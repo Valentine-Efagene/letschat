@@ -5,8 +5,8 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 const multer = require("multer");
-const userRouter = require("./users/routes.config");
-const authRouter = require("./authorization/routes.config");
+const userRouter = require("./users/routes");
+const authRouter = require("./authorization/routes");
 require("dotenv").config();
 
 app.use(express.json());

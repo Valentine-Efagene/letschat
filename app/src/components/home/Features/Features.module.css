@@ -1,0 +1,79 @@
+.features {
+  width: 100%;
+  display: flex;
+  margin-block: 3rem;
+  padding-block: 1rem;
+
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+.card {
+  width: 30vw;
+  min-width: 30vw;
+  margin-right: 2rem;
+  height: 40vh;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  padding: 1.5rem 1.25rem;
+  align-items: center;
+
+  border-radius: 0.5rem;
+  border: 1px solid rgba(147, 147, 147, 0.23);
+  
+   /* box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.268); */
+  transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 12px 20px 0px;
+}
+
+.card button {
+  border: 1px solid lightgray;
+  background-color: #00000000;
+  padding: 0.7rem 2rem;
+  border-radius: 0.4rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  width: fit-content;
+  margin: auto;
+  transition-duration: 300ms;
+  white-space: nowrap;
+}
+
+.card button:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.card p {
+  text-align: center;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.card h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.features .youtube {
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  margin-block: auto;
+}
+
+@media screen and (max-width: 800px) {
+  .card {
+  }
+
+  .features {
+    margin-block: 0;
+  }
+}

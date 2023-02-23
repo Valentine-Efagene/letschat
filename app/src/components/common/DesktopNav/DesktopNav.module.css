@@ -1,0 +1,19 @@
+.container{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    height: 90px;
+    padding-inline: 2rem;
+    font-family: 'Poppins', sans-serif;
+    align-items: center;
+}
+
+.navItemsWrapper {
+    display: flex;
+    padding: 1.25rem;
+    margin-left: auto;
+}
+
+.navItemsWrapper > *:not(:first-child){
+    margin-left: 1.25rem;
+}
