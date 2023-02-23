@@ -1,4 +1,4 @@
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import styles from "./Hero.module.css";
@@ -24,7 +24,7 @@ export default function Hero({className}) {
           </p>
           <button className={styles.cta}>
             Explore{" "}
-            <FontAwesomeIcon className={styles.icon} icon={faArrowRight} />
+            <FontAwesomeIcon className={styles.icon} icon={faArrowRightLong} />
           </button>
         </div>
         <div className={styles.right}>

@@ -1,0 +1,44 @@
+.container {
+  height: 100%;
+  position: relative;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 1rem 1rem;
+  background-color: var(--primary-3);
+}
+
+.avatar {
+  display: flex;
+  overflow: hidden;
+  background-color: #00000000;
+  border: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar img {
+  object-fit: cover;
+  width: 3rem;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+}
+
+.newChat {
+  background-color: #00000000;
+  border: none;
+}
+
+.chatIcon {
+  transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--primary-1);
+}
+
+.chatIcon:hover {
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 12px 20px 0px;
+}

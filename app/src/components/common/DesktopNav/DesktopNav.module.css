@@ -8,6 +8,10 @@
     align-items: center;
 }
 
+.logo{
+    color: rgb(87, 86, 85);
+}
+
 .navItemsWrapper {
     display: flex;
     padding: 1.25rem;
@@ -15,5 +19,5 @@
 }
 
 .navItemsWrapper > *:not(:first-child){
-    margin-left: 1.25rem;
+    margin-left: 2.5rem;
 }

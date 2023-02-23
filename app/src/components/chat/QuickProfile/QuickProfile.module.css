@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: aqua;
+  width: 100%;
+  padding: 1.25rem;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(-100%);
+  transition: transform 300ms;
+}
+
+.container > *:not(:first-child) {
+  margin-top: 1.25rem;
+}
+
+.in {
+  transform: translateX(0);
+}
+
+.out {
+  transform: translateX(-100%);
+}
+
+.top {
+  height: fit-content;
+}
+
+.back {
+  background-color: #00000000;
+  border: none;
+}
+
+.back .icon {
+  font-size: 2rem;
+}
+
+.avatar {
+  margin: auto;
+}
+
+.avatar img {
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  width: 7rem;
+  object-fit: cover;
+}

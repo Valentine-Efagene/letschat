@@ -3,6 +3,8 @@
     transition: color 300ms, border 100ms;
     height: fit-content;
     cursor: pointer;
+    text-decoration: none;
+    color: rgb(45, 45, 45);
 }
 
 .container hr{

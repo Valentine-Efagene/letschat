@@ -1,8 +1,9 @@
 import React from 'react'
 import styles from './NavLink.module.css'
+import {NavLink as Link} from 'react-router-dom'
 
-export default function NavLink({ url, active, children }) {
+export default function NavLink({ to, active, children }) {
     return (
-        <a href={url} className={`${active?styles.active:null} ${styles.container}`}>{children}<hr/></a>
+        <Link to={to} className={`${active?styles.active:null} ${styles.container}`}>{children}<hr/></Link>
     )
 }

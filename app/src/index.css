@@ -3,6 +3,11 @@
   line-height: 1.5;
   font-weight: 400;
   color: #242424;
+  --primary-1: #47577b;
+  --primary-2: #8b94aa;
+  --primary-3: #dde1e9;
+  --secondary: #ffffff;
+  --accent: #47577b;
 
   color-scheme: light;
 
@@ -17,4 +22,8 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+button{
+  cursor: pointer;
 }

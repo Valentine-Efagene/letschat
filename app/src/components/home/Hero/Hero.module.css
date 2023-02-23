@@ -3,7 +3,7 @@
   padding: 1.25rem;
   position: relative;
   font-family: 'Poppins', sans-serif;
-  --display-font-color: rgb(39, 39, 39);
+  --display-font-color: var(--primary-dark);
 }
 
 @media screen and (min-width: 601px) {
@@ -35,7 +35,7 @@
   font-size: 1.125rem;
   line-height: 1.5;
   font-weight: 600;
-  color: var(--display-font-color);
+  color: rgb(50, 50, 50);
 
   border: none;
   background-color: #00000000;
@@ -64,9 +64,10 @@
 }
 
 .headline {
+  font-family: 'Poppins', sans-serif;
   font-size: 5rem;
   max-width: 10ch;
-  font-weight: 700;
+  font-weight: 900;
   color: var(--display-font-color);
 }
 

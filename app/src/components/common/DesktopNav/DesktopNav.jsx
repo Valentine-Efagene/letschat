@@ -12,15 +12,15 @@ DesktopNav.propTypes = {
 export default function DesktopNav({className}) {
   return (
   <nav className={`${className} ${styles.container}`}>
-    <FontAwesomeIcon icon={faCommenting} size='3x' style={{color: 'cadetblue'}} />
+    <FontAwesomeIcon icon={faCommenting} size='3x' className={styles.logo} />
     <div className={styles.navItemsWrapper}>
-    <NavLink>
+    <NavLink to='/'>
         Home
     </NavLink>
-    <NavLink className={styles.navButton}>
+    <NavLink to='/chat' className={styles.navButton}>
         Chat
     </NavLink>
-    <NavLink className={styles.navButton}>
+    <NavLink to='/about' className={styles.navButton}>
         About
     </NavLink>
     </div>
