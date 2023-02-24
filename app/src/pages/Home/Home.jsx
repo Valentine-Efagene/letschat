@@ -1,9 +1,9 @@
-import React from "react";
-import styles from "./Home.module.css";
-import DesktopNav from "../../components/common/DesktopNav/DesktopNav";
-import Hero from "../../components/home/Hero/Hero";
-import Features from "../../components/home/Features/Features";
-import Footer from "../../components/common/Footer/Footer";
+import React from 'react';
+import styles from './Home.module.css';
+import DesktopNav from '../../components/common/DesktopNav/DesktopNav';
+import Hero from '../../components/home/Hero/Hero';
+import Features from '../../components/home/Features/Features';
+import Footer from '../../components/common/Footer/Footer';
 
 export default function Home() {
   return (
@@ -12,8 +12,8 @@ export default function Home() {
         <DesktopNav className={styles.nav} />
         <Hero className={styles.hero} />
       </div>
-      <Features/>
-      <Footer/>
+      <Features />
+      <Footer />
     </div>
   );
 }

@@ -2,15 +2,39 @@
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: 1fr 1fr;
+  height: fit-content;
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #00000000;
+  cursor: pointer;
+}
+
+.container:not(:last-child) {
+  border-bottom: 1px solid var(--primary-1);
 }
 
 .avatar {
   grid-row: 1 / span 2;
   margin: auto;
+  margin-right: 1rem;
 }
 
 .avatar img {
-  width: 3rem;
+  width: 2rem;
   aspect-ratio: 1/1;
   border-radius: 50%;
+}
+
+.name {
+  display: flex;
+  flex-flow: row nowrap;
+  white-space: nowrap;
+}
+
+.snippet {
+  font-size: 0.8rem;
+  max-width: 7ch;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }

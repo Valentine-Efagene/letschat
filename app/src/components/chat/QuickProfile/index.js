@@ -1,1 +1,1 @@
-export { default } from "./QuickProfile";
+export { default } from './QuickProfile';

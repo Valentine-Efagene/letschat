@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 5rem;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  background-color: #0000005a;
+  overflow: hidden;
+  cursor: pointer;
+
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.icon {
+  color: #00000000;
+  margin: auto;
+  width: 40%;
+  height: 40%;
+  transition: color 300ms ease-in-out;
+}
+
+.container:hover .icon {
+  color: #ffffffdc;
+}

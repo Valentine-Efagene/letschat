@@ -3,9 +3,11 @@
   line-height: 1.5;
   font-weight: 400;
   color: #242424;
+  --primary-0: #2e3c5d;
   --primary-1: #47577b;
-  --primary-2: #8b94aa;
-  --primary-3: #dde1e9;
+  --primary-2: #8e9cbc;
+  --primary-3: lightblue;
+  --primary-4: rgb(228, 241, 245);
   --secondary: #ffffff;
   --accent: #47577b;
 
@@ -24,6 +26,6 @@
   padding: 0;
 }
 
-button{
+button {
   cursor: pointer;
 }

@@ -1,0 +1,32 @@
+.container {
+  padding: 0.5rem 2rem;
+  min-height: 2rem;
+  width: fit-content;
+  border-radius: 0.3rem;
+  transition: background-color 300ms;
+}
+
+.primary {
+  background-color: var(--primary-1);
+  border: none;
+  color: white;
+}
+
+.primary:hover {
+  background-color: var(--primary-0);
+}
+
+.outline {
+  background-color: #00000000;
+  border: 1px solid var(--primary-1);
+}
+
+.outline:hover {
+  background-color: var(--primary-1);
+  color: white;
+}
+
+.light {
+  background-color: #00000000;
+  border: none;
+}

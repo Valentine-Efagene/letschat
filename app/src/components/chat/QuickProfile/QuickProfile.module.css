@@ -1,15 +1,28 @@
 .container {
   display: flex;
   flex-direction: column;
-  background-color: aqua;
+  background-color: var(--primary-3);
   width: 100%;
   padding: 1.25rem;
   height: 100vh;
+  min-width: fit-content;
   position: absolute;
   top: 0;
   left: 0;
   transform: translateX(-100%);
   transition: transform 300ms;
+}
+
+.container > form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.container .label {
+  display: grid;
+  grid-template-columns: 1fr;
+  font-size: 0.8rem;
 }
 
 .container > *:not(:first-child) {
@@ -37,7 +50,7 @@
   font-size: 2rem;
 }
 
-.avatar {
+.container .avatar {
   margin: auto;
 }
 
