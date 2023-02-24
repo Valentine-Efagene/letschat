@@ -4,6 +4,7 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+const morgan = require("morgan");
 const multer = require("multer");
 const userRouter = require("./users/routes");
 const authRouter = require("./authorization/routes");
@@ -12,6 +13,7 @@ require("dotenv").config();
 app.use(express.json());
 app.use(userRouter);
 app.use(authRouter);
+app.use(morgan("dev"));
 
 const PORT = 3000;
 

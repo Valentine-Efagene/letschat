@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import avatar from '../../../assets/img/avatar.jpg';
 import styles from './QuickProfile.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +10,8 @@ QuickProfile.propTypes = {
   hide: func,
   show: bool,
 };
+
+const handleChange = e => {};
 
 export default function QuickProfile({ className, hide, show }) {
   return (
@@ -25,6 +27,7 @@ export default function QuickProfile({ className, hide, show }) {
       <div className={styles.avatar}>
         <img src={avatar} />
       </div>
+      <form onSubmit={handleChange}></form>
     </div>
   );
 }
