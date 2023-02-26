@@ -1,0 +1,24 @@
+.container {
+  background-color: #00000000;
+  padding-block: 0.5rem;
+  outline: none;
+  font-size: 1rem;
+  transition: 300ms;
+  background-color: #00000000;
+}
+
+.rounded {
+  border: 1px solid var(--primary-2);
+  border-radius: 0.3rem;
+  padding-inline: 0.5rem;
+}
+
+/* https://css-tricks.com/snippets/css/change-autocomplete-styles-webkit-browsers/ */
+.container:-webkit-autofill,
+.container:autofill,
+.container:-webkit-autofill:hover,
+.container:-webkit-autofill:focus {
+  -webkit-text-fill-color: #000000;
+  -webkit-box-shadow: none;
+  -webkit-box-shadow: 0 0 0px 1000px var(--primary-3) inset;
+}
