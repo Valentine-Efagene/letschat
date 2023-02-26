@@ -11,7 +11,7 @@ import UserContext from '../../../../contexts/userContext';
 Profile.propTypes = {};
 
 export default function Profile() {
-  const { user, login } = useContext(UserContext);
+  const { user, update } = useContext(UserContext);
   const [data, setData] = useState(user ?? {});
 
   const handleAvatarChange = ref => {
@@ -27,8 +27,19 @@ export default function Profile() {
     }));
   };
 
+  const handleSubmit = e => {
+    e.preventDefault();
+    const formData = new FormData();
+
+    for (const key in data) {
+      formData.set(key, data[key]);
+    }
+
+    update(data);
+  };
+
   return (
-    <form className={styles.container} onSubmit={login}>
+    <form className={styles.container} onSubmit={handleSubmit}>
       <ImagePicker
         style={{ margin: 'auto' }}
         className={styles.avatar}

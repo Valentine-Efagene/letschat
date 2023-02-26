@@ -7,10 +7,10 @@ import Login from './components/auth/forms/Login';
 import SignUp from './components/auth/forms/SignUp';
 import UserContext from './contexts/userContext';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import { ToastContext, SUCCESS } from './contexts/ToastContext';
 import Toast from './components/Toast';
+import axios from 'axios';
 
 function App() {
   const router = createBrowserRouter([
@@ -40,13 +40,14 @@ function App() {
 
   const [user, setUser] = useState();
 
-  const login = e => {
-    e?.preventDefault();
+  const update = async payload => {
     const userId = localStorage.getItem('user-id');
 
     try {
-      const { data: statusCode } = axios.post(
-        `${process.env.REACT_APP_BASE_URL}/user/${userId}`,
+      const { status } = await axios.patch(
+        //`${process.env.REACT_APP_BASE_URL}/user/${userId}`,
+        `http://localhost:3000/users/${userId}`,
+        payload,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('access-token')}`,
@@ -55,13 +56,12 @@ function App() {
       );
 
       setToastState(prevState => {
-        if (e == null) return prevState;
-
         return {
           ...prevState,
-          message: statusCode,
+          show: true,
+          message: status === 204 ? 'Updated' : '',
           title: SUCCESS,
-          delay: 500,
+          delay: 3000,
         };
       });
     } catch (error) {
@@ -78,7 +78,6 @@ function App() {
         : null;
 
       if (_user) {
-        console.log(`http://localhost:3000/users/${_user.userId}`);
         try {
           const res = await fetch(
             `http://localhost:3000/users/${_user.userId}`,
@@ -90,7 +89,6 @@ function App() {
           const data = await res.json();
           data.avatar = `http://localhost:3000/${data.avatar}`;
           setUser(data);
-          console.table(data);
         } catch (error) {
           console.log(error);
           setUser(_user);
@@ -114,7 +112,7 @@ function App() {
 
   return (
     <ToastContext.Provider value={{ toastState, setToastState }}>
-      <UserContext.Provider value={{ user, setUser, login }}>
+      <UserContext.Provider value={{ user, setUser, update }}>
         <RouterProvider router={router} />
         <Toast
           show={toastState?.show}

@@ -17,7 +17,9 @@ export default function Contact({ user, onClick }) {
       <NavLink className={styles.avatar}>
         <img src={avatar} alt="" />
       </NavLink>
-      <div className={styles.name}>{`${firstName} ${lastName}`}</div>
+      <div className={styles.name}>{`${firstName ? firstName : ''} ${
+        lastName ? lastName : ''
+      }`}</div>
       <div className={styles.snippet}>{snippet}</div>
     </div>
   );

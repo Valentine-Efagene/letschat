@@ -1,12 +1,14 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
 //import { postData } from '../../../../Helpers/requests';
 import axios from 'axios';
 import Button from '../../../inputs/Button/Button';
 import TextField from '../../../inputs/TextField/TextField';
 import styles from './Login.module.css';
+import UserContext from '../../../../contexts/userContext';
 
 export default function Login() {
   const [payload, setPayload] = useState({
@@ -15,6 +17,8 @@ export default function Login() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
 
   const handleChange = event => {
     const { name, value, type, checked } = event.target;
@@ -32,12 +36,36 @@ export default function Login() {
 
     try {
       const {
-        data: { accessToken, refreshToken, id },
+        data: { accessToken, refreshToken, userId },
       } = await axios.post('http://localhost:3000/auth', payload);
 
       localStorage.setItem('access-token', accessToken);
       localStorage.setItem('refresh-token', refreshToken);
-      localStorage.setItem('user-id', id);
+      localStorage.setItem('user-id', userId);
+
+      const _user = accessToken
+        ? jwt_decode(localStorage.getItem('access-token'))
+        : null;
+
+      if (_user) {
+        try {
+          const res = await fetch(
+            `http://localhost:3000/users/${_user.userId}`,
+            {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            },
+          );
+          //fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${_user.id}`)
+          const data = await res.json();
+          data.avatar = `http://localhost:3000/${data.avatar}`;
+          setUser(data);
+
+          navigate('/chat');
+        } catch (error) {
+          console.log(error);
+          setUser(_user);
+        }
+      }
     } catch (error) {
       console.log(error);
     } finally {

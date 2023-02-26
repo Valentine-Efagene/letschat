@@ -13,13 +13,14 @@ DesktopNav.propTypes = {
 
 export default function DesktopNav({ className }) {
   const [showProfile, setShowProfile] = useState(false);
-  const { user } = useContext(UserContext);
-  console.table(user?.avatar);
+  const { user, setUser } = useContext(UserContext);
 
   const toggleShowProfile = () => setShowProfile(prevState => !prevState);
 
   const logout = () => {
     localStorage.clear();
+    setUser(null);
+    toggleShowProfile();
   };
 
   return (
