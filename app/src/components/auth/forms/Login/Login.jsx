@@ -39,6 +39,8 @@ export default function Login() {
         data: { accessToken, refreshToken, userId },
       } = await axios.post('http://localhost:3000/auth', payload);
 
+      console.log({ userId });
+
       localStorage.setItem('access-token', accessToken);
       localStorage.setItem('refresh-token', refreshToken);
       localStorage.setItem('user-id', userId);

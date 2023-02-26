@@ -53,7 +53,7 @@ exports.patchById = async (req, res) => {
     req.body.avatar = req?.file?.filename;
 
     UserModel.patchUser(req.params.userId, req.body).then((result) => {
-      res.status(204).send({});
+      res.status(200).send(result);
     });
   } catch (error) {
     res.status(500).send(error.message);

@@ -1,4 +1,5 @@
 import React from 'react';
+import Detail from '../../components/chat/Detail/Detail';
 import Master from '../../components/chat/Master/Master';
 import styles from './DesktopChat.module.css';
 
@@ -8,7 +9,9 @@ export default function DesktopChat() {
       <div className={styles.master}>
         <Master />
       </div>
-      <div className={styles.detail}></div>
+      <div className={styles.detail}>
+        <Detail />
+      </div>
     </div>
   );
 }

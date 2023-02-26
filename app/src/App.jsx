@@ -44,16 +44,20 @@ function App() {
     const userId = localStorage.getItem('user-id');
 
     try {
-      const { status } = await axios.patch(
+      const result = await axios.patch(
         //`${process.env.REACT_APP_BASE_URL}/user/${userId}`,
         `http://localhost:3000/users/${userId}`,
         payload,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('access-token')}`,
+            'Content-Type': 'multipart/form-data',
           },
         },
       );
+
+      const { status, data } = result;
+      setUser({ ...data, avatar: `http://localhost:3000/${data?.avatar}` });
 
       setToastState(prevState => {
         return {

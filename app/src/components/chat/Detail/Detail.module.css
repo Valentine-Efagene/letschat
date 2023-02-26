@@ -1,2 +1,6 @@
 .container {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
 }

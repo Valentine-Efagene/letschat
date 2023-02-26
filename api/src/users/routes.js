@@ -39,7 +39,7 @@ function fileFilter(req, file, cb) {
   }
 }
 
-const upload = multer({ storage, limits: { fileSize: 1000000 }, fileFilter });
+const upload = multer({ storage, limits: { fileSize: 20000000 }, fileFilter });
 
 const router = Router();
 
