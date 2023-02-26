@@ -1,0 +1,57 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.1rem;
+  border: 1px solid var(--primary-2);
+
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 4px #00000020;
+  padding: 0.5rem 1rem;
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translate(-50%, 0);
+  transition: 300ms;
+  min-width: 30vw;
+}
+
+.success {
+  background-color: var(--primary-3);
+}
+
+.error {
+  background-color: pink;
+}
+
+.in {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.out {
+  opacity: 0;
+  transform: translateY(20px);
+  visibility: collapse;
+}
+
+.close {
+  border: none;
+  background-color: #0000002d;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  transition: background-color 500ms color 500ms;
+}
+
+.close:hover {
+  background-color: #0000003d;
+  color: #ffffff;
+}
+
+.top {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+}

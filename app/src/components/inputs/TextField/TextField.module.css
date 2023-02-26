@@ -1,18 +1,25 @@
 .container {
-  border: none;
   background-color: #00000000;
-  border-bottom: 1px solid lightgray;
   padding-block: 0.5rem;
   outline: none;
-  border-bottom: 2px solid var(--primary-2);
   font-size: 1rem;
-
   transition: 300ms;
+  background-color: #00000000;
 }
 
-.container:focus {
+.rounded {
+  border: 1px solid var(--primary-2);
+  border-radius: 0.3rem;
+  padding-inline: 0.5rem;
+}
+
+.line {
+  border: none;
+  border-bottom: 2px solid var(--primary-2);
+}
+
+.line:focus {
   border-bottom: 2px solid var(--primary-1);
-  background-color: #00000000;
 }
 
 /* https://css-tricks.com/snippets/css/change-autocomplete-styles-webkit-browsers/ */

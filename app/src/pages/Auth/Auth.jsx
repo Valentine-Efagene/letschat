@@ -1,11 +1,12 @@
 import React from 'react';
-import LoginForm from '../../components/auth/forms/Login';
+import Layout from '../../components/layouts/Layout/Layout';
 import styles from './Auth.module.css';
+import { Outlet } from 'react-router-dom';
 
 export default function Auth() {
   return (
-    <div className={styles.container}>
-      <LoginForm />
-    </div>
+    <Layout>
+      <Outlet />
+    </Layout>
   );
 }

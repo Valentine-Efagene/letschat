@@ -24,12 +24,22 @@ export default function ImagePicker({
   style,
   disabled = false,
 }) {
+  const getImage = () => {
+    if (value?.name) {
+      return URL.createObjectURL(value);
+    }
+
+    if (value) {
+      return value;
+    }
+
+    return defaultValue;
+  };
+
   const avatarInputRef = useRef();
   const _style = {
     ...style,
-    backgroundImage: `url(${
-      value?.name ? URL.createObjectURL(value) : '/storage/' + defaultValue
-    })`,
+    backgroundImage: `url(${getImage()})`,
   };
 
   return (

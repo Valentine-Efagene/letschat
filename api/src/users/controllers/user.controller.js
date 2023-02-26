@@ -50,10 +50,7 @@ exports.patchById = async (req, res) => {
   }
 
   try {
-    req.body.avatar = {
-      data: req?.file?.filename,
-      contentType: req?.file?.mimetype,
-    };
+    req.body.avatar = req?.file?.filename;
 
     UserModel.patchUser(req.params.userId, req.body).then((result) => {
       res.status(204).send({});

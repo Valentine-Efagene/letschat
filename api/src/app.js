@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
@@ -11,9 +12,11 @@ const authRouter = require("./authorization/routes");
 require("dotenv").config();
 
 app.use(express.json());
+app.use(cors());
 app.use(userRouter);
 app.use(authRouter);
 app.use(morgan("dev"));
+app.use(express.static("uploads"));
 
 const PORT = 3000;
 

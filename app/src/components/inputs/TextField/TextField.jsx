@@ -1,4 +1,4 @@
-import { func, number, object, oneOfType, string } from 'prop-types';
+import { func, number, object, oneOf, oneOfType, string } from 'prop-types';
 import React from 'react';
 import styles from './TextField.module.css';
 
@@ -12,6 +12,7 @@ TextField.propTypes = {
   onChange: func,
   value: string,
   defaultValue: string,
+  variant: oneOf(['line', 'rounded']),
 };
 
 export default function TextField({
@@ -24,7 +25,13 @@ export default function TextField({
   onChange,
   value,
   defaultValue,
+  variant = 'rounded',
 }) {
+  const variantMap = {
+    rounded: styles.rounded,
+    line: styles.line,
+  };
+
   return (
     <input
       id={id}
@@ -32,7 +39,7 @@ export default function TextField({
       type={type}
       placeholder={placeholder}
       style={style}
-      className={`${styles.container} ${className}`}
+      className={`${variantMap[variant]} ${styles.container} ${className}`}
       onChange={onChange}
       value={value}
       defaultValue={defaultValue}

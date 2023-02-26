@@ -1,17 +1,15 @@
-.container h2 {
-  text-align: center;
-}
-
 .container {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.25rem;
   margin-inline: auto;
-  width: calc(100% - 2.5rem);
-  max-width: 600px;
 }
 
 .container input,
 .container button {
   width: 100%;
+}
+
+.label {
+  font-size: 0.9rem;
 }

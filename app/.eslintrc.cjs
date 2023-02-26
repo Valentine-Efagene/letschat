@@ -32,5 +32,6 @@ module.exports = {
     Cypress: 'readonly',
     __dirname: 'readonly',
     module: 'readonly',
+    process: 'readonly',
   },
 };
