@@ -47,6 +47,7 @@
   position: absolute;
   display: block;
   width: 50vw;
+  max-width: 20rem;
   padding: 1.5rem;
   right: 0px;
   box-shadow: 1px 1px 4px #00000020;
