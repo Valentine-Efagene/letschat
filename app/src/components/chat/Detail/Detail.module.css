@@ -1,35 +1,6 @@
 .container {
   height: 100%;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.25rem;
+  display: flex;
+  flex-direction: column;
   padding: 1.25rem;
-}
-
-.send {
-  background-color: var(--primary-3);
-  transition: 300ms;
-  border: none;
-  width: 3rem;
-  aspect-ratio: 1/1;
-  border-radius: 50%;
-}
-
-.send:hover {
-  color: #ffffff;
-  background-color: var(--primary-1);
-}
-
-.form {
-  margin-top: auto;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1rem;
-}
-
-.textArea {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid var(--primary-2);
-  border-radius: 0.3rem;
 }

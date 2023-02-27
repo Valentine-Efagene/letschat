@@ -1,14 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './Master.module.css';
-import avatar from '../../../assets/img/avatar.jpg';
-import { faComment } from '@fortawesome/free-solid-svg-icons';
+import { faComment, faUser } from '@fortawesome/free-solid-svg-icons';
 import QuickProfile from '../QuickProfile/QuickProfile';
 import Contact from '../cards/Contact/Contact';
-import UserContext from '../../../contexts/userContext';
+import { useSelector } from 'react-redux';
 
 export default function Master() {
-  const { user } = useContext(UserContext);
+  const { user } = useSelector(state => state.auth);
   const [showQuickProfile, setShowQuickProfile] = useState(false);
 
   const showQuick = () => setShowQuickProfile(true);
@@ -18,7 +17,11 @@ export default function Master() {
     <div className={styles.container}>
       <div className={styles.top}>
         <button onClick={showQuick} className={styles.avatar}>
-          <img src={user?.avatar ?? avatar} />
+          {user?.avatar ? (
+            <img src={user?.avatar} alt="" />
+          ) : (
+            <FontAwesomeIcon size="1x" icon={faUser} />
+          )}
         </button>
         <button className={styles.newChat}>
           <FontAwesomeIcon className={styles.chatIcon} icon={faComment} />

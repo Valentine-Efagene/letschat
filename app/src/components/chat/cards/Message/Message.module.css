@@ -1,0 +1,16 @@
+.container {
+  border: 1px solid var(--primary-2);
+  border-radius: 0.3rem;
+  padding: 1rem;
+  width: clamp(10rem, 70%, 23rem);
+  background-color: var(--primary-3);
+  height: fit-content;
+}
+
+.sender {
+  margin-left: auto;
+}
+
+.receiver {
+  margin-right: auto;
+}

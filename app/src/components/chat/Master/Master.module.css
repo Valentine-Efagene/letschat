@@ -2,13 +2,15 @@
   height: 100%;
   position: relative;
   background-color: var(--primary-3);
+  box-shadow: 1px 1px 4px var(--primary-1);
 }
 
 .top {
   display: grid;
   grid-template-columns: auto auto auto;
   padding: 1rem 1rem;
-  background-color: var(--primary-1);
+  background-color: var(--primary-2);
+  border-bottom: 4px solid var(--primary-1);
 }
 
 .avatar {
@@ -18,13 +20,21 @@
   border: none;
   justify-content: center;
   align-items: center;
+
+  border-radius: 50%;
+  width: 3rem;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1/1;
+  background-color: #00000020;
 }
 
 .avatar img {
   object-fit: cover;
   width: 3rem;
   aspect-ratio: 1/1;
-  border-radius: 50%;
 }
 
 .newChat {
@@ -32,11 +42,27 @@
   border: none;
 }
 
+@keyframes speak {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: none;
+  }
+  50% {
+    transform: translateY(-2px) scale(1.2);
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 12px 20px 0px;
+  }
+}
+
+.top:hover .chatIcon {
+  animation: speak 1s ease-in-out;
+}
+
 .chatIcon {
   transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
   width: 1.5rem;
   height: 1.5rem;
-  color: var(--primary-3);
+  color: var(--primary-4);
 }
 
 .chatIcon:hover {

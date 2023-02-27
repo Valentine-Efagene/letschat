@@ -2,16 +2,20 @@ import React, { useContext } from 'react';
 import styles from './Profile.module.css';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import ImagePicker from '../../../inputs/ImagePicker/ImagePicker';
 import TextField from '../../../inputs/TextField/TextField';
 import Button from '../../../inputs/Button/Button';
-import UserContext from '../../../../contexts/userContext';
-
-Profile.propTypes = {};
+import { useDispatch, useSelector } from 'react-redux';
+import { PENDING } from '../../../../Helpers/loadingStates';
+import { SUCCESS, ToastContext } from '../../../../contexts/ToastContext';
+import { sendMessageThunk } from '../../../../redux/message/message.slice';
 
 export default function Profile() {
-  const { user, update } = useContext(UserContext);
+  const dispatch = useDispatch();
+  const { setToastState } = useContext(ToastContext);
+  const { user } = useSelector(state => state.auth);
+  const { status } = useSelector(state => state.user);
   const [data, setData] = useState(user ?? {});
 
   const handleAvatarChange = ref => {
@@ -27,15 +31,32 @@ export default function Profile() {
     }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    const formData = new FormData();
+    try {
+      const result = await dispatch(sendMessageThunk(data));
 
-    for (const key in data) {
-      formData.set(key, data[key]);
+      setToastState(prevState => {
+        return {
+          ...prevState,
+          show: true,
+          //message: (status % 10) - status / 10 === 20 ? 'Updated' : '',
+          message: JSON.stringify(result),
+          title: SUCCESS,
+          delay: 3000,
+        };
+      });
+    } catch (error) {
+      setToastState(prevState => {
+        return {
+          ...prevState,
+          show: true,
+          message: error.message,
+          title: 'Error',
+          delay: 3000,
+        };
+      });
     }
-
-    update(data);
   };
 
   return (
@@ -82,6 +103,9 @@ export default function Profile() {
           style={{ width: '1rem', height: '1rem' }}
           icon={faSave}
         />
+        {status === PENDING && (
+          <FontAwesomeIcon icon={faSpinner} className={styles.spinner} />
+        )}
       </Button>
     </form>
   );

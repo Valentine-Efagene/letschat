@@ -5,7 +5,7 @@ const uuid = require("uuid");
 
 exports.login = (req, res) => {
   try {
-    let refreshId = req.body.userId + jwtSecret;
+    let refreshId = req.body.id + jwtSecret;
     let salt = crypto.randomBytes(16).toString("base64");
     let hash = crypto
       .createHmac("sha512", salt)
@@ -15,13 +15,11 @@ exports.login = (req, res) => {
     let token = jwt.sign(req.body, jwtSecret);
     let b = Buffer.from(hash);
     let refresh_token = b.toString("base64");
-    res
-      .status(201)
-      .send({
-        accessToken: token,
-        refreshToken: refresh_token,
-        userId: req.body.userId,
-      });
+    res.status(201).send({
+      accessToken: token,
+      refreshToken: refresh_token,
+      id: req.body.id,
+    });
   } catch (err) {
     res.status(500).send({ errors: err });
   }

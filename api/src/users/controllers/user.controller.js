@@ -34,7 +34,7 @@ exports.list = (req, res) => {
 };
 
 exports.getById = (req, res) => {
-  UserModel.findById(req.params.userId).then((result) => {
+  UserModel.findById(req.params.id).then((result) => {
     res.status(200).send(result);
   });
 };
@@ -52,7 +52,7 @@ exports.patchById = async (req, res) => {
   try {
     req.body.avatar = req?.file?.filename;
 
-    UserModel.patchUser(req.params.userId, req.body).then((result) => {
+    UserModel.patchUser(req.params.id, req.body).then((result) => {
       res.status(200).send(result);
     });
   } catch (error) {
@@ -61,7 +61,7 @@ exports.patchById = async (req, res) => {
 };
 
 exports.removeById = (req, res) => {
-  UserModel.removeById(req.params.userId).then((result) => {
+  UserModel.removeById(req.params.id).then((result) => {
     res.status(204).send({});
   });
 };

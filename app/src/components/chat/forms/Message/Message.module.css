@@ -1,0 +1,23 @@
+.form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+}
+
+.send {
+  background-color: var(--primary-3);
+  transition: 300ms;
+  border: none;
+  width: 3rem;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+}
+
+.send:hover:not(:disabled) {
+  color: #ffffff;
+  background-color: var(--primary-1);
+}
+
+.send:disabled {
+  cursor: default;
+}

@@ -1,12 +1,13 @@
 import React from 'react';
 import styles from './Contact.module.css';
 import { NavLink } from 'react-router-dom';
-import { UserProp } from '../../../../propTypes/user';
+import { userProp } from '../../../../prop-types/user';
 import { func } from 'prop-types';
-import placeholder from '../../../../assets/img/avatar.jpg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 Contact.propTypes = {
-  user: UserProp,
+  user: userProp,
   onClick: func,
 };
 
@@ -16,7 +17,11 @@ export default function Contact({ user, onClick }) {
   return (
     <div onClick={onClick} className={styles.container}>
       <NavLink className={styles.avatar}>
-        <img src={avatar ?? placeholder} alt="" />
+        {avatar ? (
+          <img src={avatar} alt="" />
+        ) : (
+          <FontAwesomeIcon icon={faUser} />
+        )}
       </NavLink>
       <div className={styles.name}>{`${firstName ? firstName : ''} ${
         lastName ? lastName : ''

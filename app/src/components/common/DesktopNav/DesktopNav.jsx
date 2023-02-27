@@ -1,11 +1,12 @@
 import { faCommenting } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { string } from 'prop-types';
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NavLink from '../NavLink/NavLink';
 import styles from './DesktopNav.module.css';
 import Profile from '../forms/Profile/Profile';
-import UserContext from '../../../contexts/userContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCurrentUserThunk, logout } from '../../../redux/auth/auth.slice';
 
 DesktopNav.propTypes = {
   className: string,
@@ -13,15 +14,22 @@ DesktopNav.propTypes = {
 
 export default function DesktopNav({ className }) {
   const [showProfile, setShowProfile] = useState(false);
-  const { user, setUser } = useContext(UserContext);
+  const dispatch = useDispatch();
+  const { user } = useSelector(state => state.auth);
 
   const toggleShowProfile = () => setShowProfile(prevState => !prevState);
 
-  const logout = () => {
-    localStorage.clear();
-    setUser(null);
-    toggleShowProfile();
+  const handleLogout = () => {
+    dispatch(logout());
   };
+
+  useEffect(() => {
+    const init = async () => {
+      await dispatch(fetchCurrentUserThunk());
+    };
+
+    init();
+  }, []);
 
   return (
     <nav className={`${className} ${styles.container}`}>
@@ -34,9 +42,11 @@ export default function DesktopNav({ className }) {
         <NavLink to="/about" className={styles.navButton}>
           About
         </NavLink>
-        <NavLink to="/auth/login" className={styles.navButton}>
-          Login
-        </NavLink>
+        {user == null && (
+          <NavLink to="/auth/login" className={styles.navButton}>
+            Login
+          </NavLink>
+        )}
         {user && (
           <div className={styles.profile}>
             <button onClick={toggleShowProfile} className={styles.avatar}>
@@ -45,7 +55,7 @@ export default function DesktopNav({ className }) {
             {showProfile && (
               <div className={styles.form}>
                 <Profile />
-                <button className={styles.logout} onClick={logout}>
+                <button className={styles.logout} onClick={handleLogout}>
                   Log Out
                 </button>
               </div>

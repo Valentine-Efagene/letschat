@@ -14,4 +14,4 @@ const users = arrayOf({
   email: string,
 });
 
-export { user as UserProp, users as usersProp };
+export { user as userProp, users as usersProp };

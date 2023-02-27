@@ -30,6 +30,8 @@ exports.findByEmail = (email) => {
 };
 exports.findById = (id) => {
   return User.findById(id).then((result) => {
+    if (result == null) return null;
+
     result = result.toJSON();
     delete result._id;
     delete result.__v;
@@ -66,9 +68,9 @@ exports.patchUser = (id, userData) => {
   );
 };
 
-exports.removeById = (userId) => {
+exports.removeById = (id) => {
   return new Promise((resolve, reject) => {
-    User.deleteMany({ _id: userId }, (err) => {
+    User.deleteMany({ _id: id }, (err) => {
       if (err) {
         reject(err);
       } else {

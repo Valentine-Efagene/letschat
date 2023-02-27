@@ -9,12 +9,14 @@ const morgan = require("morgan");
 const multer = require("multer");
 const userRouter = require("./users/routes");
 const authRouter = require("./authorization/routes");
+const messageRouter = require("./messages/routes");
 require("dotenv").config();
 
 app.use(express.json());
 app.use(cors());
 app.use(userRouter);
 app.use(authRouter);
+app.use(messageRouter);
 app.use(morgan("dev"));
 app.use(express.static("uploads"));
 

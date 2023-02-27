@@ -15,7 +15,7 @@ exports.validRefreshNeeded = (req, res, next) => {
   let refresh_token = b.toString();
   let hash = crypto
     .createHmac("sha512", req.jwt.refreshKey)
-    .update(req.jwt.userId + secret)
+    .update(req.jwt.id + secret)
     .digest("base64");
   if (hash === refresh_token) {
     req.body = req.jwt;

@@ -5,6 +5,7 @@
   height: 90px;
   font-family: 'Poppins', sans-serif;
   align-items: center;
+  padding-inline: 1.25rem;
 }
 
 .logo {
@@ -40,6 +41,7 @@
 
 .profile {
   position: relative;
+  z-index: 1;
 }
 
 .profile .form {

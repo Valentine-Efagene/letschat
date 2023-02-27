@@ -1,4 +1,4 @@
-const UsersController = require("./controllers/user.controller");
+const MessageController = require("./controllers/message.controller");
 const PermissionMiddleware = require("../common/middlewares/auth.permission.middleware");
 const ValidationMiddleware = require("../common/middlewares/auth.validation.middleware");
 const { Router } = require("express");
@@ -43,33 +43,43 @@ const upload = multer({ storage, limits: { fileSize: 20000000 }, fileFilter });
 
 const router = Router();
 
-router.post("/users", [UsersController.insert]);
-
-router.get("/users", [
-  ValidationMiddleware.validJWTNeeded,
-  PermissionMiddleware.minimumPermissionLevelRequired(PAID),
-  UsersController.list,
+router.post("/messages", [
+  upload.array("photos", 12),
+  MessageController.insert,
 ]);
 
-router.get("/users/:id", [
+router.get("/messages", [
+  ValidationMiddleware.validJWTNeeded,
+  PermissionMiddleware.minimumPermissionLevelRequired(PAID),
+  MessageController.list,
+]);
+
+// Key
+router.get("/:userId/messages", [
+  ValidationMiddleware.validJWTNeeded,
+  PermissionMiddleware.minimumPermissionLevelRequired(PAID),
+  MessageController.listByUser,
+]);
+
+router.get("/messages/:id", [
   ValidationMiddleware.validJWTNeeded,
   PermissionMiddleware.minimumPermissionLevelRequired(FREE),
   PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
-  UsersController.getById,
+  MessageController.getById,
 ]);
 
-router.patch("/users/:id", [
+router.patch("/messages/:id", [
   ValidationMiddleware.validJWTNeeded,
   upload.single("avatar"),
   PermissionMiddleware.minimumPermissionLevelRequired(FREE),
   PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
-  UsersController.patchById,
+  MessageController.patchById,
 ]);
 
-router.delete("/users/:id", [
+router.delete("/messages/:id", [
   ValidationMiddleware.validJWTNeeded,
   PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
-  UsersController.removeById,
+  MessageController.removeById,
 ]);
 
 module.exports = router;
