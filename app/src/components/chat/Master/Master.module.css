@@ -31,6 +31,20 @@
   background-color: #00000020;
 }
 
+.indicator {
+  width: 0.6rem;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+}
+
+.connected {
+  background-color: green;
+}
+
+.disconnected {
+  background-color: red;
+}
+
 .avatar img {
   object-fit: cover;
   width: 3rem;

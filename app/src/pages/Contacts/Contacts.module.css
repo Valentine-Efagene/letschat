@@ -1,0 +1,9 @@
+.container {
+  padding: 1.25rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media screen and (max-width: 800px) {
+}

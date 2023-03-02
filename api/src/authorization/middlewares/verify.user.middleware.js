@@ -1,4 +1,4 @@
-const UserModel = require("../../users/models/user.model");
+const UserModel = require("../../user/models/user.model");
 const crypto = require("crypto");
 
 exports.hasAuthValidFields = (req, res, next) => {

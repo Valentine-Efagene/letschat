@@ -7,6 +7,7 @@ import Contact from '../cards/Contact/Contact';
 import { useSelector } from 'react-redux';
 
 export default function Master() {
+  const { socket } = useSelector(state => state.socket);
   const { user } = useSelector(state => state.auth);
   const [showQuickProfile, setShowQuickProfile] = useState(false);
 
@@ -26,6 +27,10 @@ export default function Master() {
         <button className={styles.newChat}>
           <FontAwesomeIcon className={styles.chatIcon} icon={faComment} />
         </button>
+        <span
+          className={`${
+            socket?.connected ? styles.connected : styles.disconnected
+          } ${styles.indicator}`}></span>
       </div>
       <QuickProfile show={showQuickProfile} hide={hideQuick} />
       <div className={styles.cl}>

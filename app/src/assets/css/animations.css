@@ -1,0 +1,25 @@
+@keyframes pulse {
+  0% {
+    background-color: hsl(200, 20%, 90%);
+  }
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
+}
+
+@keyframes oscillation {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(0.7rem);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+:root {
+  --pulse-animation: pulse 1s ease-in-out infinite alternate;
+  --oscillation-animation: oscillation 1s ease-in-out;
+}

@@ -13,9 +13,10 @@ DesktopNav.propTypes = {
 };
 
 export default function DesktopNav({ className }) {
-  const [showProfile, setShowProfile] = useState(false);
   const dispatch = useDispatch();
+
   const { user } = useSelector(state => state.auth);
+  const [showProfile, setShowProfile] = useState(false);
 
   const toggleShowProfile = () => setShowProfile(prevState => !prevState);
 
@@ -38,6 +39,9 @@ export default function DesktopNav({ className }) {
         <NavLink to="/">Home</NavLink>
         <NavLink to="/chat" className={styles.navButton}>
           Chat
+        </NavLink>
+        <NavLink to="/contacts" className={styles.navButton}>
+          Contacts
         </NavLink>
         <NavLink to="/about" className={styles.navButton}>
           About

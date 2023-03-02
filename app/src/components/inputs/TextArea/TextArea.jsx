@@ -15,6 +15,7 @@ TextArea.propTypes = {
   variant: oneOf(['rounded']),
   rows: number,
   cols: number,
+  onKeyUp: func,
 };
 
 export default function TextArea({
@@ -30,6 +31,7 @@ export default function TextArea({
   variant = 'rounded',
   rows = 10,
   cols,
+  onKeyUp,
 }) {
   const variantMap = {
     rounded: styles.rounded,
@@ -41,6 +43,7 @@ export default function TextArea({
       rows={rows}
       cols={cols}
       id={id}
+      onKeyUp={onKeyUp}
       name={name}
       type={type}
       placeholder={placeholder}

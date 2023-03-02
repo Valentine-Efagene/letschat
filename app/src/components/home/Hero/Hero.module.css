@@ -47,20 +47,8 @@
   align-items: center;
 }
 
-@keyframes oscillation {
-  0% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(1rem);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
 .cta:hover .icon {
-  animation: oscillation 1s ease-in-out;
+  animation: var(--oscillation-animation);
 }
 
 .headline {

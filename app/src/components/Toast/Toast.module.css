@@ -9,10 +9,10 @@
   padding: 0.5rem 1rem;
   position: absolute;
   bottom: 3rem;
-  left: 50%;
-  transform: translate(-50%, 0);
-  transition: 300ms;
+  left: 2rem;
+  max-width: 70vw;
   min-width: 30vw;
+  transition: background-color 300ms, visibility 300ms;
 }
 
 .success {
@@ -33,6 +33,7 @@
   opacity: 0;
   transform: translateY(20px);
   visibility: collapse;
+  display: none;
 }
 
 .close {

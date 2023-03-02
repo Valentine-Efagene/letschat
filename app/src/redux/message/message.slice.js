@@ -34,7 +34,11 @@ const sendMessageThunk = createAsyncThunk(
 export const messageSlice = createSlice({
   name: 'message',
   initialState,
-  reducers: {},
+  reducers: {
+    appendMessage: (state, { payload }) => {
+      state.messages.push(payload);
+    },
+  },
   extraReducers: buiilder => {
     buiilder.addCase(fetchMessagesThunk.fulfilled, (state, { payload }) => {
       state.messages = payload;
@@ -62,4 +66,5 @@ export const messageSlice = createSlice({
 });
 
 export { sendMessageThunk, fetchMessagesThunk };
+export const { appendMessage } = messageSlice.actions;
 export default messageSlice.reducer;

@@ -6,4 +6,21 @@
   grid-template-columns: 1fr;
   gap: 1.25rem;
   height: fit-content;
+  position: sticky;
+  overflow: scroll;
+  max-height: 70%;
+}
+
+.container::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.container::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+.container::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: transparent;
 }

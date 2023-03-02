@@ -10,6 +10,7 @@ import { ToastContext, SUCCESS } from './contexts/ToastContext';
 import Toast from './components/Toast';
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
+import Contacts from './pages/Contacts';
 
 function App() {
   const router = createBrowserRouter([
@@ -20,6 +21,10 @@ function App() {
     {
       path: '/chat',
       element: <Chat />,
+    },
+    {
+      path: '/contacts',
+      element: <Contacts />,
     },
     {
       path: '/auth',
