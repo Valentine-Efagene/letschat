@@ -8,6 +8,7 @@ const userSchema = new Schema({
   email: String,
   password: String,
   permissionLevel: Number,
+  contacts: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
 userSchema.virtual("id").get(function () {
@@ -20,23 +21,26 @@ userSchema.set("toJSON", {
 });
 
 userSchema.findById = function (cb) {
-  return this.model("Users").find({ id: this.id }, cb);
+  return this.model("User").find({ id: this.id }, cb);
 };
 
-const User = mongoose.model("Users", userSchema);
+const User = mongoose.model("User", userSchema);
 
 exports.findByEmail = (email) => {
-  return User.find({ email: email });
+  return User.find({ email: email }).populate("contacts");
 };
-exports.findById = (id) => {
-  return User.findById(id).then((result) => {
-    if (result == null) return null;
 
-    result = result.toJSON();
-    delete result._id;
-    delete result.__v;
-    return result;
-  });
+exports.findById = (id) => {
+  return User.findById(id)
+    .populate("contacts")
+    .then((result) => {
+      if (result == null) return null;
+
+      result = result.toJSON();
+      delete result._id;
+      delete result.__v;
+      return result;
+    });
 };
 
 exports.createUser = (userData) => {
@@ -59,12 +63,62 @@ exports.list = (perPage, page) => {
   });
 };
 
+exports.contacts = async (id) => {
+  const user = await User.findById(id).populate("contacts");
+  return user.contacts;
+};
+
 exports.patchUser = (id, userData) => {
   return User.findOneAndUpdate(
     {
       _id: id,
     },
-    userData
+    userData,
+    {
+      returnOriginal: false,
+    }
+  );
+};
+
+exports.addContactById = (id, contactId) => {
+  return User.findByIdAndUpdate(
+    id,
+    {
+      $addToSet: {
+        contacts: contactId,
+      },
+    },
+    {
+      returnOriginal: false,
+    }
+  );
+};
+
+exports.removeContactById = (id, contactId) => {
+  return User.findByIdAndUpdate(
+    id,
+    {
+      $pull: {
+        contacts: contactId,
+      },
+    },
+    {
+      returnOriginal: false,
+    }
+  );
+};
+
+exports.removeContactById = (id, contactId) => {
+  return User.findByIdAndUpdate(
+    id,
+    {
+      $pull: {
+        contacts: contactId,
+      },
+    },
+    {
+      returnOriginal: false,
+    }
   );
 };
 

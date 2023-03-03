@@ -4,6 +4,7 @@ import { IDLE, PENDING, SUCCEEDED, FAILED } from '../../Helpers/loadingStates';
 
 const initialState = {
   messages: null,
+  target: null,
   status: IDLE,
   error: null,
 };
@@ -38,6 +39,9 @@ export const messageSlice = createSlice({
     appendMessage: (state, { payload }) => {
       state.messages.push(payload);
     },
+    setTarget: (state, { payload }) => {
+      state.target = payload;
+    },
   },
   extraReducers: buiilder => {
     buiilder.addCase(fetchMessagesThunk.fulfilled, (state, { payload }) => {
@@ -66,5 +70,5 @@ export const messageSlice = createSlice({
 });
 
 export { sendMessageThunk, fetchMessagesThunk };
-export const { appendMessage } = messageSlice.actions;
+export const { appendMessage, setTarget } = messageSlice.actions;
 export default messageSlice.reducer;

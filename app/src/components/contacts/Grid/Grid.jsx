@@ -1,13 +1,17 @@
 import React from 'react';
 import { usersProp } from '../../../prop-types/user';
+import { addContactThunk } from '../../../redux/user/user.slice';
 import styles from './Grid.module.css';
-const API_BASE_URL = 'http://localhost:3000';
 
 Grid.propTypes = {
   contacts: usersProp,
 };
 
 export default function Grid({ contacts }) {
+  const handleChat = async id => {
+    await addContactThunk(id);
+  };
+
   return (
     <div className={styles.container}>
       {contacts?.map(contact => {
@@ -17,14 +21,12 @@ export default function Grid({ contacts }) {
 
         return (
           <div key={id} className={styles.card}>
-            <img
-              className={styles.avatar}
-              src={`${API_BASE_URL}/upload/${avatar}`}
-              alt=""
-            />
+            <img className={styles.avatar} src={`${avatar}`} alt="" />
             <div>{email}</div>
             <div>{`${firstName} ${lastName}`}</div>
-            <button className={styles.cta}>Chat</button>
+            <button className={styles.cta} onClick={() => handleChat(id)}>
+              Add Contact
+            </button>
           </div>
         );
       })}

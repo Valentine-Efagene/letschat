@@ -19,10 +19,10 @@ messageSchema.set("toJSON", {
 });
 
 messageSchema.findById = function (cb) {
-  return this.model("Messages").find({ id: this.id }, cb);
+  return this.model("Message").find({ id: this.id }, cb);
 };
 
-const Message = mongoose.model("Messages", messageSchema);
+const Message = mongoose.model("Message", messageSchema);
 
 exports.findById = (id) => {
   return Message.findById(id).then((result) => {

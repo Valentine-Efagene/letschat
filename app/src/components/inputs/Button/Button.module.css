@@ -4,6 +4,10 @@
   width: fit-content;
   border-radius: 0.3rem;
   transition: background-color 300ms;
+  font-family: Poppins, sans-serif;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
 }
 
 .primary {

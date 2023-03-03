@@ -24,14 +24,6 @@ export default function DesktopNav({ className }) {
     dispatch(logout());
   };
 
-  useEffect(() => {
-    const init = async () => {
-      await dispatch(fetchCurrentUserThunk());
-    };
-
-    init();
-  }, []);
-
   return (
     <nav className={`${className} ${styles.container}`}>
       <FontAwesomeIcon icon={faCommenting} size="3x" className={styles.logo} />

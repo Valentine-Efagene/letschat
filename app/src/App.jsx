@@ -5,14 +5,24 @@ import Chat from './pages/Chat/Chat';
 import Auth from './pages/Auth/Auth';
 import Login from './components/auth/forms/Login';
 import SignUp from './components/auth/forms/SignUp';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ToastContext, SUCCESS } from './contexts/ToastContext';
 import Toast from './components/Toast';
-import { store } from './redux/store';
-import { Provider } from 'react-redux';
 import Contacts from './pages/Contacts';
+import { fetchCurrentUserThunk } from './redux/auth/auth.slice';
+import { useDispatch } from 'react-redux';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const init = async () => {
+      await dispatch(fetchCurrentUserThunk());
+    };
+
+    init();
+  }, []);
+
   const router = createBrowserRouter([
     {
       path: '/',
@@ -54,19 +64,17 @@ function App() {
     setToastState(prevState => ({ ...prevState, show: false }));
 
   return (
-    <Provider store={store}>
-      <ToastContext.Provider value={{ toastState, setToastState }}>
-        <RouterProvider router={router} />
-        <Toast
-          show={toastState?.show}
-          onClose={() => closeToast(false)}
-          type={toastState?.type}
-          delay={toastState?.delay}
-          message={toastState?.message}
-          title={toastState?.title}
-        />
-      </ToastContext.Provider>
-    </Provider>
+    <ToastContext.Provider value={{ toastState, setToastState }}>
+      <RouterProvider router={router} />
+      <Toast
+        show={toastState?.show}
+        onClose={() => closeToast(false)}
+        type={toastState?.type}
+        delay={toastState?.delay}
+        message={toastState?.message}
+        title={toastState?.title}
+      />
+    </ToastContext.Provider>
   );
 }
 

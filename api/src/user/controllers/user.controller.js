@@ -16,6 +16,47 @@ exports.insert = (req, res) => {
   });
 };
 
+exports.contacts = (req, res) => {
+  let limit =
+    req.query.limit && req.query.limit <= 100 ? parseInt(req.query.limit) : 10;
+  let page = 0;
+
+  if (req.query) {
+    if (req.query.page) {
+      req.query.page = parseInt(req.query.page);
+      page = Number.isInteger(req.query.page) ? req.query.page : 0;
+    }
+  }
+
+  UserModel.contacts(req.params.id, limit, page).then((result) => {
+    res.status(200).send(result);
+  });
+};
+
+exports.addContactById = async (req, res) => {
+  try {
+    UserModel.addContactById(req.params.id, req.body.contactId).then(
+      (result) => {
+        res.status(200).send(result);
+      }
+    );
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+exports.removeContactById = async (req, res) => {
+  try {
+    UserModel.removeContactById(req.params.id, req.body.contactId).then(
+      (result) => {
+        res.status(200).send(result);
+      }
+    );
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
 exports.list = (req, res) => {
   let limit =
     req.query.limit && req.query.limit <= 100 ? parseInt(req.query.limit) : 10;
@@ -53,6 +94,7 @@ exports.patchById = async (req, res) => {
     req.body.avatar = req?.file?.filename;
 
     UserModel.patchUser(req.params.id, req.body).then((result) => {
+      console.log(result);
       res.status(200).send(result);
     });
   } catch (error) {

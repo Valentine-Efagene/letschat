@@ -45,6 +45,10 @@ const router = Router();
 
 router.post("/users", [UsersController.insert]);
 
+router.get("/users/:id/contacts", [UsersController.contacts]);
+router.patch("/users/:id/contacts/add", [UsersController.addContactById]);
+router.patch("/users/:id/contacts/remove", [UsersController.removeContactById]);
+
 router.get("/users", [
   ValidationMiddleware.validJWTNeeded,
   PermissionMiddleware.minimumPermissionLevelRequired(PAID),

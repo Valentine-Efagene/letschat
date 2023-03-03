@@ -9,6 +9,21 @@
   flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;
+  border: 1px solid var(--primary-2);
+  border-radius: 0.3rem;
+  padding: 1rem;
+  transition: 300ms;
+}
+
+.card:hover {
+  border: 1px solid var(--primary-3);
+
+  transform: translateY(-8px);
+  box-shadow: var(--primary-4) 0px 12px 20px 0px;
+}
+
+.card:hover .icon {
+  animation: var(--oscillation-animation);
 }
 
 .card > *:not(:first-child) {
@@ -35,6 +50,7 @@
   border: none;
   font-size: 1.125rem;
   font-family: Poppins, sans-serif;
+  margin-right: 1.25rem;
 }
 
 .cta:hover .icon {

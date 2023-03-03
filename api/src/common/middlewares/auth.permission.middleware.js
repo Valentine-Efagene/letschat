@@ -9,6 +9,11 @@ exports.minimumPermissionLevelRequired = (required_permission_level) => {
     let user_permission_level = parseInt(req.jwt.permissionLevel);
     //let id = req.jwt.id;
 
+    // console.log({
+    //   required: required_permission_level,
+    //   user: user_permission_level,
+    // });
+
     if (user_permission_level & required_permission_level) {
       return next();
     } else {
