@@ -8,6 +8,7 @@ import {
 } from '../../../../redux/message/message.slice';
 import MessageCard from '../../cards/Message';
 import styles from './Messages.module.css';
+import { useParams } from 'react-router-dom';
 
 // https://css-tricks.com/books/greatest-css-tricks/pin-scrolling-to-bottom/
 
@@ -17,6 +18,7 @@ export default function Messages() {
   const { messages } = useSelector(state => state.message);
   const { socket } = useSelector(state => state.socket);
   const ref = useRef();
+  const { id: target } = useParams();
 
   const scrollToBottom = () => {
     const timeout = setTimeout(() => {
@@ -42,7 +44,7 @@ export default function Messages() {
 
     const init = async () => {
       try {
-        await dispatch(fetchMessagesThunk());
+        await dispatch(fetchMessagesThunk(target));
       } catch (error) {
         setToastState(prevState => {
           return {

@@ -19,6 +19,8 @@ const initialState = {
 const fetchByIdThunk = createAsyncThunk(
   'user/fetchById',
   async (id, { rejectWithValue }) => {
+    if (id == null) return null;
+
     try {
       return await fetchUserById(id);
     } catch (error) {

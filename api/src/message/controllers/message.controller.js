@@ -40,6 +40,27 @@ exports.listByUser = (req, res) => {
   });
 };
 
+exports.listBySenderReceiver = (req, res) => {
+  let limit =
+    req.query.limit && req.query.limit <= 100 ? parseInt(req.query.limit) : 10;
+  let page = 0;
+
+  if (req.query) {
+    if (req.query.page) {
+      req.query.page = parseInt(req.query.page);
+      page = Number.isInteger(req.query.page) ? req.query.page : 0;
+    }
+  }
+
+  const { senderId, receiverId } = req.params;
+
+  MessageModel.listBySenderReceiver(limit, page, senderId, receiverId).then(
+    (result) => {
+      res.status(200).send(result);
+    }
+  );
+};
+
 exports.getById = (req, res) => {
   MessageModel.findById(req.params.id).then((result) => {
     res.status(200).send(result);

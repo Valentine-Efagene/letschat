@@ -7,10 +7,18 @@
   border: none;
   background-color: #00000000;
   cursor: pointer;
+  color: #000000;
+  text-decoration: none;
+  transition: 300ms;
 }
 
 .container:not(:last-child) {
   border-bottom: 4px solid var(--primary-1);
+}
+
+.isTarget {
+  background-color: var(--primary-1);
+  color: #ffffff;
 }
 
 .avatar {

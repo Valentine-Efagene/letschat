@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import styles from './Message.module.css';
 
 import { func } from 'prop-types';
 import { messageProp } from '../../../../prop-types/message';
-import UserContext from '../../../../contexts/UserContext';
 
 Message.propTypes = {
   message: messageProp,
@@ -11,7 +11,7 @@ Message.propTypes = {
 };
 
 export default function Message({ message }) {
-  const { user } = useContext(UserContext);
+  const { user } = useSelector(state => state.auth);
   const { text, sender, receiver, photos } = message;
 
   return (

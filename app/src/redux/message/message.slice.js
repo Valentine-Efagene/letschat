@@ -11,9 +11,11 @@ const initialState = {
 
 const fetchMessagesThunk = createAsyncThunk(
   'message/fetch',
-  async (_, { rejectWithValue }) => {
+  async (target, { rejectWithValue }) => {
+    if (target == null) return null;
+
     try {
-      const result = await fetchMessages();
+      const result = await fetchMessages(target);
       return result;
     } catch (error) {
       return rejectWithValue(error.response.data);

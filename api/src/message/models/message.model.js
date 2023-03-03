@@ -55,6 +55,25 @@ exports.listByUser = (perPage, page, userId) => {
   });
 };
 
+exports.listBySenderReceiver = (perPage, page, senderId, receiverId) => {
+  return new Promise((resolve, reject) => {
+    Message.find()
+      .or([
+        { sender: senderId, receiver: receiverId },
+        { sender: receiverId, receiver: senderId },
+      ])
+      .limit(perPage)
+      .skip(perPage * page)
+      .exec(function (err, users) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(users);
+        }
+      });
+  });
+};
+
 exports.list = (perPage, page) => {
   return new Promise((resolve, reject) => {
     Message.find()

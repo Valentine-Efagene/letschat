@@ -54,7 +54,12 @@ router.get("/messages", [
   MessageController.list,
 ]);
 
-// Key
+router.get("/:senderId/messages/:receiverId", [
+  ValidationMiddleware.validJWTNeeded,
+  PermissionMiddleware.minimumPermissionLevelRequired(PAID),
+  MessageController.listBySenderReceiver,
+]);
+
 router.get("/:userId/messages", [
   ValidationMiddleware.validJWTNeeded,
   PermissionMiddleware.minimumPermissionLevelRequired(PAID),

@@ -39,9 +39,9 @@ export default function Contacts() {
       </Button>
 
       {layout === GRID ? (
-        <Grid contacts={otherUsers} />
+        <Grid users={otherUsers} />
       ) : (
-        <List contacts={otherUsers} />
+        <List users={otherUsers} />
       )}
     </div>
   );

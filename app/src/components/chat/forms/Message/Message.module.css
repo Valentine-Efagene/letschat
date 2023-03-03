@@ -4,6 +4,12 @@
   gap: 1rem;
 }
 
+.controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
 .send {
   background-color: var(--primary-3);
   transition: 300ms;

@@ -1,7 +1,7 @@
 .container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
 }
 
 .card {
@@ -46,4 +46,9 @@
   background-color: var(--primary-1);
   border: none;
   color: #ffffff;
+}
+
+@media screen and (max-width: 800px) {
+  .container {
+  }
 }

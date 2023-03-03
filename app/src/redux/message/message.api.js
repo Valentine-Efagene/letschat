@@ -16,11 +16,11 @@ async function sendMessage(data) {
   return response.json();
 }
 
-async function fetchMessages() {
+async function fetchMessages(target) {
   const userId = localStorage.getItem('user-id');
   const token = localStorage.getItem('access-token');
 
-  const response = await fetch(`${API_BASE_URL}/${userId}/messages`, {
+  const response = await fetch(`${API_BASE_URL}/${userId}/messages/${target}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response.json();

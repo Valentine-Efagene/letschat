@@ -1,32 +1,45 @@
 import React from 'react';
 import { usersProp } from '../../../prop-types/user';
 import { addContactThunk } from '../../../redux/user/user.slice';
+import { Link } from 'react-router-dom';
 import styles from './Grid.module.css';
+import { useDispatch, useSelector } from 'react-redux';
 
 Grid.propTypes = {
-  contacts: usersProp,
+  users: usersProp,
 };
 
-export default function Grid({ contacts }) {
-  const handleChat = async id => {
-    await addContactThunk(id);
+export default function Grid({ users }) {
+  const dispatch = useDispatch();
+  const { user } = useSelector(state => state.auth);
+
+  const handleAddContact = async id => {
+    await dispatch(addContactThunk(id));
   };
 
   return (
     <div className={styles.container}>
-      {contacts?.map(contact => {
-        if (contact == null) return;
+      {users?.map(_user => {
+        if (_user == null) return;
 
-        const { id, avatar, email, firstName, lastName } = contact;
+        const isContact = user?.contacts?.find(({ id }) => _user.id === id);
+
+        const { id, avatar, email, firstName, lastName } = _user;
 
         return (
           <div key={id} className={styles.card}>
             <img className={styles.avatar} src={`${avatar}`} alt="" />
             <div>{email}</div>
             <div>{`${firstName} ${lastName}`}</div>
-            <button className={styles.cta} onClick={() => handleChat(id)}>
-              Add Contact
-            </button>
+            {isContact ? (
+              <Link to={`/chat/${id}`}>Chat</Link>
+            ) : (
+              <button
+                className={styles.cta}
+                onClick={() => handleAddContact(id)}>
+                Add to Contacts
+              </button>
+            )}
           </div>
         );
       })}

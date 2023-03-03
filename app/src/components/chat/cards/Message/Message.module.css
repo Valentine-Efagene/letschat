@@ -12,5 +12,7 @@
 }
 
 .receiver {
+  background-color: var(--primary-1);
+  color: #ffffff;
   margin-right: auto;
 }

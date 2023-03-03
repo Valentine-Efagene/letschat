@@ -2,32 +2,33 @@ import React, { useContext, useEffect, useState } from 'react';
 import styles from './Message.module.css';
 import TextArea from '../../../inputs/TextArea/TextArea';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import {
-  ERROR,
-  // SUCCESS,
-  ToastContext,
-} from '../../../../contexts/ToastContext';
-import {
-  useDispatch,
-  //useDispatch,
-  useSelector,
-} from 'react-redux';
+  faPaperclip,
+  faPaperPlane,
+  faSpinner,
+} from '@fortawesome/free-solid-svg-icons';
+import { ERROR, ToastContext } from '../../../../contexts/ToastContext';
+import { useDispatch, useSelector } from 'react-redux';
 import { PENDING } from '../../../../Helpers/loadingStates';
-// import { sendMessageThunk } from '../../../../redux/message/message.slice';
-import { object } from 'prop-types';
-import { reconnect } from '../../../../redux/socket/socket.slice';
-import { appendMessage } from '../../../../redux/message/message.slice';
+import { useParams } from 'react-router-dom';
+import AttachmentPicker from '../../../inputs/AttachmentPicker/AttachmentPicker';
 
 export default function Message() {
-  // const dispatch = useDispatch();
   const { user } = useSelector(state => state.auth);
   const { status } = useSelector(state => state.message);
   const { socket } = useSelector(state => state.socket);
 
   const { setToastState } = useContext(ToastContext);
-  const [data, setData] = useState({
-    sender: user?.id,
+  const [data, setData] = useState({});
+
+  const { id: receiver } = useParams();
+
+  useEffect(() => {
+    setData(prevState => ({ ...prevState, receiver }));
+
+    // dispatch(fetchByIdThunk(receiver)).then(user => {
+    //   dispatch(setTarget(user));
+    // });
   });
 
   const handleChange = e => {
@@ -41,27 +42,11 @@ export default function Message() {
     socket?.emit('typing');
   };
 
-  const dispatch = useDispatch();
-
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      socket?.send(data);
+      socket?.send({ ...data, sender: user?.id });
       setData(prevState => ({ ...prevState, text: '' }));
-
-      /*
-      const result = await dispatch(sendMessageThunk(data));
-
-      setToastState(prevState => {
-        return {
-          ...prevState,
-          show: true,
-          message: (status % 10) - status / 10 === 20 ? 'Updated' : '',
-          // message: JSON.stringify(result),
-          title: SUCCESS,
-          delay: 3000,
-        };
-      });*/
     } catch (error) {
       setToastState(prevState => {
         return {
@@ -87,9 +72,14 @@ export default function Message() {
         value={data?.text}
         rows="5"
       />
-      <button className={styles.send} disabled={status === PENDING}>
-        <FontAwesomeIcon icon={status === PENDING ? faSpinner : faPaperPlane} />
-      </button>
+      <div className={styles.controls}>
+        <button className={styles.send} disabled={status === PENDING}>
+          <FontAwesomeIcon
+            icon={status === PENDING ? faSpinner : faPaperPlane}
+          />
+        </button>
+        <AttachmentPicker />
+      </div>
     </form>
   );
 }
