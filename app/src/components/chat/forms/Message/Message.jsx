@@ -2,19 +2,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import styles from './Message.module.css';
 import TextArea from '../../../inputs/TextArea/TextArea';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPaperclip,
-  faPaperPlane,
-  faSpinner,
-} from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { ERROR, ToastContext } from '../../../../contexts/ToastContext';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { PENDING } from '../../../../Helpers/loadingStates';
 import { useParams } from 'react-router-dom';
 import AttachmentPicker from '../../../inputs/AttachmentPicker/AttachmentPicker';
 
 export default function Message() {
-  const { user } = useSelector(state => state.auth);
+  const { user } = useSelector(state => state.user);
   const { status } = useSelector(state => state.message);
   const { socket } = useSelector(state => state.socket);
 
@@ -25,11 +21,7 @@ export default function Message() {
 
   useEffect(() => {
     setData(prevState => ({ ...prevState, receiver }));
-
-    // dispatch(fetchByIdThunk(receiver)).then(user => {
-    //   dispatch(setTarget(user));
-    // });
-  });
+  }, []);
 
   const handleChange = e => {
     const {

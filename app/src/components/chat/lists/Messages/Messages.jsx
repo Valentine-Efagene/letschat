@@ -1,4 +1,3 @@
-import { object } from 'prop-types';
 import React, { useContext, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ERROR, ToastContext } from '../../../../contexts/ToastContext';
@@ -15,8 +14,8 @@ import { useParams } from 'react-router-dom';
 export default function Messages() {
   const { setToastState } = useContext(ToastContext);
   const dispatch = useDispatch();
-  const { messages } = useSelector(state => state.message);
   const { socket } = useSelector(state => state.socket);
+  const { messages } = useSelector(state => state.message);
   const ref = useRef();
   const { id: target } = useParams();
 

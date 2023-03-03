@@ -28,6 +28,7 @@
   animation: var(--pulse-animation);
   border-radius: 50%;
   margin: auto;
+  object-fit: cover;
 }
 
 .cta {

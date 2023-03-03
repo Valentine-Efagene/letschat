@@ -1,0 +1,16 @@
+.container {
+  border-radius: 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.container,
+.container > img {
+  width: 3rem;
+  aspect-ratio: 1/1;
+}
+
+.container > img {
+  object-fit: cover;
+}

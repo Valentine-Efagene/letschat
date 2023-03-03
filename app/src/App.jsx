@@ -9,8 +9,8 @@ import { useEffect, useState } from 'react';
 import { ToastContext, SUCCESS } from './contexts/ToastContext';
 import Toast from './components/Toast';
 import Contacts from './pages/Contacts';
-import { fetchCurrentUserThunk } from './redux/auth/auth.slice';
 import { useDispatch } from 'react-redux';
+import { fetchCurrentUserThunk } from './redux/user/user.slice';
 
 function App() {
   const dispatch = useDispatch();

@@ -7,7 +7,7 @@ import Button from '../../../inputs/Button/Button';
 import TextField from '../../../inputs/TextField/TextField';
 import styles from './Login.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { signInThunk } from '../../../../redux/auth/auth.slice';
+import { signInThunk } from '../../../../redux/user/user.slice';
 
 export default function Login() {
   const [credentials, setCredentials] = useState({
@@ -16,8 +16,7 @@ export default function Login() {
   });
 
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.auth);
-  const { status } = useSelector(state => state.auth);
+  const { status } = useSelector(state => state.user);
   const navigate = useNavigate();
 
   const handleChange = event => {
@@ -37,7 +36,9 @@ export default function Login() {
       if (status === SUCCEEDED) {
         navigate('/chat');
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log({ error });
+    }
   };
 
   return (

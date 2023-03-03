@@ -1,12 +1,12 @@
 import { faCommenting } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { string } from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import NavLink from '../NavLink/NavLink';
 import styles from './DesktopNav.module.css';
 import Profile from '../forms/Profile/Profile';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCurrentUserThunk, logout } from '../../../redux/auth/auth.slice';
+import { logout } from '../../../redux/user/user.slice';
 
 DesktopNav.propTypes = {
   className: string,
@@ -15,7 +15,7 @@ DesktopNav.propTypes = {
 export default function DesktopNav({ className }) {
   const dispatch = useDispatch();
 
-  const { user } = useSelector(state => state.auth);
+  const { user } = useSelector(state => state.user);
   const [showProfile, setShowProfile] = useState(false);
 
   const toggleShowProfile = () => setShowProfile(prevState => !prevState);

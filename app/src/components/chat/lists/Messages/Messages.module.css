@@ -9,6 +9,7 @@
   position: sticky;
   overflow: scroll;
   max-height: 70%;
+  padding: 1.25rem;
 }
 
 .container::-webkit-scrollbar {

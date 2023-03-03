@@ -11,7 +11,7 @@ Message.propTypes = {
 };
 
 export default function Message({ message }) {
-  const { user } = useSelector(state => state.auth);
+  const { user } = useSelector(state => state.user);
   const { text, sender, receiver, photos } = message;
 
   return (

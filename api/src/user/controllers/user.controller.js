@@ -90,11 +90,12 @@ exports.patchById = async (req, res) => {
     req.body.password = salt + "$" + hash;
   }
 
+  //console.log({ body: req.body, file: req.file });
+
   try {
-    req.body.avatar = req?.file?.filename;
+    req.body.avatar = `${process.env.BASE_URL}/${req?.file?.filename}`;
 
     UserModel.patchUser(req.params.id, req.body).then((result) => {
-      console.log(result);
       res.status(200).send(result);
     });
   } catch (error) {

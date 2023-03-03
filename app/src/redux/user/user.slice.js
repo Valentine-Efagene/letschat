@@ -6,6 +6,9 @@ import {
   removeContactById,
   fetchContacts,
   fetchAllUsers,
+  signIn,
+  signUp,
+  fetchCurrentUser,
 } from './user.api';
 import { IDLE, PENDING, SUCCEEDED, FAILED } from '../../Helpers/loadingStates';
 
@@ -16,13 +19,50 @@ const initialState = {
   error: null,
 };
 
+const fetchCurrentUserThunk = createAsyncThunk(
+  'user/fetchCurrentUser',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await fetchCurrentUser();
+      return res;
+    } catch (error) {
+      rejectWithValue(error);
+    }
+  },
+);
+
+const signInThunk = createAsyncThunk(
+  'user/signIn',
+  async (credentials, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
+
+    try {
+      return await signIn(credentials);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+const signUpThunk = createAsyncThunk(
+  'user/signUp',
+  async (credentials, { rejectWithValue }) => {
+    try {
+      return await signUp(credentials);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
 const fetchByIdThunk = createAsyncThunk(
   'user/fetchById',
   async (id, { rejectWithValue }) => {
     if (id == null) return null;
 
     try {
-      return await fetchUserById(id);
+      const response = await fetchUserById(id);
+      return response;
     } catch (error) {
       rejectWithValue(error);
     }
@@ -88,11 +128,49 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setCurrentChatMate: (state, { payload }) => {
-      state.chatMate = payload;
+    logout: state => {
+      localStorage.clear();
+      state.user = null;
     },
   },
   extraReducers: buiilder => {
+    buiilder.addCase(fetchCurrentUserThunk.fulfilled, (state, { payload }) => {
+      state.user = payload;
+      state.status = SUCCEEDED;
+    });
+    buiilder.addCase(fetchCurrentUserThunk.pending, (state, { payload }) => {
+      state.status = PENDING;
+    });
+    buiilder.addCase(fetchCurrentUserThunk.rejected, (state, { payload }) => {
+      state.error = payload;
+      state.status = FAILED;
+    });
+
+    buiilder.addCase(signInThunk.fulfilled, (state, { payload }) => {
+      state.user = payload.data;
+      state.status = SUCCEEDED;
+    });
+    buiilder.addCase(signInThunk.pending, (state, { payload }) => {
+      state.status = PENDING;
+    });
+    buiilder.addCase(signInThunk.rejected, (state, { payload }) => {
+      console.table([payload]);
+      state.error = payload;
+      state.status = FAILED;
+    });
+
+    buiilder.addCase(signUpThunk.fulfilled, (state, { payload }) => {
+      state.user = payload;
+      state.status = SUCCEEDED;
+    });
+    buiilder.addCase(signUpThunk.pending, (state, { payload }) => {
+      state.status = PENDING;
+    });
+    buiilder.addCase(signUpThunk.rejected, (state, { payload }) => {
+      state.error = payload;
+      state.status = FAILED;
+    });
+
     buiilder.addCase(fetchByIdThunk.fulfilled, (state, { payload }) => {
       state.user = payload;
       state.status = SUCCEEDED;
@@ -106,7 +184,7 @@ export const userSlice = createSlice({
     });
 
     buiilder.addCase(updateUserThunk.fulfilled, (state, { payload }) => {
-      state.user = payload;
+      state.user = payload?.data;
       state.status = SUCCEEDED;
     });
     buiilder.addCase(updateUserThunk.pending, (state, { payload }) => {
@@ -174,6 +252,9 @@ export {
   removeContactThunk,
   fetchContactsThunk,
   fetchAllUsersThunk,
+  signInThunk,
+  signUpThunk,
+  fetchCurrentUserThunk,
 };
-export const { setCurrentChatMate } = userSlice.actions;
+export const { logout } = userSlice.actions;
 export default userSlice.reducer;

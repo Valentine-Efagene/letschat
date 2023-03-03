@@ -1,4 +1,4 @@
-import { faDashboard, faList, faTh } from '@fortawesome/free-solid-svg-icons';
+import { faList, faTh } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,11 +12,9 @@ const GRID = 'grid';
 const LIST = 'list';
 
 export default function Contacts() {
-  const { user } = useSelector(state => state.auth);
-  const { users } = useSelector(state => state.user);
+  const { user, users } = useSelector(state => state.user);
 
   const [layout, setLayout] = useState(GRID);
-  const contacts = user?.contacts;
   const dispatch = useDispatch();
 
   useEffect(() => {

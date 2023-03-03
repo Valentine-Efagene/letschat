@@ -13,6 +13,7 @@
 
 .receiver {
   background-color: var(--primary-1);
+  border-color: #ffffff;
   color: #ffffff;
   margin-right: auto;
 }

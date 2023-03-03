@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 
 export default function Master() {
   const { socket } = useSelector(state => state.socket);
-  const { user } = useSelector(state => state.auth);
+  const { user } = useSelector(state => state.user);
   const [showQuickProfile, setShowQuickProfile] = useState(false);
   const { id: target } = useParams();
 

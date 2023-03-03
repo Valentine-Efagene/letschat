@@ -11,7 +11,7 @@ Grid.propTypes = {
 
 export default function Grid({ users }) {
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.auth);
+  const { user } = useSelector(state => state.user);
 
   const handleAddContact = async id => {
     await dispatch(addContactThunk(id));

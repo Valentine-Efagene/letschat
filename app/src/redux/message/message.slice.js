@@ -44,6 +44,9 @@ export const messageSlice = createSlice({
     setTarget: (state, { payload }) => {
       state.target = payload;
     },
+    setMessages: (state, { payload }) => {
+      state.messages = payload;
+    },
   },
   extraReducers: buiilder => {
     buiilder.addCase(fetchMessagesThunk.fulfilled, (state, { payload }) => {
@@ -72,5 +75,5 @@ export const messageSlice = createSlice({
 });
 
 export { sendMessageThunk, fetchMessagesThunk };
-export const { appendMessage, setTarget } = messageSlice.actions;
+export const { appendMessage, setTarget, setMessages } = messageSlice.actions;
 export default messageSlice.reducer;

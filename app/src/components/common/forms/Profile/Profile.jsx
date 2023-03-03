@@ -9,14 +9,18 @@ import Button from '../../../inputs/Button/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { PENDING } from '../../../../Helpers/loadingStates';
 import { SUCCESS, ToastContext } from '../../../../contexts/ToastContext';
-import { sendMessageThunk } from '../../../../redux/message/message.slice';
+import { updateUserThunk } from '../../../../redux/user/user.slice';
 
 export default function Profile() {
   const dispatch = useDispatch();
   const { setToastState } = useContext(ToastContext);
-  const { user } = useSelector(state => state.auth);
-  const { status } = useSelector(state => state.user);
-  const [data, setData] = useState(user ?? {});
+  const { user, status } = useSelector(state => state.user);
+  const [data, setData] = useState({
+    avatar: user?.avatar ?? '',
+    firstName: user?.firstName ?? '',
+    lastName: user?.lastName ?? '',
+    email: user?.email ?? '',
+  });
 
   const handleAvatarChange = ref => {
     handleChange({ target: { name: 'avatar', value: ref.current?.files[0] } });
@@ -34,7 +38,7 @@ export default function Profile() {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const result = await dispatch(sendMessageThunk(data));
+      const result = await dispatch(updateUserThunk(data));
 
       setToastState(prevState => {
         return {

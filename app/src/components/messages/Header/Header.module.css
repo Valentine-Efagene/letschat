@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  justify-content: flex-end;
+  background-color: var(--primary-1);
+  padding: 0.7rem 1rem;
+}
+
+.avatar {
+  margin-left: auto;
+}
