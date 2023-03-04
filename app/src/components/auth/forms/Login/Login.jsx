@@ -1,6 +1,6 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PENDING, SUCCEEDED } from '../../../../Helpers/loadingStates';
 import Button from '../../../inputs/Button/Button';
@@ -8,6 +8,7 @@ import TextField from '../../../inputs/TextField/TextField';
 import styles from './Login.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInThunk } from '../../../../redux/user/user.slice';
+import { ERROR, ToastContext } from '../../../../contexts/ToastContext';
 
 export default function Login() {
   const [credentials, setCredentials] = useState({
@@ -16,7 +17,8 @@ export default function Login() {
   });
 
   const dispatch = useDispatch();
-  const { status } = useSelector(state => state.user);
+  const { setToastState } = useContext(ToastContext);
+  const { status, error } = useSelector(state => state.user);
   const navigate = useNavigate();
 
   const handleChange = event => {
@@ -28,14 +30,25 @@ export default function Login() {
     }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = e => {
     e.preventDefault();
     try {
-      await dispatch(signInThunk(credentials));
+      dispatch(signInThunk(credentials)).then(() => {
+        setToastState(prevState => {
+          return {
+            ...prevState,
+            show: error != null,
+            message: error?.message,
+            title: error?.code,
+            delay: 3000,
+            type: ERROR,
+          };
+        });
 
-      if (status === SUCCEEDED) {
-        navigate('/chat');
-      }
+        if (status === SUCCEEDED) {
+          navigate('/chat');
+        }
+      });
     } catch (error) {
       console.log({ error });
     }

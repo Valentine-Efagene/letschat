@@ -1,10 +1,11 @@
 import { faList, faTh } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Grid from '../../components/contacts/Grid/Grid';
 import List from '../../components/contacts/List/List';
 import Button from '../../components/inputs/Button/Button';
+import { ERROR, ToastContext } from '../../contexts/ToastContext';
 import { fetchAllUsersThunk } from '../../redux/user/user.slice';
 import styles from './Contacts.module.css';
 
@@ -12,7 +13,8 @@ const GRID = 'grid';
 const LIST = 'list';
 
 export default function Contacts() {
-  const { user, users } = useSelector(state => state.user);
+  const { user, users, error } = useSelector(state => state.user);
+  const { setToastState } = useContext(ToastContext);
 
   const [layout, setLayout] = useState(GRID);
   const dispatch = useDispatch();
@@ -20,6 +22,17 @@ export default function Contacts() {
   useEffect(() => {
     const init = async () => {
       await dispatch(fetchAllUsersThunk());
+
+      setToastState(prevState => {
+        return {
+          ...prevState,
+          show: error != null,
+          message: error?.message,
+          title: error?.code,
+          delay: 3000,
+          type: ERROR,
+        };
+      });
     };
 
     init();

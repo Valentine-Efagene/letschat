@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { SUCCEEDED } from '../../../../Helpers/loadingStates';
+import { signUpThunk } from '../../../../redux/user/user.slice';
 import Button from '../../../inputs/Button/Button';
 import TextField from '../../../inputs/TextField/TextField';
 import styles from './SignUp.module.css';
@@ -10,6 +13,9 @@ export default function SignUp() {
     password: '',
   });
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleChange = event => {
     const { name, value, type, checked } = event.target;
 
@@ -19,10 +25,24 @@ export default function SignUp() {
     }));
   };
 
+  const handleSubmit = async e => {
+    e.preventDefault();
+    try {
+      await dispatch(signUpThunk(data));
+
+      if (status === SUCCEEDED) {
+        navigate('/chat');
+      }
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit} className={styles.container}>
       <h2>Get Started</h2>
       <label>
+        Email
         <TextField
           variant="rounded"
           type="email"
@@ -32,6 +52,7 @@ export default function SignUp() {
         />
       </label>
       <label>
+        Password
         <TextField
           onChange={handleChange}
           variant="rounded"

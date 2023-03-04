@@ -1,20 +1,43 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styles from './Master.module.css';
 import { faComment, faUser } from '@fortawesome/free-solid-svg-icons';
 import QuickProfile from '../QuickProfile/QuickProfile';
 import Contact from '../cards/Contact/Contact';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { fetchContactsThunk } from '../../../redux/user/user.slice';
+import { ERROR, ToastContext } from '../../../contexts/ToastContext';
 
 export default function Master() {
   const { socket } = useSelector(state => state.socket);
-  const { user } = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const { user, error, contacts } = useSelector(state => state.user);
+  const { setToastState } = useContext(ToastContext);
   const [showQuickProfile, setShowQuickProfile] = useState(false);
   const { id: target } = useParams();
 
   const showQuick = () => setShowQuickProfile(true);
   const hideQuick = () => setShowQuickProfile(false);
+
+  useEffect(() => {
+    const init = () => {
+      dispatch(fetchContactsThunk()).then(() => {
+        setToastState(prevState => {
+          return {
+            ...prevState,
+            show: error != null,
+            message: error?.message,
+            title: error?.code,
+            delay: 3000,
+            type: ERROR,
+          };
+        });
+      });
+    };
+
+    init();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -36,7 +59,7 @@ export default function Master() {
       </div>
       <QuickProfile show={showQuickProfile} hide={hideQuick} />
       <div className={styles.cl}>
-        {user?.contacts?.map(contact => {
+        {contacts?.map(contact => {
           const { id } = contact;
 
           return (

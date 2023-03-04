@@ -60,7 +60,7 @@ export default function Messages() {
 
     init();
     scrollToBottom();
-  }, []);
+  }, [target]);
 
   return (
     <div className={styles.container} ref={ref}>

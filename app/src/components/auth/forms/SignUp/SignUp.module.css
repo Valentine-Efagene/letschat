@@ -1,7 +1,3 @@
-.container h2 {
-  text-align: center;
-}
-
 .container {
   display: grid;
   grid-template-columns: 1fr;
@@ -9,6 +5,10 @@
   margin-inline: auto;
   width: calc(100% - 2.5rem);
   max-width: 600px;
+}
+
+.container h2 {
+  text-align: center;
 }
 
 .container input,

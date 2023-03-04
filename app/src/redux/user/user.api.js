@@ -1,5 +1,6 @@
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+import { CustomException } from '../../Helpers/error';
 
 const API_BASE_URL = 'http://localhost:3000';
 
@@ -25,38 +26,53 @@ async function fetchCurrentUser() {
  * @param {{email, password}} credentials
  */
 async function signIn(credentials) {
+  const response = await axios.post('http://localhost:3000/auth', credentials);
+
+  if (response?.status > 399) {
+    throw new CustomException(response?.statusText, response?.status);
+  }
+
   const {
     data: { accessToken, refreshToken, id },
-  } = await axios.post('http://localhost:3000/auth', credentials);
+  } = response;
 
   localStorage.setItem('access-token', accessToken);
   localStorage.setItem('refresh-token', refreshToken);
   localStorage.setItem('user-id', id);
 
-  const _user = accessToken
-    ? jwt_decode(localStorage.getItem('access-token'))
-    : null;
+  const _user = accessToken ? jwt_decode(accessToken) : null;
 
-  if (_user) {
-    const res = await fetch(`${API_BASE_URL}/users/${_user.id}`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    const data = await res.json();
-    data.avatar = `${API_BASE_URL}/${data.avatar}`;
+  if (_user == null) return null;
 
-    return _user;
+  const res = await fetch(`${API_BASE_URL}/users/${id}`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  if (res?.status > 399) {
+    throw new CustomException(res?.statusText, res?.status);
   }
 
-  return null;
+  const data = await res.json();
+  return data;
 }
 
 /**
  *
  * @param {{email, password}} credentials
  */
-async function signUp() {}
+async function signUp(credentials) {
+  const { id } = await axios.post('http://localhost:3000/users', credentials);
+
+  if (id) {
+    return signIn(credentials);
+  }
+
+  return null;
+}
 
 async function fetchUserById(id) {
+  if (id == null) return null;
+
   const token = localStorage.getItem('access-token');
 
   const _user = token ? jwt_decode(localStorage.getItem('access-token')) : null;
@@ -81,10 +97,12 @@ async function fetchAllUsers() {
       headers: { Authorization: `Bearer ${token}` },
     });
 
+    if (response?.status !== 200) {
+      throw new CustomException(response?.statusText, response?.status);
+    }
+
     return await response.json();
   }
-
-  return null;
 }
 
 async function fetchContacts() {
@@ -100,7 +118,9 @@ async function fetchContacts() {
       },
     );
 
-    return response;
+    const { data } = response;
+
+    return data;
   }
 
   return null;
@@ -122,7 +142,9 @@ async function addContactById(id) {
       },
     );
 
-    return response;
+    const { data } = response;
+
+    return data;
   }
 
   return null;

@@ -21,7 +21,7 @@ export default function Message() {
 
   useEffect(() => {
     setData(prevState => ({ ...prevState, receiver }));
-  }, []);
+  }, [receiver]);
 
   const handleChange = e => {
     const {

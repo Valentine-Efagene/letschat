@@ -27,20 +27,22 @@ userSchema.findById = function (cb) {
 const User = mongoose.model("User", userSchema);
 
 exports.findByEmail = (email) => {
-  return User.find({ email: email }).populate("contacts");
+  return User.find({ email: email }); //.populate("contacts");
 };
 
 exports.findById = (id) => {
-  return User.findById(id)
-    .populate("contacts")
-    .then((result) => {
-      if (result == null) return null;
+  return (
+    User.findById(id)
+      //.populate("contacts")
+      .then((result) => {
+        if (result == null) return null;
 
-      result = result.toJSON();
-      delete result._id;
-      delete result.__v;
-      return result;
-    });
+        result = result.toJSON();
+        delete result._id;
+        delete result.__v;
+        return result;
+      })
+  );
 };
 
 exports.createUser = (userData) => {

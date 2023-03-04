@@ -33,7 +33,7 @@ exports.contacts = (req, res) => {
   });
 };
 
-exports.addContactById = async (req, res) => {
+exports.addContactById = (req, res) => {
   try {
     UserModel.addContactById(req.params.id, req.body.contactId).then(
       (result) => {
@@ -45,7 +45,7 @@ exports.addContactById = async (req, res) => {
   }
 };
 
-exports.removeContactById = async (req, res) => {
+exports.removeContactById = (req, res) => {
   try {
     UserModel.removeContactById(req.params.id, req.body.contactId).then(
       (result) => {
@@ -80,7 +80,7 @@ exports.getById = (req, res) => {
   });
 };
 
-exports.patchById = async (req, res) => {
+exports.patchById = (req, res) => {
   if (req.body.password) {
     let salt = crypto.randomBytes(16).toString("base64");
     let hash = crypto
@@ -93,9 +93,11 @@ exports.patchById = async (req, res) => {
   //console.log({ body: req.body, file: req.file });
 
   try {
-    req.body.avatar = `${process.env.BASE_URL}/${req?.file?.filename}`;
+    if (req.file) {
+      req.body.avatar = `${process.env.BASE_URL}/${req?.file?.filename}`;
+    }
 
-    UserModel.patchUser(req.params.id, req.body).then((result) => {
+    UserModel.patchUser(req.params?.id, req.body).then((result) => {
       res.status(200).send(result);
     });
   } catch (error) {

@@ -17,6 +17,7 @@ const initialState = {
   users: null,
   status: IDLE,
   error: null,
+  contacts: null,
 };
 
 const fetchCurrentUserThunk = createAsyncThunk(
@@ -33,13 +34,11 @@ const fetchCurrentUserThunk = createAsyncThunk(
 
 const signInThunk = createAsyncThunk(
   'user/signIn',
-  async (credentials, thunkAPI) => {
-    const { rejectWithValue } = thunkAPI;
-
+  async (credentials, { rejectWithValue }) => {
     try {
       return await signIn(credentials);
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error);
     }
   },
 );
@@ -50,7 +49,7 @@ const signUpThunk = createAsyncThunk(
     try {
       return await signUp(credentials);
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error);
     }
   },
 );
@@ -64,18 +63,19 @@ const fetchByIdThunk = createAsyncThunk(
       const response = await fetchUserById(id);
       return response;
     } catch (error) {
-      rejectWithValue(error);
+      alert('error');
+      return rejectWithValue(error);
     }
   },
 );
 
 const fetchAllUsersThunk = createAsyncThunk(
   'user/fetchAllUsers',
-  async (id, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       return await fetchAllUsers();
     } catch (error) {
-      rejectWithValue(error);
+      return rejectWithValue(error);
     }
   },
 );
@@ -84,9 +84,10 @@ const updateUserThunk = createAsyncThunk(
   'user/updateUser',
   async (data, { rejectWithValue }) => {
     try {
-      return await updateUser(data);
+      const res = await updateUser(data);
+      return res;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error);
     }
   },
 );
@@ -97,7 +98,7 @@ const addContactThunk = createAsyncThunk(
     try {
       return await addContactById(contactId);
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error);
     }
   },
 );
@@ -108,7 +109,7 @@ const removeContactThunk = createAsyncThunk(
     try {
       return await removeContactById(contactId);
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error);
     }
   },
 );
@@ -119,7 +120,7 @@ const fetchContactsThunk = createAsyncThunk(
     try {
       return await fetchContacts(contactId);
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error);
     }
   },
 );
@@ -147,14 +148,13 @@ export const userSlice = createSlice({
     });
 
     buiilder.addCase(signInThunk.fulfilled, (state, { payload }) => {
-      state.user = payload.data;
+      state.user = payload;
       state.status = SUCCEEDED;
     });
     buiilder.addCase(signInThunk.pending, (state, { payload }) => {
       state.status = PENDING;
     });
     buiilder.addCase(signInThunk.rejected, (state, { payload }) => {
-      console.table([payload]);
       state.error = payload;
       state.status = FAILED;
     });
@@ -172,6 +172,7 @@ export const userSlice = createSlice({
     });
 
     buiilder.addCase(fetchByIdThunk.fulfilled, (state, { payload }) => {
+      alert(payload);
       state.user = payload;
       state.status = SUCCEEDED;
     });
@@ -196,7 +197,7 @@ export const userSlice = createSlice({
     });
 
     buiilder.addCase(fetchContactsThunk.fulfilled, (state, { payload }) => {
-      state.user = payload;
+      state.contacts = payload;
       state.status = SUCCEEDED;
     });
     buiilder.addCase(fetchContactsThunk.pending, (state, { payload }) => {
@@ -234,8 +235,10 @@ export const userSlice = createSlice({
     buiilder.addCase(fetchAllUsersThunk.fulfilled, (state, { payload }) => {
       state.users = payload;
       state.status = SUCCEEDED;
+      state.error = null;
     });
     buiilder.addCase(fetchAllUsersThunk.pending, (state, { payload }) => {
+      state.error = null;
       state.status = PENDING;
     });
     buiilder.addCase(fetchAllUsersThunk.rejected, (state, { payload }) => {
