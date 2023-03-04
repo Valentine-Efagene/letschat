@@ -9,27 +9,14 @@ import MessageCard from '../../cards/Message';
 import styles from './Messages.module.css';
 import { useParams } from 'react-router-dom';
 
-// https://css-tricks.com/books/greatest-css-tricks/pin-scrolling-to-bottom/
+// https://dev.to/novu/building-a-chat-app-with-socketio-and-react-2edj
 
 export default function Messages() {
   const { setToastState } = useContext(ToastContext);
   const dispatch = useDispatch();
   const { socket } = useSelector(state => state.socket);
   const { messages } = useSelector(state => state.message);
-  const ref = useRef();
   const { id: target } = useParams();
-
-  const scrollToBottom = () => {
-    const timeout = setTimeout(() => {
-      if (ref?.current) {
-        ref.current.scrollTo(0, ref.current.scrollHeight);
-      }
-
-      return () => {
-        clearTimeout(timeout);
-      };
-    }, 100);
-  };
 
   useEffect(() => {
     socket?.on('connect', () => {});
@@ -38,9 +25,10 @@ export default function Messages() {
 
     socket?.on('response', message => {
       dispatch(appendMessage(message));
-      scrollToBottom();
     });
+  }, []);
 
+  useEffect(() => {
     const init = async () => {
       try {
         await dispatch(fetchMessagesThunk(target));
@@ -59,13 +47,16 @@ export default function Messages() {
     };
 
     init();
-    scrollToBottom();
   }, [target]);
 
   return (
-    <div className={styles.container} ref={ref}>
-      {messages?.map(message => (
-        <MessageCard key={message?.id} message={message} />
+    <div className={styles.container}>
+      {messages?.map((message, index) => (
+        <MessageCard
+          isLastMessage={index + 1 === messages?.length}
+          key={message?.id}
+          message={message}
+        />
       ))}
     </div>
   );
