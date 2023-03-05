@@ -70,7 +70,11 @@ exports.list = (req, res) => {
   }
 
   UserModel.list(limit, page).then((result) => {
-    res.status(200).send(result);
+    if (page < 0) {
+      res.status(400).send();
+    } else {
+      res.status(200).send(result);
+    }
   });
 };
 

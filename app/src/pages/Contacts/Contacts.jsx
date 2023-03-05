@@ -26,7 +26,7 @@ const generatePaginationLinks = (total, perPage = 4) => {
 
   for (let index = 0; index < links.length; index++) {
     // +1 because the pagination is 1-based
-    links[index] = `/users?page=${index}`;
+    links[index] = `/users?page=${index + 1}`;
   }
 
   return links;
@@ -58,7 +58,7 @@ export default function Contacts() {
 
   useEffect(() => {
     const init = async () => {
-      await dispatch(fetchAllUsersThunk(page));
+      await dispatch(fetchAllUsersThunk(page - 1));
 
       setToastState(prevState => {
         return {

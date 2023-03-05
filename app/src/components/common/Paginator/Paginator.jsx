@@ -42,9 +42,9 @@ export default function Paginator({
           {links?.map((link, index) => (
             <Link
               key={link}
-              className={`${currentPage == index ? styles.active : null}`}
+              className={`${currentPage == index + 1 ? styles.active : null}`}
               to={link}>
-              {index}
+              {index + 1}
             </Link>
           ))}
           <Link
