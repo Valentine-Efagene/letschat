@@ -15,6 +15,13 @@
   transition: 300ms;
 }
 
+.text {
+  overflow: hidden;
+  margin: auto;
+  max-width: 100%;
+  text-overflow: ellipsis;
+}
+
 .card:hover {
   border: 1px solid var(--primary-3);
 

@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-flow: row nowrap;
+  background-color: #00000000;
+}
+
+.container a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  background-color: #00000000;
+  padding: 0px 6px;
+  gap: 8px;
+  width: 27px;
+  height: 28px;
+  border: none;
+  color: #292d32;
+  margin: 0 3px;
+}
+
+.container .disabled,
+.container .active {
+  pointer-events: none;
+}
+
+.container .active {
+  background-color: var(--primary-1);
+  color: #ffffff;
+  border-radius: 5px;
+}

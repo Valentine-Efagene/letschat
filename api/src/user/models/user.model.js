@@ -70,6 +70,10 @@ exports.contacts = async (id) => {
   return user?.contacts;
 };
 
+exports.getTotal = async () => {
+  return await User.countDocuments();
+};
+
 exports.patchUser = (id, userData) => {
   return User.findOneAndUpdate(
     {

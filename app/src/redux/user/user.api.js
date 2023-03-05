@@ -70,6 +70,24 @@ async function signUp(credentials) {
   return null;
 }
 
+/**
+ *
+ */
+async function fetchTotal() {
+  const accessToken = localStorage.getItem('access-token');
+
+  const response = await fetch(`${API_BASE_URL}/users/total`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  if (response?.status > 399) {
+    throw new CustomException(response?.statusText, response?.status);
+  }
+
+  const data = await response.json();
+  return data;
+}
+
 async function fetchUserById(id) {
   if (id == null) return null;
 
@@ -89,13 +107,17 @@ async function fetchUserById(id) {
   return null;
 }
 
-async function fetchAllUsers() {
+async function fetchAllUsers(page = 0, limit = 6) {
   const token = localStorage.getItem('access-token');
 
   if (token) {
-    const response = await fetch(`${API_BASE_URL}/users`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await fetch(
+      // http://localhost:3000/users?page=1&limit=1
+      `${API_BASE_URL}/users?page=${page}&limit=${limit}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
 
     if (response?.status !== 200) {
       throw new CustomException(response?.statusText, response?.status);
@@ -206,4 +228,5 @@ export {
   fetchCurrentUser,
   signIn,
   signUp,
+  fetchTotal,
 };

@@ -14,6 +14,7 @@
   visibility: hidden;
   height: 3px;
   background-color: cadetblue;
+  border: none;
   transition-duration: 300ms;
 }
 

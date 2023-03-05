@@ -74,6 +74,14 @@ exports.list = (req, res) => {
   });
 };
 
+exports.total = (req, res) => {
+  UserModel.getTotal().then((result) => {
+    // https://www.reddit.com/r/learnjavascript/comments/vowzmw/comment/iehnpgw/?utm_source=share&utm_medium=web2x&context=3
+    // Explains the need for the string conversion
+    res.status(200).send(String(result));
+  });
+};
+
 exports.getById = (req, res) => {
   UserModel.findById(req.params.id).then((result) => {
     res.status(200).send(result);

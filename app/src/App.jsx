@@ -82,7 +82,7 @@ function App() {
       element: <Chat />,
     },
     {
-      path: '/contacts',
+      path: '/users',
       element: <Contacts />,
     },
     {

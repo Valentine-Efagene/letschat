@@ -9,6 +9,7 @@ import {
   signIn,
   signUp,
   fetchCurrentUser,
+  fetchTotal,
 } from './user.api';
 import { IDLE, PENDING, SUCCEEDED, FAILED } from '../../Helpers/loadingStates';
 
@@ -18,6 +19,7 @@ const initialState = {
   status: IDLE,
   error: null,
   contacts: null,
+  total: null,
 };
 
 const fetchCurrentUserThunk = createAsyncThunk(
@@ -54,6 +56,17 @@ const signUpThunk = createAsyncThunk(
   },
 );
 
+const fetchTotalThunk = createAsyncThunk(
+  'user/fetchTotal',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await fetchTotal();
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
+);
+
 const fetchByIdThunk = createAsyncThunk(
   'user/fetchById',
   async (id, { rejectWithValue }) => {
@@ -70,9 +83,9 @@ const fetchByIdThunk = createAsyncThunk(
 
 const fetchAllUsersThunk = createAsyncThunk(
   'user/fetchAllUsers',
-  async (_, { rejectWithValue }) => {
+  async (page, { rejectWithValue }) => {
     try {
-      return await fetchAllUsers();
+      return await fetchAllUsers(page);
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -154,6 +167,18 @@ export const userSlice = createSlice({
       state.status = PENDING;
     });
     buiilder.addCase(signInThunk.rejected, (state, { payload }) => {
+      state.error = payload;
+      state.status = FAILED;
+    });
+
+    buiilder.addCase(fetchTotalThunk.fulfilled, (state, { payload }) => {
+      state.total = payload;
+      state.status = SUCCEEDED;
+    });
+    buiilder.addCase(fetchTotalThunk.pending, (state, { payload }) => {
+      state.status = PENDING;
+    });
+    buiilder.addCase(fetchTotalThunk.rejected, (state, { payload }) => {
       state.error = payload;
       state.status = FAILED;
     });
@@ -256,6 +281,7 @@ export {
   signInThunk,
   signUpThunk,
   fetchCurrentUserThunk,
+  fetchTotalThunk,
 };
 export const { logout } = userSlice.actions;
 export default userSlice.reducer;

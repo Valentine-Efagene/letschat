@@ -55,6 +55,12 @@ router.get("/users", [
   UsersController.list,
 ]);
 
+router.get("/users/total", [
+  ValidationMiddleware.validJWTNeeded,
+  PermissionMiddleware.minimumPermissionLevelRequired(FREE),
+  UsersController.total,
+]);
+
 router.get("/users/:id", [
   ValidationMiddleware.validJWTNeeded,
   PermissionMiddleware.minimumPermissionLevelRequired(FREE),
