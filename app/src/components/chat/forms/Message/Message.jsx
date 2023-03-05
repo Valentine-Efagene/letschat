@@ -4,10 +4,11 @@ import TextArea from '../../../inputs/TextArea/TextArea';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { ERROR, ToastContext } from '../../../../contexts/ToastContext';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { PENDING } from '../../../../Helpers/loadingStates';
 import { useParams } from 'react-router-dom';
 import AttachmentPicker from '../../../inputs/AttachmentPicker/AttachmentPicker';
+import { pushTyping } from '../../../../redux/message/message.slice';
 
 export default function Message() {
   const { user } = useSelector(state => state.user);
@@ -16,6 +17,7 @@ export default function Message() {
 
   const { setToastState } = useContext(ToastContext);
   const [data, setData] = useState({});
+  //const dispatch = useDispatch();
 
   const { id: receiver } = useParams();
 
@@ -30,8 +32,12 @@ export default function Message() {
     setData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleKeyPress = () => {
-    socket?.emit('typing');
+  const handleTyping = () => {
+    socket?.emit('typing', user?.id);
+  };
+
+  const handleDoneTyping = () => {
+    socket?.emit('done-typing', user?.id);
   };
 
   const handleSubmit = async e => {
@@ -59,7 +65,8 @@ export default function Message() {
         name="text"
         onChange={handleChange}
         placeholder="Talk"
-        onKeyUp={handleKeyPress}
+        onKeyDown={handleTyping}
+        onKeyUp={handleDoneTyping}
         className={styles.textArea}
         value={data?.text}
         rows="5"

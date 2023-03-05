@@ -9,15 +9,50 @@ import { useEffect, useState } from 'react';
 import { ToastContext, SUCCESS } from './contexts/ToastContext';
 import Toast from './components/Toast';
 import Contacts from './pages/Contacts';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchCurrentUserThunk } from './redux/user/user.slice';
+import {
+  appendMessage,
+  pushTyping,
+  removeTyping,
+} from './redux/message/message.slice';
 
 function App() {
   const dispatch = useDispatch();
+  const { socket } = useSelector(state => state.socket);
+  const { user } = useSelector(state => state.user);
+  const { typing } = useSelector(state => state.message);
 
   useEffect(() => {
-    const init = async () => {
-      await dispatch(fetchCurrentUserThunk());
+    socket?.on('connect', () => {});
+
+    socket?.on('disconnect', () => {});
+
+    socket?.on('done-typing-response', data => {
+      dispatch(removeTyping(data));
+    });
+
+    socket?.on('typing-response', data => {
+      dispatch(pushTyping(data));
+    });
+
+    socket?.on('message-response', message => {
+      dispatch(appendMessage(message));
+    });
+  }, [socket]);
+
+  socket.on('connect_failed', data => {
+    alert('Failed');
+  });
+
+  useEffect(() => {
+    const init = () => {
+      dispatch(fetchCurrentUserThunk()).then(() => {
+        if (user == null) return;
+
+        socket.auth = { userId: user?.id };
+        socket.connect();
+      });
     };
 
     init();

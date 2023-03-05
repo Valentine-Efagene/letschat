@@ -108,25 +108,27 @@ async function fetchAllUsers() {
 async function fetchContacts() {
   const token = localStorage.getItem('access-token');
 
+  if (token == null) return null;
+
   const _user = token ? jwt_decode(localStorage.getItem('access-token')) : null;
 
-  if (_user) {
-    const response = await axios.get(
-      `${API_BASE_URL}/users/${_user.id}/contacts`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
+  if (_user == null && _user?.id == null) return null;
 
-    const { data } = response;
+  const response = await axios.get(
+    `${API_BASE_URL}/users/${_user.id}/contacts`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
 
-    return data;
-  }
+  const { data } = response;
 
-  return null;
+  return data;
 }
 
 async function addContactById(id) {
+  if (id == null) return null;
+
   const token = localStorage.getItem('access-token');
 
   const _user = token ? jwt_decode(localStorage.getItem('access-token')) : null;
@@ -151,6 +153,8 @@ async function addContactById(id) {
 }
 
 async function removeContactById(id) {
+  if (id == null) return null;
+
   const token = localStorage.getItem('access-token');
 
   const _user = token ? jwt_decode(localStorage.getItem('access-token')) : null;

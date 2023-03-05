@@ -4,7 +4,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { IDLE } from '../../Helpers/loadingStates';
 import io from 'socket.io-client';
-const socket = io.connect('http://localhost:3000');
+
+const socket = io.connect('http://localhost:3000', {
+  autoConnect: true,
+});
+
+socket.onAny((event, ...args) => {
+  console.log(event, args);
+});
 
 const initialState = {
   socket: socket,

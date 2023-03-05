@@ -43,10 +43,10 @@ io.on("connection", (client) => {
   console.log(`Client ${client.id} connected`);
 
   client.on("message", (data) => {
-    console.log({ data });
     MessageModel.createMessage(data)
       .then(() => {
-        io.emit("response", data);
+        client.broadcast.emit("message-response", data);
+        client.broadcast.emit("done-typing-response", data);
       })
       .catch((error) => {
         console.log(error);
@@ -57,8 +57,15 @@ io.on("connection", (client) => {
     console.log("A user disconnected");
   });
 
+  client.on("done-typing", (data) => {
+    client.broadcast.emit("done-typing-response", data);
+    //client.broadcast.emit("typing-response", data);
+    console.log(".");
+  });
+
   client.on("typing", (data) => {
-    //client.broadcast.emit("typing", { username: client.username });
+    client.broadcast.emit("typing-response", data);
+    //client.broadcast.emit("typing-response", data);
     console.log(".");
   });
 });

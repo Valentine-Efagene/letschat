@@ -14,19 +14,8 @@ import { useParams } from 'react-router-dom';
 export default function Messages() {
   const { setToastState } = useContext(ToastContext);
   const dispatch = useDispatch();
-  const { socket } = useSelector(state => state.socket);
   const { messages } = useSelector(state => state.message);
   const { id: target } = useParams();
-
-  useEffect(() => {
-    socket?.on('connect', () => {});
-
-    socket?.on('disconnect', () => {});
-
-    socket?.on('response', message => {
-      dispatch(appendMessage(message));
-    });
-  }, []);
 
   useEffect(() => {
     const init = async () => {

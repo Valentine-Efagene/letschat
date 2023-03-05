@@ -63,7 +63,6 @@ const fetchByIdThunk = createAsyncThunk(
       const response = await fetchUserById(id);
       return response;
     } catch (error) {
-      alert('error');
       return rejectWithValue(error);
     }
   },
@@ -116,9 +115,9 @@ const removeContactThunk = createAsyncThunk(
 
 const fetchContactsThunk = createAsyncThunk(
   'user/fetchContacts',
-  async (contactId, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      return await fetchContacts(contactId);
+      return await fetchContacts();
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -172,7 +171,6 @@ export const userSlice = createSlice({
     });
 
     buiilder.addCase(fetchByIdThunk.fulfilled, (state, { payload }) => {
-      alert(payload);
       state.user = payload;
       state.status = SUCCEEDED;
     });

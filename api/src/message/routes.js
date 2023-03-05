@@ -50,19 +50,19 @@ router.post("/messages", [
 
 router.get("/messages", [
   ValidationMiddleware.validJWTNeeded,
-  PermissionMiddleware.minimumPermissionLevelRequired(PAID),
+  PermissionMiddleware.minimumPermissionLevelRequired(FREE),
   MessageController.list,
 ]);
 
 router.get("/:senderId/messages/:receiverId", [
   ValidationMiddleware.validJWTNeeded,
-  PermissionMiddleware.minimumPermissionLevelRequired(PAID),
+  PermissionMiddleware.minimumPermissionLevelRequired(FREE),
   MessageController.listBySenderReceiver,
 ]);
 
 router.get("/:userId/messages", [
   ValidationMiddleware.validJWTNeeded,
-  PermissionMiddleware.minimumPermissionLevelRequired(PAID),
+  PermissionMiddleware.minimumPermissionLevelRequired(FREE),
   MessageController.listByUser,
 ]);
 

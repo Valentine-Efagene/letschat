@@ -39,7 +39,6 @@ exports.createMessage = (messageData) => {
 };
 
 exports.listByUser = (perPage, page, userId) => {
-  console.log({ userId });
   return new Promise((resolve, reject) => {
     Message.find()
       .or([{ sender: userId }, { receiver: userId }])

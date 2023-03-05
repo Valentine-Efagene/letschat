@@ -7,6 +7,7 @@ const initialState = {
   target: null,
   status: IDLE,
   error: null,
+  typing: [],
 };
 
 const fetchMessagesThunk = createAsyncThunk(
@@ -47,6 +48,14 @@ export const messageSlice = createSlice({
     setMessages: (state, { payload }) => {
       state.messages = payload;
     },
+    pushTyping: (state, { payload }) => {
+      if (state.typing.find(_user => _user === payload)) return;
+
+      state.typing = [...state.typing, payload];
+    },
+    removeTyping: (state, { payload }) => {
+      state.typing = state.typing?.filter(_typing => _typing !== payload);
+    },
   },
   extraReducers: buiilder => {
     buiilder.addCase(fetchMessagesThunk.fulfilled, (state, { payload }) => {
@@ -75,5 +84,11 @@ export const messageSlice = createSlice({
 });
 
 export { sendMessageThunk, fetchMessagesThunk };
-export const { appendMessage, setTarget, setMessages } = messageSlice.actions;
+export const {
+  appendMessage,
+  setTarget,
+  setMessages,
+  pushTyping,
+  removeTyping,
+} = messageSlice.actions;
 export default messageSlice.reducer;

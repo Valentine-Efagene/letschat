@@ -16,6 +16,7 @@ TextArea.propTypes = {
   rows: number,
   cols: number,
   onKeyUp: func,
+  onKeyDown: func,
 };
 
 export default function TextArea({
@@ -32,6 +33,7 @@ export default function TextArea({
   rows = 10,
   cols,
   onKeyUp,
+  onKeyDown,
 }) {
   const variantMap = {
     rounded: styles.rounded,
@@ -44,6 +46,7 @@ export default function TextArea({
       cols={cols}
       id={id}
       onKeyUp={onKeyUp}
+      onKeyDown={onKeyDown}
       name={name}
       type={type}
       placeholder={placeholder}

@@ -67,7 +67,7 @@ exports.list = (perPage, page) => {
 
 exports.contacts = async (id) => {
   const user = await User.findById(id).populate("contacts");
-  return user.contacts;
+  return user?.contacts;
 };
 
 exports.patchUser = (id, userData) => {

@@ -51,7 +51,7 @@ router.patch("/users/:id/contacts/remove", [UsersController.removeContactById]);
 
 router.get("/users", [
   ValidationMiddleware.validJWTNeeded,
-  PermissionMiddleware.minimumPermissionLevelRequired(PAID),
+  PermissionMiddleware.minimumPermissionLevelRequired(FREE),
   UsersController.list,
 ]);
 

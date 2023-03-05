@@ -1,10 +1,11 @@
 import React from 'react';
 import styles from './Contact.module.css';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { userProp } from '../../../../prop-types/user';
 import { bool, func, string } from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from 'react-redux';
 
 Contact.propTypes = {
   user: userProp,
@@ -14,7 +15,8 @@ Contact.propTypes = {
 };
 
 export default function Contact({ isTarget, to, user, onClick }) {
-  const { avatar, firstName, lastName, snippet } = user ?? {};
+  const { avatar, firstName, lastName, snippet, id } = user ?? {};
+  const { typing } = useSelector(state => state.message);
 
   return (
     <Link
@@ -31,7 +33,10 @@ export default function Contact({ isTarget, to, user, onClick }) {
       <div className={styles.name}>{`${firstName ? firstName : ''} ${
         lastName ? lastName : ''
       }`}</div>
-      <div className={styles.snippet}>{snippet}</div>
+      {/* <div className={styles.snippet}>{snippet}</div> */}
+      {Array.isArray(typing) && typing?.find(_user => _user === id) ? (
+        <div>Typing</div>
+      ) : null}
     </Link>
   );
 }

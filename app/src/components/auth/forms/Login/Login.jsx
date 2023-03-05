@@ -33,7 +33,7 @@ export default function Login() {
   const handleSubmit = e => {
     e.preventDefault();
     try {
-      dispatch(signInThunk(credentials)).then(() => {
+      dispatch(signInThunk(credentials)).then(res => {
         setToastState(prevState => {
           return {
             ...prevState,
@@ -45,12 +45,21 @@ export default function Login() {
           };
         });
 
-        if (status === SUCCEEDED) {
+        if (res?.type !== 'user/signIn/rejected') {
           navigate('/chat');
         }
       });
     } catch (error) {
-      console.log({ error });
+      setToastState(prevState => {
+        return {
+          ...prevState,
+          show: true,
+          message: error?.message,
+          title: error?.code,
+          delay: 3000,
+          type: ERROR,
+        };
+      });
     }
   };
 
