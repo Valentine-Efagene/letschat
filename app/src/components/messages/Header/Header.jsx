@@ -4,6 +4,9 @@ import Avatar from '../../common/Avatar/Avatar';
 import styles from './Header.module.css';
 import { fetchUserById } from '../../../redux/user/user.api';
 import { ERROR, ToastContext } from '../../../contexts/ToastContext';
+import NavLink from '../../common/NavLink/NavLink';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faPhone } from '@fortawesome/free-solid-svg-icons';
 
 export default function Header() {
   const { id } = useParams();
@@ -31,6 +34,12 @@ export default function Header() {
 
   return (
     <div className={styles.container}>
+      <NavLink className={styles.navLink} to="/">
+        <FontAwesomeIcon className={styles.icon} icon={faHome} />
+      </NavLink>
+      <NavLink className={styles.navLink} to="/contacts">
+        <FontAwesomeIcon icon={faPhone} className={styles.icon} />
+      </NavLink>
       <Avatar user={target} />
     </div>
   );

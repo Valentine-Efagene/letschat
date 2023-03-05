@@ -8,15 +8,16 @@ Avatar.propTypes = {
   user: userProp,
   className: string,
   style: object,
+  to: string,
 };
 
-export default function Avatar({ user, className, style }) {
+export default function Avatar({ user, className, style, to }) {
   if (user == null) return null;
 
   const { avatar, firstName, lastName } = user;
 
   return (
-    <Link style={style} className={`${className} ${styles.container}`}>
+    <Link to={to} style={style} className={`${className} ${styles.container}`}>
       {avatar ? (
         <img src={avatar} alt="" />
       ) : (

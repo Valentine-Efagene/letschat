@@ -26,12 +26,6 @@ function App() {
   useEffect(() => {
     socket?.on('disconnect', () => {
       console.log('Disconnected');
-
-      const timeout = setTimeout(() => {
-        socket.connect();
-
-        return clearTimeout(timeout);
-      }, 1000);
     });
 
     socket?.on('connection', () => {});
@@ -64,16 +58,15 @@ function App() {
       dispatch(fetchCurrentUserThunk()).then(() => {
         if (user == null) return;
 
-        //socket.auth = { userId: user?.id };
-
         if (!socket?.connected) {
+          socket.auth = { userId: user?.id };
           socket.connect();
         }
       });
     };
 
     init();
-  }, [socket]);
+  }, []);
 
   const router = createBrowserRouter([
     {
