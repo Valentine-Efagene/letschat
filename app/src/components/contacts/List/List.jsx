@@ -1,20 +1,26 @@
 import React from 'react';
-import { usersProp } from '../../../prop-types/user';
+import { userProp, usersProp } from '../../../prop-types/user';
+import { func } from 'prop-types';
+import { Link } from 'react-router-dom';
 import styles from './List.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightLong } from '@fortawesome/free-solid-svg-icons';
 
 List.propTypes = {
-  contacts: usersProp,
+  users: usersProp,
+  user: userProp,
+  handleAddContact: func,
 };
 
-export default function List({ contacts }) {
+export default function List({ user, users, handleAddContact }) {
   return (
     <div className={styles.container}>
-      {contacts?.map(contact => {
-        if (contact == null) return;
+      {users?.map(_user => {
+        if (_user == null) return;
 
-        const { id, firstName, lastName, avatar, email } = contact;
+        const isContact = user?.contacts?.find(
+          contactId => _user.id === contactId,
+        );
+
+        const { id, firstName, lastName, avatar, email } = _user;
 
         return (
           <div key={id} className={styles.card}>
@@ -23,13 +29,15 @@ export default function List({ contacts }) {
               <div className={styles.email}>{email}</div>
               <div className={styles.name}>{`${firstName} ${lastName}`}</div>
             </div>
-            <button className={styles.cta}>
-              Add Contact{' '}
-              <FontAwesomeIcon
-                className={styles.icon}
-                icon={faArrowRightLong}
-              />
-            </button>
+            {isContact ? (
+              <Link to={`/chat/${id}`}>Chat</Link>
+            ) : (
+              <button
+                className={styles.cta}
+                onClick={() => handleAddContact(id)}>
+                Add to Contacts
+              </button>
+            )}
           </div>
         );
       })}

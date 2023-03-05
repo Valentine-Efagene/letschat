@@ -8,6 +8,7 @@ import Button from '../../components/inputs/Button/Button';
 import { ERROR, ToastContext } from '../../contexts/ToastContext';
 import { fetchAllUsersThunk } from '../../redux/user/user.slice';
 import styles from './Contacts.module.css';
+import { addContactThunk } from '../../redux/user/user.slice';
 
 const GRID = 'grid';
 const LIST = 'list';
@@ -38,6 +39,21 @@ export default function Contacts() {
     init();
   }, []);
 
+  const handleAddContact = async id => {
+    await dispatch(addContactThunk(id));
+
+    setToastState(prevState => {
+      return {
+        ...prevState,
+        show: error != null,
+        message: error?.message,
+        title: error?.code,
+        delay: 3000,
+        type: ERROR,
+      };
+    });
+  };
+
   const toggleLayout = () =>
     setLayout(prevState => (prevState === GRID ? LIST : GRID));
 
@@ -50,9 +66,17 @@ export default function Contacts() {
       </Button>
 
       {layout === GRID ? (
-        <Grid users={otherUsers} />
+        <Grid
+          user={user}
+          users={otherUsers}
+          handleAddContact={handleAddContact}
+        />
       ) : (
-        <List users={otherUsers} />
+        <List
+          user={user}
+          users={otherUsers}
+          handleAddContact={handleAddContact}
+        />
       )}
     </div>
   );

@@ -16,17 +16,29 @@ import {
   pushTyping,
   removeTyping,
 } from './redux/message/message.slice';
+import { setPeers } from './redux/socket/socket.slice';
 
 function App() {
   const dispatch = useDispatch();
   const { socket } = useSelector(state => state.socket);
   const { user } = useSelector(state => state.user);
-  const { typing } = useSelector(state => state.message);
 
   useEffect(() => {
-    socket?.on('connect', () => {});
+    socket?.on('disconnect', () => {
+      console.log('Disconnected');
 
-    socket?.on('disconnect', () => {});
+      const timeout = setTimeout(() => {
+        socket.connect();
+
+        return clearTimeout(timeout);
+      }, 1000);
+    });
+
+    socket?.on('connection', () => {});
+
+    socket?.on('connect-response', data => {
+      dispatch(setPeers(data));
+    });
 
     socket?.on('done-typing-response', data => {
       dispatch(removeTyping(data));
@@ -39,24 +51,29 @@ function App() {
     socket?.on('message-response', message => {
       dispatch(appendMessage(message));
     });
-  }, [socket]);
 
-  socket.on('connect_failed', data => {
-    alert('Failed');
-  });
+    socket.on('connect_failed', () => {
+      console.log('Failed');
+    });
 
-  useEffect(() => {
+    socket.on('connect_error', err => {
+      console.log(err.message);
+    });
+
     const init = () => {
       dispatch(fetchCurrentUserThunk()).then(() => {
         if (user == null) return;
 
-        socket.auth = { userId: user?.id };
-        socket.connect();
+        //socket.auth = { userId: user?.id };
+
+        if (!socket?.connected) {
+          socket.connect();
+        }
       });
     };
 
     init();
-  }, []);
+  }, [socket]);
 
   const router = createBrowserRouter([
     {

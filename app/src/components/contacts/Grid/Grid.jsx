@@ -1,36 +1,16 @@
-import React, { useContext } from 'react';
-import { usersProp } from '../../../prop-types/user';
-import { addContactThunk } from '../../../redux/user/user.slice';
+import React from 'react';
+import { userProp, usersProp } from '../../../prop-types/user';
 import { Link } from 'react-router-dom';
 import styles from './Grid.module.css';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { ToastContext, ERROR } from '../../../contexts/ToastContext';
+import { func } from 'prop-types';
 
 Grid.propTypes = {
   users: usersProp,
+  user: userProp,
+  handleAddContact: func,
 };
 
-export default function Grid({ users }) {
-  const dispatch = useDispatch();
-  const { setToastState } = useContext(ToastContext);
-  const { user, error } = useSelector(state => state.user);
-
-  const handleAddContact = async id => {
-    await dispatch(addContactThunk(id));
-
-    setToastState(prevState => {
-      return {
-        ...prevState,
-        show: error != null,
-        message: error?.message,
-        title: error?.code,
-        delay: 3000,
-        type: ERROR,
-      };
-    });
-  };
-
+export default function Grid({ user, users, handleAddContact }) {
   return (
     <div className={styles.container}>
       {users?.map(_user => {

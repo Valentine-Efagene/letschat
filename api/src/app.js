@@ -39,14 +39,39 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+io.use((client, next) => {
+  const userId = client.handshake.auth?.userId;
+
+  if (!userId) {
+    return next(new Error("Invalid user ID"));
+  }
+
+  client.userId = userId;
+  next();
+});
+
+const userToSocketMap = {};
+const clients = new Set();
+
 io.on("connection", (client) => {
   console.log(`Client ${client.id} connected`);
+  console.log(`User ${client.userId} connected`);
+
+  clients.add(client.userId);
+
+  userToSocketMap[client.userId] = client.id;
+
+  io.emit("connect-response", clients);
 
   client.on("message", (data) => {
+    const { receiver, sender } = data;
+    console.table(data);
+
     MessageModel.createMessage(data)
-      .then(() => {
-        client.broadcast.emit("message-response", data);
-        client.broadcast.emit("done-typing-response", data);
+      .then((res) => {
+        console.log(userToSocketMap);
+        io.to(userToSocketMap[receiver]).emit("message-response", data);
+        io.to(userToSocketMap[sender]).emit("message-response", data);
       })
       .catch((error) => {
         console.log(error);
@@ -54,6 +79,7 @@ io.on("connection", (client) => {
   });
 
   client.on("disconnect", function () {
+    clients.delete(client.userId);
     console.log("A user disconnected");
   });
 

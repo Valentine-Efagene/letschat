@@ -54,7 +54,7 @@ export default function Master() {
         </button>
         <span
           className={`${
-            socket?.connected ? styles.connected : styles.disconnected
+            socket.connected ? styles.connected : styles.disconnected
           } ${styles.indicator}`}></span>
       </div>
       <QuickProfile show={showQuickProfile} hide={hideQuick} />

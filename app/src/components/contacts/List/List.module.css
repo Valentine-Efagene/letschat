@@ -26,6 +26,21 @@
   animation: var(--oscillation-animation);
 }
 
+@keyframes font-single-pulse {
+  0%,
+  100% {
+    font-size: 1.125rem;
+  }
+
+  50% {
+    font-size: 1.14rem;
+  }
+}
+
+.card:hover .cta {
+  animation: font-single-pulse 1s ease-in-out;
+}
+
 .card > *:not(:first-child) {
   margin-left: 1rem;
   height: fit-content;
@@ -51,6 +66,8 @@
   font-size: 1.125rem;
   font-family: Poppins, sans-serif;
   margin-right: 1.25rem;
+  color: rgb(85, 26, 139);
+  text-decoration: underline;
 }
 
 .cta:hover .icon {

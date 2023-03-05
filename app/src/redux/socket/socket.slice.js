@@ -5,8 +5,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import { IDLE } from '../../Helpers/loadingStates';
 import io from 'socket.io-client';
 
-const socket = io.connect('http://localhost:3000', {
+const URL = 'http://localhost:3000';
+const socket = io(URL, {
+  auth: { userId: localStorage.getItem('user-id') },
   autoConnect: true,
+  reconnectionDelayMax: 1000,
 });
 
 socket.onAny((event, ...args) => {
@@ -14,20 +17,24 @@ socket.onAny((event, ...args) => {
 });
 
 const initialState = {
-  socket: socket,
+  socket,
   status: IDLE,
   error: null,
+  peers: [],
 };
 
 export const socketSlice = createSlice({
   name: 'socket',
   initialState,
   reducers: {
+    setPeers: (state, { payload }) => {
+      state.peers = payload;
+    },
     reconnect: state => {
       state.socket = io.connect('http://localhost:3000');
     },
   },
 });
 
-export const { reconnect } = socketSlice.actions;
+export const { setPeers, reconnect } = socketSlice.actions;
 export default socketSlice.reducer;
