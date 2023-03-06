@@ -36,7 +36,7 @@ export default function Contacts() {
   let [searchParams, setSearchParams] = useSearchParams();
   const { user, users, error, total } = useSelector(state => state.user);
   const { setToastState } = useContext(ToastContext);
-  const page = searchParams.get('page') ?? 0;
+  const page = searchParams.get('page') ?? 1;
 
   const [layout, setLayout] = useState(GRID);
   const dispatch = useDispatch();

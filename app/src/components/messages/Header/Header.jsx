@@ -38,7 +38,7 @@ export default function Header() {
         <NavLink className={styles.navLink} to="/">
           <FontAwesomeIcon className={styles.icon} icon={faHome} />
         </NavLink>
-        <NavLink className={styles.navLink} to="/contacts">
+        <NavLink className={styles.navLink} to="/users">
           <FontAwesomeIcon icon={faAddressBook} className={styles.icon} />
         </NavLink>
       </div>

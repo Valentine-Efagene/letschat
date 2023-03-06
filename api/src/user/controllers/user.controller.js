@@ -69,13 +69,13 @@ exports.list = (req, res) => {
     }
   }
 
-  UserModel.list(limit, page).then((result) => {
-    if (page < 0) {
-      res.status(400).send();
-    } else {
+  if (page * limit < 0) {
+    res.status(400).send();
+  } else {
+    UserModel.list(limit, page).then((result) => {
       res.status(200).send(result);
-    }
-  });
+    });
+  }
 };
 
 exports.total = (req, res) => {
