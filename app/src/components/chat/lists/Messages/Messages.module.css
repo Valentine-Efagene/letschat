@@ -5,7 +5,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.25rem;
-  height: fit-content;
+  height: 100%;
   position: sticky;
   overflow: scroll;
   max-height: 70%;
@@ -24,4 +24,20 @@
 .container::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background-color: transparent;
+}
+
+.loadMore {
+  background-color: var(--primary-4);
+  border: 1px solid var(--primary-0);
+  width: fit-content;
+  padding: 0.6rem 0.8rem;
+  margin-inline: auto;
+  margin-bottom: auto;
+  border-radius: 0.3rem;
+  color: var(--primary-0);
+  transition-duration: 300ms;
+}
+
+.loadMore:hover {
+  background-color: var(--primary-3);
 }

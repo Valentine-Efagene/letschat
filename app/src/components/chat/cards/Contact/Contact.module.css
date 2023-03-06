@@ -12,7 +12,7 @@
   transition: 300ms;
 }
 
-.container:not(:last-child) {
+.container {
   border-bottom: 4px solid var(--primary-1);
 }
 

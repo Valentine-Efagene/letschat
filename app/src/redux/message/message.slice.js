@@ -1,5 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchMessages, sendMessage } from './message.api';
+import {
+  fetchMessages,
+  sendMessage,
+  fetchCountByContactId,
+} from './message.api';
 import { IDLE, PENDING, SUCCEEDED, FAILED } from '../../Helpers/loadingStates';
 
 const initialState = {
@@ -7,16 +11,31 @@ const initialState = {
   target: null,
   status: IDLE,
   error: null,
+  count: null,
   typing: [],
 };
 
 const fetchMessagesThunk = createAsyncThunk(
   'message/fetch',
-  async (target, { rejectWithValue }) => {
+  async ({ target, page, limit }, { rejectWithValue }) => {
     if (target == null) return null;
 
     try {
-      const result = await fetchMessages(target);
+      const result = await fetchMessages(target, page, limit);
+      return result;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+const fetchCountByContactIdThunk = createAsyncThunk(
+  'message/count',
+  async (contactId, { rejectWithValue }) => {
+    if (contactId == null) return null;
+
+    try {
+      const result = await fetchCountByContactId(contactId);
       return result;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -80,10 +99,31 @@ export const messageSlice = createSlice({
       state.error = payload;
       state.status = FAILED;
     });
+
+    buiilder.addCase(
+      fetchCountByContactIdThunk.fulfilled,
+      (state, { payload }) => {
+        state.count = payload;
+        state.status = SUCCEEDED;
+      },
+    );
+    buiilder.addCase(
+      fetchCountByContactIdThunk.pending,
+      (state, { payload }) => {
+        state.status = PENDING;
+      },
+    );
+    buiilder.addCase(
+      fetchCountByContactIdThunk.rejected,
+      (state, { payload }) => {
+        state.error = payload;
+        state.status = FAILED;
+      },
+    );
   },
 });
 
-export { sendMessageThunk, fetchMessagesThunk };
+export { sendMessageThunk, fetchMessagesThunk, fetchCountByContactIdThunk };
 export const {
   appendMessage,
   setTarget,

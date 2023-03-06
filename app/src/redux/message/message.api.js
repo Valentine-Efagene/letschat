@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { CustomException } from '../../Helpers/error';
 
 const API_BASE_URL = 'http://localhost:3000';
 
@@ -27,14 +28,36 @@ async function sendMessage(messageData) {
   return data;
 }
 
-async function fetchMessages(target) {
+async function fetchMessages(target, page, limit = 5) {
   const userId = localStorage.getItem('user-id');
   const token = localStorage.getItem('access-token');
 
-  const response = await fetch(`${API_BASE_URL}/${userId}/messages/${target}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const response = await fetch(
+    `${API_BASE_URL}/${userId}/messages/${target}?page=${page}&limit=${limit}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
   return response.json();
 }
 
-export { sendMessage, fetchMessages };
+async function fetchCountByContactId(contactId) {
+  const userId = localStorage.getItem('user-id');
+  const accessToken = localStorage.getItem('access-token');
+
+  const response = await fetch(
+    `${API_BASE_URL}/${userId}/messages/${contactId}/count`,
+    {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    },
+  );
+
+  if (response?.status > 399) {
+    throw new CustomException(response?.statusText, response?.status);
+  }
+
+  const data = await response.json();
+  return data;
+}
+
+export { sendMessage, fetchMessages, fetchCountByContactId };

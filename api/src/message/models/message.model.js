@@ -18,6 +18,15 @@ messageSchema.set("toJSON", {
   virtuals: true,
 });
 
+exports.getCount = async (userId, contactId) => {
+  return await Message.countDocuments({
+    $or: [
+      { sender: userId, receiver: contactId },
+      { sender: contactId, receiver: userId },
+    ],
+  });
+};
+
 messageSchema.findById = function (cb) {
   return this.model("Message").find({ id: this.id }, cb);
 };
@@ -38,6 +47,7 @@ exports.createMessage = (messageData) => {
   return message.save();
 };
 
+/*
 exports.listByUser = (perPage, page, userId) => {
   return new Promise((resolve, reject) => {
     Message.find()
@@ -53,6 +63,7 @@ exports.listByUser = (perPage, page, userId) => {
       });
   });
 };
+*/
 
 exports.listBySenderReceiver = (perPage, page, senderId, receiverId) => {
   return new Promise((resolve, reject) => {
@@ -61,7 +72,7 @@ exports.listBySenderReceiver = (perPage, page, senderId, receiverId) => {
         { sender: senderId, receiver: receiverId },
         { sender: receiverId, receiver: senderId },
       ])
-      .limit(perPage)
+      //.limit(perPage)
       .skip(perPage * page)
       .exec(function (err, users) {
         if (err) {

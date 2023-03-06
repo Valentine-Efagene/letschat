@@ -54,17 +54,23 @@ router.get("/messages", [
   MessageController.list,
 ]);
 
+router.get("/:userId/messages/:contactId/count", [
+  ValidationMiddleware.validJWTNeeded,
+  PermissionMiddleware.minimumPermissionLevelRequired(FREE),
+  MessageController.count,
+]);
+
 router.get("/:senderId/messages/:receiverId", [
   ValidationMiddleware.validJWTNeeded,
   PermissionMiddleware.minimumPermissionLevelRequired(FREE),
   MessageController.listBySenderReceiver,
 ]);
 
-router.get("/:userId/messages", [
-  ValidationMiddleware.validJWTNeeded,
-  PermissionMiddleware.minimumPermissionLevelRequired(FREE),
-  MessageController.listByUser,
-]);
+// router.get("/:userId/messages", [
+//   ValidationMiddleware.validJWTNeeded,
+//   PermissionMiddleware.minimumPermissionLevelRequired(FREE),
+//   MessageController.listByUser,
+// ]);
 
 router.get("/messages/:id", [
   ValidationMiddleware.validJWTNeeded,

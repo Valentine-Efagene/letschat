@@ -2,18 +2,21 @@ import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './Message.module.css';
 
-import { bool, func } from 'prop-types';
+import { bool, func, number } from 'prop-types';
 import { messageProp } from '../../../../prop-types/message';
 
 Message.propTypes = {
   message: messageProp,
   onClick: func,
   isLastMessage: bool,
+  isFirstMessage: bool,
 };
 
 export default function Message({ message, isLastMessage }) {
   const { user } = useSelector(state => state.user);
   const { text, sender, images } = message;
+
+  useEffect;
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -27,7 +30,7 @@ export default function Message({ message, isLastMessage }) {
 
       return clearTimeout(timeout);
     }, 100);
-  });
+  }, []);
 
   const ref = useRef();
 

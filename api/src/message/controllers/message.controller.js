@@ -12,6 +12,16 @@ exports.insert = (req, res) => {
   });
 };
 
+exports.count = (req, res) => {
+  MessageModel.getCount(req.params.userId, req.params.contactId).then(
+    (result) => {
+      // https://www.reddit.com/r/learnjavascript/comments/vowzmw/comment/iehnpgw/?utm_source=share&utm_medium=web2x&context=3
+      // Explains the need for the string conversion
+      res.status(200).send(String(result));
+    }
+  );
+};
+
 exports.list = (req, res) => {
   let limit =
     req.query.limit && req.query.limit <= 100 ? parseInt(req.query.limit) : 10;
