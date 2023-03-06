@@ -13,7 +13,7 @@ Message.propTypes = {
 
 export default function Message({ message, isLastMessage }) {
   const { user } = useSelector(state => state.user);
-  const { text, sender, receiver, photos } = message;
+  const { text, sender, receiver, images } = message;
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -37,7 +37,15 @@ export default function Message({ message, isLastMessage }) {
       className={`${user?.id === sender ? styles.sender : styles.receiver} ${
         styles.container
       }`}>
-      <p>{text}</p>
+      <p>{text ?? ''}</p>
+      {images?.length > 0 && (
+        <div className={styles.images}>
+          <hr />
+          {images?.map(img => (
+            <img key={img} src={img} alt="" />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

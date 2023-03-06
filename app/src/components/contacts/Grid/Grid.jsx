@@ -26,7 +26,9 @@ export default function Grid({ user, users, handleAddContact }) {
           <div key={id} className={styles.card}>
             <img className={styles.avatar} src={`${avatar}`} alt="" />
             <div className={styles.text}>{email}</div>
-            <div className={styles.text}>{`${firstName} ${lastName}`}</div>
+            <div className={styles.text}>{`${firstName ?? ''} ${
+              lastName ?? ''
+            }`}</div>
             {isContact ? (
               <Link to={`/chat/${id}`}>Chat</Link>
             ) : (

@@ -64,18 +64,9 @@ io.on("connection", (client) => {
   io.emit("connect-response", clients);
 
   client.on("message", (data) => {
-    const { receiver, sender } = data;
-    console.table(data);
+    const { receiver } = data;
 
-    MessageModel.createMessage(data)
-      .then((res) => {
-        console.log(userToSocketMap);
-        io.to(userToSocketMap[receiver]).emit("message-response", data);
-        io.to(userToSocketMap[sender]).emit("message-response", data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    io.to(userToSocketMap[receiver]).emit("message-response", data);
   });
 
   client.on("disconnect", function () {

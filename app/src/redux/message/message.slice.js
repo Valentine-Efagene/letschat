@@ -70,7 +70,7 @@ export const messageSlice = createSlice({
     });
 
     buiilder.addCase(sendMessageThunk.fulfilled, (state, { payload }) => {
-      state.messages = payload;
+      state.messages = [...state.messages, payload];
       state.status = SUCCEEDED;
     });
     buiilder.addCase(sendMessageThunk.pending, (state, { payload }) => {

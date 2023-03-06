@@ -27,7 +27,9 @@ export default function List({ user, users, handleAddContact }) {
             <img className={styles.avatar} src={`${avatar}`} alt="" />
             <div className={styles.nameNEmail}>
               <div className={styles.email}>{email}</div>
-              <div className={styles.name}>{`${firstName} ${lastName}`}</div>
+              <div className={styles.name}>{`${firstName ?? ''} ${
+                lastName ?? ''
+              }`}</div>
             </div>
             {isContact ? (
               <Link to={`/chat/${id}`}>Chat</Link>

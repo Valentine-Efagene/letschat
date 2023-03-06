@@ -1,8 +1,14 @@
 const MessageModel = require("../models/message.model");
 
 exports.insert = (req, res) => {
+  if (req.files) {
+    req.body.images = req.files.map(
+      (img) => `${process.env.BASE_URL}/${img.filename}`
+    );
+  }
+
   MessageModel.createMessage(req.body).then((result) => {
-    res.status(201).send({ id: result._id });
+    res.status(201).send(result);
   });
 };
 

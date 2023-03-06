@@ -17,3 +17,21 @@
   color: #ffffff;
   margin-right: auto;
 }
+
+.images {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.images hr {
+  border: 1px solid var(--primary-2);
+  margin-block: 1rem;
+}
+
+.images img {
+  object-fit: cover;
+  width: 13rem;
+  aspect-ratio: 2/3;
+  border-radius: 0.4rem;
+}

@@ -16,6 +16,7 @@ AttachmentPicker.propTypes = {
   style: object,
   name: string,
   id: string,
+  multiple: bool,
 };
 
 export default function AttachmentPicker({
@@ -25,6 +26,7 @@ export default function AttachmentPicker({
   disabled = false,
   name,
   id,
+  multiple,
 }) {
   const attachmentRef = useRef();
 
@@ -35,6 +37,7 @@ export default function AttachmentPicker({
       style={style}>
       <FontAwesomeIcon icon={faPaperclip} className={styles.icon} />
       <input
+        multiple={multiple}
         disabled={disabled}
         ref={attachmentRef}
         hidden

@@ -44,7 +44,7 @@ const upload = multer({ storage, limits: { fileSize: 20000000 }, fileFilter });
 const router = Router();
 
 router.post("/messages", [
-  upload.array("photos", 12),
+  upload.array("images", 12),
   MessageController.insert,
 ]);
 

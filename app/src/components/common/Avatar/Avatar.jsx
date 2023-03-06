@@ -21,7 +21,7 @@ export default function Avatar({ user, className, style, to }) {
       {avatar ? (
         <img src={avatar} alt="" />
       ) : (
-        `${firstName?.[0]}${lastName?.[0]}`
+        `${firstName?.[0] ?? ''}${lastName?.[0] ?? ''}`
       )}
     </Link>
   );

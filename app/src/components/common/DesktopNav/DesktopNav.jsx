@@ -32,7 +32,7 @@ export default function DesktopNav({ className }) {
         <NavLink to="/chat" className={styles.navButton}>
           Chat
         </NavLink>
-        <NavLink to="/contacts" className={styles.navButton}>
+        <NavLink to="/users" className={styles.navButton}>
           Contacts
         </NavLink>
         <NavLink to="/about" className={styles.navButton}>

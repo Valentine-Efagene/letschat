@@ -6,7 +6,7 @@ const messageSchema = new Schema({
   receiver: String,
   ref: String,
   text: String,
-  images: String,
+  images: [String],
 });
 
 messageSchema.virtual("id").get(function () {

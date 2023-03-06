@@ -1,64 +1,28 @@
-import React, { useContext, useEffect, useState } from 'react';
 import styles from './Message.module.css';
 import TextArea from '../../../inputs/TextArea/TextArea';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { ERROR, ToastContext } from '../../../../contexts/ToastContext';
-import { useDispatch, useSelector } from 'react-redux';
 import { PENDING } from '../../../../Helpers/loadingStates';
-import { useParams } from 'react-router-dom';
 import AttachmentPicker from '../../../inputs/AttachmentPicker/AttachmentPicker';
-import { pushTyping } from '../../../../redux/message/message.slice';
+import { func, object } from 'prop-types';
 
-export default function Message() {
-  const { user } = useSelector(state => state.user);
-  const { status } = useSelector(state => state.message);
-  const { socket } = useSelector(state => state.socket);
+Message.propTypes = {
+  handleSubmit: func,
+  data: object,
+  handleImagesPicked: func,
+  handleChange: func,
+  handleTyping: func,
+  handleDoneTyping: func,
+};
 
-  const { setToastState } = useContext(ToastContext);
-  const [data, setData] = useState({});
-  //const dispatch = useDispatch();
-
-  const { id: receiver } = useParams();
-
-  useEffect(() => {
-    setData(prevState => ({ ...prevState, receiver }));
-  }, [receiver]);
-
-  const handleChange = e => {
-    const {
-      target: { name, value },
-    } = e;
-    setData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleTyping = () => {
-    socket?.emit('typing', user?.id);
-  };
-
-  const handleDoneTyping = () => {
-    socket?.emit('done-typing', user?.id);
-  };
-
-  const handleSubmit = async e => {
-    e.preventDefault();
-    try {
-      socket?.send({ ...data, sender: user?.id });
-      setData(prevState => ({ ...prevState, text: '' }));
-    } catch (error) {
-      setToastState(prevState => {
-        return {
-          ...prevState,
-          show: true,
-          message: error?.message,
-          title: 'Error',
-          delay: 3000,
-          type: ERROR,
-        };
-      });
-    }
-  };
-
+export default function Message({
+  handleSubmit,
+  data,
+  handleImagesPicked,
+  handleChange,
+  handleDoneTyping,
+  handleTyping,
+}) {
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <TextArea
@@ -77,7 +41,7 @@ export default function Message() {
             icon={status === PENDING ? faSpinner : faPaperPlane}
           />
         </button>
-        <AttachmentPicker />
+        <AttachmentPicker multiple={true} onChange={handleImagesPicked} />
       </div>
     </form>
   );
