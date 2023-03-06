@@ -9,11 +9,11 @@ import MessageCard from '../../cards/Message';
 import styles from './Messages.module.css';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUp, faArrowUp19 } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 
 // https://dev.to/novu/building-a-chat-app-with-socketio-and-react-2edj
 
-const STEP = 2;
+const STEP = 10;
 
 export default function Messages() {
   const { setToastState } = useContext(ToastContext);
@@ -21,26 +21,22 @@ export default function Messages() {
   const { messages } = useSelector(state => state.message);
   const { id: target } = useParams();
   const [page, setPage] = useState(null);
-  const [limit, setLimit] = useState(STEP);
-
-  useEffect(() => {
-    const init = async () => {
-      const total = await dispatch(fetchCountByContactIdThunk(target)).unwrap();
-      setPage(Math.floor(total / STEP));
-    };
-
-    init();
-  }, []);
 
   useEffect(() => {
     const init = async () => {
       try {
+        const total = await dispatch(
+          fetchCountByContactIdThunk(target),
+        ).unwrap();
+        setPage(prevState =>
+          prevState == null ? Math.floor(total / STEP) : prevState,
+        );
         // The calculation is to get the last page (zero-based)
         dispatch(
           fetchMessagesThunk({
             target,
             page,
-            limit,
+            STEP,
           }),
         );
       } catch (error) {
@@ -57,10 +53,8 @@ export default function Messages() {
       }
     };
 
-    if (page) {
-      init();
-    }
-  }, [target, limit, page]);
+    init();
+  }, [target, page]);
 
   const loadMore = () => {
     setPage(prevState => prevState - 1);
@@ -75,7 +69,7 @@ export default function Messages() {
 
   return (
     <div className={styles.container} ref={containerRef}>
-      {page && page !== 0 && (
+      {page != null && page !== 0 && (
         <button className={styles.loadMore} onClick={loadMore}>
           <FontAwesomeIcon icon={faArrowUp} />
         </button>
