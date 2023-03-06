@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { PENDING } from '../../../../Helpers/loadingStates';
 import AttachmentPicker from '../../../inputs/AttachmentPicker/AttachmentPicker';
-import { func, object } from 'prop-types';
+import { func, object, string } from 'prop-types';
 
 Message.propTypes = {
   handleSubmit: func,
@@ -13,11 +13,12 @@ Message.propTypes = {
   handleChange: func,
   handleTyping: func,
   handleDoneTyping: func,
+  text: string,
 };
 
 export default function Message({
   handleSubmit,
-  data,
+  text,
   handleImagesPicked,
   handleChange,
   handleDoneTyping,
@@ -32,7 +33,7 @@ export default function Message({
         onKeyDown={handleTyping}
         onKeyUp={handleDoneTyping}
         className={styles.textArea}
-        value={data?.text}
+        value={text}
         rows="5"
       />
       <div className={styles.controls}>

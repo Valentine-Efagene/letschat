@@ -76,6 +76,7 @@ export default function Detail() {
         <Messages />
       )}
       <MessageForm
+        text={data?.text}
         handleImagesPicked={handleImagesPicked}
         handleChange={handleChange}
         handleDoneTyping={handleDoneTyping}
