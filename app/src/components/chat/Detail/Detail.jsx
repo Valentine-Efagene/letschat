@@ -13,16 +13,18 @@ export default function Detail() {
   const { user } = useSelector(state => state.user);
   const { status } = useSelector(state => state.message);
   const { socket } = useSelector(state => state.socket);
-
-  const { setToastState } = useContext(ToastContext);
-  const [data, setData] = useState({});
-  const dispatch = useDispatch();
-
   const { id: receiver } = useParams();
 
-  useEffect(() => {
-    setData(prevState => ({ ...prevState, receiver }));
-  }, [receiver]);
+  const defaultData = {
+    text: '',
+    images: null,
+    receiver,
+    sender: user?.id,
+  };
+
+  const { setToastState } = useContext(ToastContext);
+  const [data, setData] = useState(defaultData);
+  const dispatch = useDispatch();
 
   const handleChange = e => {
     const {
@@ -39,14 +41,14 @@ export default function Detail() {
     socket?.emit('done-typing', user?.id);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const message = dispatch(
-        sendMessageThunk({ ...data, sender: user?.id }),
+      const message = await dispatch(
+        sendMessageThunk({ ...data, sender: user?.id, receiver }),
       ).unwrap();
       socket?.send(message);
-      setData({});
+      setData(defaultData);
     } catch (error) {
       setToastState(prevState => {
         return {

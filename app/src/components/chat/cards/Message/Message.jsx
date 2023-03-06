@@ -13,7 +13,7 @@ Message.propTypes = {
 
 export default function Message({ message, isLastMessage }) {
   const { user } = useSelector(state => state.user);
-  const { text, sender, receiver, images } = message;
+  const { text, sender, images } = message;
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -42,7 +42,14 @@ export default function Message({ message, isLastMessage }) {
         <div className={styles.images}>
           <hr />
           {images?.map(img => (
-            <img key={img} src={img} alt="" />
+            <a
+              className={styles.imageWrapper}
+              key={img}
+              href={img}
+              target="_blank"
+              rel="noreferrer">
+              <img src={img} alt="" />
+            </a>
           ))}
         </div>
       )}

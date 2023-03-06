@@ -65,6 +65,7 @@ io.on("connection", (client) => {
 
   client.on("message", (data) => {
     const { receiver } = data;
+    console.table(data);
 
     io.to(userToSocketMap[receiver]).emit("message-response", data);
   });

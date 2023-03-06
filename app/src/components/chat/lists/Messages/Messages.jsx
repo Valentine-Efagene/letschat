@@ -1,10 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ERROR, ToastContext } from '../../../../contexts/ToastContext';
-import {
-  appendMessage,
-  fetchMessagesThunk,
-} from '../../../../redux/message/message.slice';
+import { fetchMessagesThunk } from '../../../../redux/message/message.slice';
 import MessageCard from '../../cards/Message';
 import styles from './Messages.module.css';
 import { useParams } from 'react-router-dom';
@@ -20,7 +17,7 @@ export default function Messages() {
   useEffect(() => {
     const init = async () => {
       try {
-        await dispatch(fetchMessagesThunk(target));
+        dispatch(fetchMessagesThunk(target));
       } catch (error) {
         setToastState(prevState => {
           return {
