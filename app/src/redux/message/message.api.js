@@ -7,15 +7,15 @@ async function sendMessage(messageData) {
   const token = localStorage.getItem('access-token');
 
   const formData = new FormData();
-  const { text, sender, receiver, images } = messageData;
+  const { text, sender, receiver, files } = messageData;
 
   formData.set('text', text);
   formData.set('sender', sender);
   formData.set('receiver', receiver);
 
-  if (images != null) {
-    for (let i = 0; i < images.length; i++) {
-      formData.append('images', images?.[i]);
+  if (files != null) {
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files?.[i]);
     }
   }
 

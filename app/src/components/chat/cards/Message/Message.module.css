@@ -18,25 +18,30 @@
   margin-right: auto;
 }
 
-.images {
+.files {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: 1.5rem;
+  padding-inline: 2rem;
 }
 
-.images hr {
+.files hr {
   border: 1px solid var(--primary-2);
   margin-block: 1rem;
 }
 
-.images img {
+.files img {
   object-fit: contain;
   width: 13rem;
   border-radius: 0.4rem;
 }
 
-.imageWrapper {
+.fileWrapper {
   width: fit-content;
   height: fit-content;
-  margin-inline: auto;
+  text-decoration: none;
+  color: #000000;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
 }

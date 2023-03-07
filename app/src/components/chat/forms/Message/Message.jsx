@@ -9,7 +9,7 @@ import { func, object, string } from 'prop-types';
 Message.propTypes = {
   handleSubmit: func,
   data: object,
-  handleImagesPicked: func,
+  handleFilesPicked: func,
   handleChange: func,
   handleTyping: func,
   handleDoneTyping: func,
@@ -19,7 +19,7 @@ Message.propTypes = {
 export default function Message({
   handleSubmit,
   text,
-  handleImagesPicked,
+  handleFilesPicked,
   handleChange,
   handleDoneTyping,
   handleTyping,
@@ -42,7 +42,7 @@ export default function Message({
             icon={status === PENDING ? faSpinner : faPaperPlane}
           />
         </button>
-        <AttachmentPicker multiple={true} onChange={handleImagesPicked} />
+        <AttachmentPicker multiple={true} onChange={handleFilesPicked} />
       </div>
     </form>
   );

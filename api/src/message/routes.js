@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
 
 function fileFilter(req, file, cb) {
   // Allowed ext
-  const filetypes = /jpeg|webp|jpg|png|gif/;
+  const filetypes = /jpeg|webp|jpg|png|gif|pdf|doc|docx|ppt|pptx|txt/;
 
   // Check ext
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
@@ -43,10 +43,7 @@ const upload = multer({ storage, limits: { fileSize: 20000000 }, fileFilter });
 
 const router = Router();
 
-router.post("/messages", [
-  upload.array("images", 12),
-  MessageController.insert,
-]);
+router.post("/messages", [upload.array("files", 12), MessageController.insert]);
 
 router.get("/messages", [
   ValidationMiddleware.validJWTNeeded,
@@ -81,7 +78,7 @@ router.get("/messages/:id", [
 
 router.patch("/messages/:id", [
   ValidationMiddleware.validJWTNeeded,
-  upload.single("avatar"),
+  upload.array("files", 12),
   PermissionMiddleware.minimumPermissionLevelRequired(FREE),
   PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
   MessageController.patchById,

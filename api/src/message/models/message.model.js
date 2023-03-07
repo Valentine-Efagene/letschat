@@ -6,7 +6,9 @@ const messageSchema = new Schema({
   receiver: String,
   ref: String,
   text: String,
-  images: [String],
+  //images: [String],
+  files: [{ path: String, mimeType: String, size: Number }],
+  date: { type: Date, default: Date.now },
 });
 
 messageSchema.virtual("id").get(function () {

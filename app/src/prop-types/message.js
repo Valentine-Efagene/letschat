@@ -1,11 +1,11 @@
-import { arrayOf, string } from 'prop-types';
+import { arrayOf, shape, string } from 'prop-types';
 
-const message = {
+const message = shape({
   sender: string,
   receiver: string,
   ref: string,
   photos: arrayOf(string),
-};
+});
 
 const messages = arrayOf({ message });
 

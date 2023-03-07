@@ -1,29 +1,30 @@
-import styles from './ImagesSection.module.css';
-import TextArea from '../../../inputs/TextArea/TextArea';
+import styles from './FilesSection.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { PENDING } from '../../../../Helpers/loadingStates';
+import { faFile } from '@fortawesome/free-solid-svg-icons';
 import { array, func } from 'prop-types';
 
-ImagesSection.propTypes = {
+FilesSection.propTypes = {
   handleSubmit: func,
-  images: array,
+  files: array,
   handleImagesPicked: func,
   handleChange: func,
   handleTyping: func,
   handleDoneTyping: func,
 };
 
-export default function ImagesSection({ images }) {
+export default function FilesSection({ files }) {
   return (
     <div className={styles.container}>
-      {images?.map(image => {
-        const { name, type } = image;
+      {files?.map(file => {
+        const { name, type } = file;
 
         return (
           <div key={name} className={styles.imageContainer}>
             {type.split('/')?.[0] === 'image' && (
-              <img src={URL.createObjectURL(image)} alt="" />
+              <img src={URL.createObjectURL(file)} alt="" />
+            )}
+            {type.split('/')?.[0] !== 'image' && (
+              <FontAwesomeIcon icon={faFile} />
             )}
           </div>
         );

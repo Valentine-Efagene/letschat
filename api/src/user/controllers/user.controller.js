@@ -106,6 +106,7 @@ exports.patchById = (req, res) => {
 
   try {
     if (req.file) {
+      console.table(req.file);
       req.body.avatar = `${process.env.BASE_URL}/${req?.file?.filename}`;
     }
 

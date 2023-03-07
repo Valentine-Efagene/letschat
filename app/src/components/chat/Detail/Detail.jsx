@@ -6,12 +6,9 @@ import Header from '../../messages/Header/Header';
 import MessageForm from '../forms/Message';
 import Messages from '../lists/Messages/Messages';
 import styles from './Detail.module.css';
-import ImagesSection from '../forms/ImagesSection/ImagesSection';
-import {
-  appendMessage,
-  sendMessageThunk,
-} from '../../../redux/message/message.slice';
+import { sendMessageThunk } from '../../../redux/message/message.slice';
 import socket from '../../../services/socket';
+import FilesSection from '../forms/FilesSection/FilesSection';
 
 export default function Detail() {
   const { user } = useSelector(state => state.user);
@@ -20,7 +17,7 @@ export default function Detail() {
 
   const defaultData = {
     text: '',
-    images: null,
+    files: null,
     receiver,
     sender: user?.id,
   };
@@ -66,21 +63,21 @@ export default function Detail() {
     }
   };
 
-  const handleImagesPicked = ref => {
-    handleChange({ target: { name: 'images', value: ref.current?.files } });
+  const handleFilesPicked = ref => {
+    handleChange({ target: { name: 'files', value: ref.current?.files } });
   };
 
   return (
     <div className={styles.container}>
       <Header />
-      {data?.images ? (
-        <ImagesSection images={Array.from(data?.images)} />
+      {data?.files ? (
+        <FilesSection files={Array.from(data?.files)} />
       ) : (
         <Messages />
       )}
       <MessageForm
         text={data?.text}
-        handleImagesPicked={handleImagesPicked}
+        handleFilesPicked={handleFilesPicked}
         handleChange={handleChange}
         handleDoneTyping={handleDoneTyping}
         handleTyping={handleTyping}

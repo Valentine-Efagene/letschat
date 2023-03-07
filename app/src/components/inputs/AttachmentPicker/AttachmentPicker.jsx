@@ -44,7 +44,8 @@ export default function AttachmentPicker({
         type="file"
         id={id}
         name={name}
-        accept="image/png,image/jpeg"
+        //accept="image/png,image/jpeg"
+        accept="*"
         onChange={() => {
           onChange(attachmentRef);
         }}

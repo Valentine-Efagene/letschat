@@ -2,9 +2,14 @@ const MessageModel = require("../models/message.model");
 
 exports.insert = (req, res) => {
   if (req.files) {
-    req.body.images = req.files.map(
-      (img) => `${process.env.BASE_URL}/${img.filename}`
-    );
+    // req.body.images = req.files.map(
+    //   (img) => `${process.env.BASE_URL}/${img.filename}`
+    // );
+    req.body.files = req.files.map(({ filename, mimetype, size }) => ({
+      path: `${process.env.BASE_URL}/${filename}`,
+      mimeType: mimetype,
+      size,
+    }));
   }
 
   MessageModel.createMessage(req.body).then((result) => {

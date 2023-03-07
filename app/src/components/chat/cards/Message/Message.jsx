@@ -4,6 +4,9 @@ import styles from './Message.module.css';
 
 import { bool, func, number } from 'prop-types';
 import { messageProp } from '../../../../prop-types/message';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFile } from '@fortawesome/free-solid-svg-icons';
+import { byteFormatter } from '../../../../Helpers/formatters';
 
 Message.propTypes = {
   message: messageProp,
@@ -14,7 +17,7 @@ Message.propTypes = {
 
 export default function Message({ message, isLastMessage }) {
   const { user } = useSelector(state => state.user);
-  const { text, sender, images } = message;
+  const { text, sender, files } = message;
 
   useEffect;
 
@@ -41,19 +44,29 @@ export default function Message({ message, isLastMessage }) {
         styles.container
       }`}>
       <p>{text ?? ''}</p>
-      {images?.length > 0 && (
-        <div className={styles.images}>
+      {files?.length > 0 && (
+        <div className={styles.files}>
           <hr />
-          {images?.map(img => (
-            <a
-              className={styles.imageWrapper}
-              key={img}
-              href={img}
-              target="_blank"
-              rel="noreferrer">
-              <img src={img} alt="" />
-            </a>
-          ))}
+          {files?.map(file => {
+            const { path, mimeType, size, id } = file;
+
+            return (
+              <a
+                className={styles.fileWrapper}
+                key={id}
+                href={path}
+                target="_blank"
+                rel="noreferrer">
+                {mimeType === 'application/pdf' && (
+                  <FontAwesomeIcon size="10x" color="cadetblue" icon={faFile} />
+                )}
+                {mimeType.split('/').includes('image') && (
+                  <img src={path} alt="" />
+                )}
+                <div className={styles.size}>{byteFormatter.format(size)}</div>
+              </a>
+            );
+          })}
         </div>
       )}
     </div>
