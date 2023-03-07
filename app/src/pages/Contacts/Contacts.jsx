@@ -14,7 +14,8 @@ import styles from './Contacts.module.css';
 import { addContactThunk } from '../../redux/user/user.slice';
 import Paginator from '../../components/common/Paginator/Paginator';
 const API_BASE_URL = 'http://localhost:3000';
-import { useSearchParams } from 'react-router-dom';
+import { useLoaderData, useSearchParams } from 'react-router-dom';
+import Layout from '../../components/layouts/Layout';
 
 const GRID = 'grid';
 const LIST = 'list';
@@ -32,9 +33,13 @@ const generatePaginationLinks = (total, perPage = 4) => {
   return links;
 };
 
+const STEP = 4;
+
 export default function Contacts() {
+  const total = useLoaderData();
+  alert(JSON.stringify(total));
   let [searchParams, setSearchParams] = useSearchParams();
-  const { user, users, error, total } = useSelector(state => state.user);
+  const { user, users, error } = useSelector(state => state.user);
   const { setToastState } = useContext(ToastContext);
   const page = searchParams.get('page') ?? 1;
 
@@ -102,31 +107,33 @@ export default function Contacts() {
   const otherUsers = users?.filter(_user => _user.id !== user?.id);
 
   return (
-    <div className={styles.container}>
-      <Button variant="outline" onClick={toggleLayout}>
-        <FontAwesomeIcon icon={layout === GRID ? faList : faTh} />
-      </Button>
+    <Layout>
+      <div className={styles.container}>
+        <Button variant="outline" onClick={toggleLayout}>
+          <FontAwesomeIcon icon={layout === GRID ? faList : faTh} />
+        </Button>
 
-      {layout === GRID ? (
-        <Grid
-          user={user}
-          users={otherUsers}
-          handleAddContact={handleAddContact}
+        {layout === GRID ? (
+          <Grid
+            user={user}
+            users={otherUsers}
+            handleAddContact={handleAddContact}
+          />
+        ) : (
+          <List
+            user={user}
+            users={otherUsers}
+            handleAddContact={handleAddContact}
+          />
+        )}
+        <Paginator
+          currentPage={page}
+          nextPageUrl={generateURL(page + 1)}
+          prevPageUrl={generateURL(page - 1)}
+          links={generatePaginationLinks(total, STEP)}
+          lastPage={Math.floor(total / STEP)}
         />
-      ) : (
-        <List
-          user={user}
-          users={otherUsers}
-          handleAddContact={handleAddContact}
-        />
-      )}
-      <Paginator
-        currentPage={page}
-        nextPageUrl={generateURL(page + 1)}
-        prevPageUrl={generateURL(page - 1)}
-        links={generatePaginationLinks(total, 4)}
-        lastPage={4}
-      />
-    </div>
+      </div>
+    </Layout>
   );
 }

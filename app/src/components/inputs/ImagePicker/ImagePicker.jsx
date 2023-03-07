@@ -1,15 +1,18 @@
-import { faCamera, faCameraAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { bool, func, object, shape, string } from 'prop-types';
+import { bool, func, object, oneOfType, shape, string } from 'prop-types';
 import React from 'react';
 import { useRef } from 'react';
 import styles from './ImagePicker.module.css';
 
 ImagePicker.propTypes = {
   defaultValue: string,
-  value: shape({
-    name: string,
-  }),
+  value: oneOfType([
+    shape({
+      name: string,
+    }),
+    string,
+  ]),
   onChange: func,
   className: string,
   disabled: bool,

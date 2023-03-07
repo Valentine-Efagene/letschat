@@ -25,29 +25,33 @@ function transformScroll(event) {
 
 /**
  * @param {HtmlElement} element
+ * @param {number} distance
+ *
  * @returns
  */
-function scrollPickerLeft(element) {
+function scrollPickerLeft(element, distance) {
   const dx = Math.min(element.scrollLeft, element.clientWidth / 2);
 
   element.scrollBy({
-    left: -dx,
+    left: distance ?? -dx,
     behavior: 'smooth',
   });
 }
 
 /**
  * @param {HtmlElement} element
+ * @param {number} distance
+ *
  * @returns
  */
-function scrollPickerRight(element) {
+function scrollPickerRight(element, distance) {
   const spaceLeft =
     element.scrollWidth - element.scrollLeft - element.clientWidth;
 
   const dx = Math.min(spaceLeft, element.clientWidth / 2);
 
   element.scrollBy({
-    left: dx,
+    left: distance ?? dx,
     behavior: 'smooth',
   });
 }
@@ -70,6 +74,16 @@ function canScrollRight(element) {
   if (element == null) return false;
 
   return element.scrollWidth - element.clientWidth - element.scrollLeft > 0;
+}
+
+/**
+ * @param {HtmlElement} element
+ * @returns
+ */
+function overflowingX(element) {
+  if (element == null) return false;
+
+  return element.scrollWidth > element.clientWidth;
 }
 
 /**
@@ -151,4 +165,5 @@ export {
   getTopRelativeToDOM,
   findPosRelativeToDOM,
   getActiveSection,
+  overflowingX,
 };

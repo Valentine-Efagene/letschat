@@ -34,7 +34,7 @@ export default function Message({
         onKeyUp={handleDoneTyping}
         className={styles.textArea}
         value={text}
-        rows="5"
+        rows={5}
       />
       <div className={styles.controls}>
         <button className={styles.send} disabled={status === PENDING}>

@@ -4,6 +4,8 @@ import { node, object, string } from 'prop-types';
 import {
   canScrollLeft,
   canScrollRight,
+  getTopRelativeToDOM,
+  overflowingX,
   scrollPickerLeft,
   scrollPickerRight,
   transformScroll,
@@ -31,8 +33,8 @@ export default function HorizontalScrollContainer({
   style,
   shouldTransformScroll = false,
 }) {
-  const containerRef = useRef();
   const leftButtonRef = useRef();
+  const containerRef = useRef();
   const rightButtonRef = useRef();
 
   const [canGoLeft, setCanGoLeft] = useState(false);
@@ -41,31 +43,51 @@ export default function HorizontalScrollContainer({
   const handleScroll = e => {
     setCanGoLeft(canScrollLeft(e.currentTarget));
     setCanGoRight(canScrollRight(e.currentTarget));
+
+    if (rightButtonRef?.current) {
+      rightButtonRef.current.style.position = 'sticky';
+      leftButtonRef.current.style.position = 'sticky';
+    }
+  };
+
+  const handleResize = e => {
+    handleScroll(containerRef?.current);
+    setCanGoRight(overflowingX(containerRef?.current));
   };
 
   useEffect(() => {
+    containerRef?.current?.addEventListener('scroll', handleScroll);
+    window?.addEventListener('resize', handleResize);
+
     if (shouldTransformScroll) {
       // Using the element's onWheel has glitches
       containerRef?.current?.addEventListener('wheel', transformScroll);
-      containerRef?.current?.addEventListener('scroll', handleScroll);
     }
 
-    // Set up scroll buttons
-    setCanGoLeft(canScrollLeft(containerRef?.current));
-    setCanGoRight(canScrollRight(containerRef?.current));
-
     // If we use absolute positioning on the buttons, and no relative on the container
-    // if (leftButtonRef != null && rightButtonRef != null) {
-    //   const top = getTopRelativeToDOM(containerRef.current);
-    //   const posY = top + containerRef.current.offsetHeight / 2;
-    //   leftButtonRef.current.style.top = posY + 'px';
-    //   rightButtonRef.current.style.top = posY + 'px';
-    // }
+
+    // const timeout = setTimeout(() => {
+    //   if (rightButtonRef?.current != null) {
+    //     const top = getTopRelativeToDOM(containerRef.current);
+    //     const posY = top + containerRef.current.offsetHeight / 2;
+    //     rightButtonRef.current.style.top = posY + 'px';
+    //   }
+
+    //   if (leftButtonRef?.current != null) {
+    //     const top = getTopRelativeToDOM(containerRef.current);
+    //     const posY = top + containerRef.current.offsetHeight / 2;
+    //     leftButtonRef.current.style.top = posY + 'px';
+    //   }
+    // }, 100);
+
+    setCanGoRight(overflowingX(containerRef?.current));
 
     return () => {
+      containerRef?.current?.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+
       if (shouldTransformScroll) {
         containerRef?.current?.removeEventListener('wheel', transformScroll);
-        containerRef?.current?.removeEventListener('scroll', handleScroll);
       }
     };
   }, []);
@@ -87,21 +109,25 @@ export default function HorizontalScrollContainer({
       style={style}
       ref={containerRef}
       className={`${className} ${styles.container}`}>
-      <button
-        ref={leftButtonRef}
-        disabled={!canGoLeft}
-        className={`${styles.left} ${styles.move}`}
-        onClick={goLeft}>
-        <FontAwesomeIcon icon={faChevronLeft} className={styles.chevron} />
-      </button>
+      {canGoLeft && (
+        <button
+          ref={leftButtonRef}
+          disabled={!canGoLeft}
+          className={`${styles.left} ${styles.move}`}
+          onClick={goLeft}>
+          <FontAwesomeIcon icon={faChevronLeft} className={styles.chevron} />
+        </button>
+      )}
       {children}
-      <button
-        ref={rightButtonRef}
-        disabled={!canGoRight}
-        className={`${styles.right} ${styles.move}`}
-        onClick={goRight}>
-        <FontAwesomeIcon icon={faChevronRight} className={styles.chevron} />
-      </button>
+      {canGoRight && (
+        <button
+          ref={rightButtonRef}
+          disabled={!canGoRight}
+          className={`${styles.right} ${styles.move}`}
+          onClick={goRight}>
+          <FontAwesomeIcon icon={faChevronRight} className={styles.chevron} />
+        </button>
+      )}
     </div>
   );
 }

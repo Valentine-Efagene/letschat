@@ -5,6 +5,7 @@ import {
   fetchCountByContactId,
 } from './message.api';
 import { IDLE, PENDING, SUCCEEDED, FAILED } from '../../Helpers/loadingStates';
+import socket from '../../services/socket';
 
 const initialState = {
   messages: null,
@@ -13,6 +14,7 @@ const initialState = {
   error: null,
   count: null,
   typing: [],
+  peers: [],
 };
 
 const fetchMessagesThunk = createAsyncThunk(
@@ -59,6 +61,7 @@ export const messageSlice = createSlice({
   initialState,
   reducers: {
     appendMessage: (state, { payload }) => {
+      socket?.send(payload);
       state.messages.push(payload);
     },
     setTarget: (state, { payload }) => {
@@ -74,6 +77,9 @@ export const messageSlice = createSlice({
     },
     removeTyping: (state, { payload }) => {
       state.typing = state.typing?.filter(_typing => _typing !== payload);
+    },
+    setPeers: (state, { payload }) => {
+      state.peers = payload;
     },
   },
   extraReducers: buiilder => {
@@ -130,5 +136,6 @@ export const {
   setMessages,
   pushTyping,
   removeTyping,
+  setPeers,
 } = messageSlice.actions;
 export default messageSlice.reducer;

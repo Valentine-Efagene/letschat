@@ -7,12 +7,15 @@ import MessageForm from '../forms/Message';
 import Messages from '../lists/Messages/Messages';
 import styles from './Detail.module.css';
 import ImagesSection from '../forms/ImagesSection/ImagesSection';
-import { sendMessageThunk } from '../../../redux/message/message.slice';
+import {
+  appendMessage,
+  sendMessageThunk,
+} from '../../../redux/message/message.slice';
+import socket from '../../../services/socket';
 
 export default function Detail() {
   const { user } = useSelector(state => state.user);
   const { status } = useSelector(state => state.message);
-  const { socket } = useSelector(state => state.socket);
   const { id: receiver } = useParams();
 
   const defaultData = {

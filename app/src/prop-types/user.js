@@ -1,11 +1,11 @@
-import { arrayOf, string } from 'prop-types';
+import { arrayOf, shape, string } from 'prop-types';
 
-const user = {
+const user = shape({
   avatar: string,
   firstName: string,
   lastName: string,
   email: string,
-};
+});
 
 const users = arrayOf({
   avatar: string,

@@ -8,6 +8,7 @@
 .container,
 .container > img {
   width: 3rem;
+  border-radius: 50%;
   aspect-ratio: 1/1;
 }
 

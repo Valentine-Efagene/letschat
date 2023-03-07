@@ -10,17 +10,21 @@ import { ToastContext, SUCCESS } from './contexts/ToastContext';
 import Toast from './components/Toast';
 import Contacts from './pages/Contacts';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCurrentUserThunk } from './redux/user/user.slice';
+import {
+  fetchCurrentUserThunk,
+  fetchTotalThunk,
+} from './redux/user/user.slice';
 import {
   appendMessage,
   pushTyping,
   removeTyping,
+  setPeers,
 } from './redux/message/message.slice';
-import { setPeers } from './redux/socket/socket.slice';
+import Profile from './pages/Profile';
+import socket from './services/socket';
 
 function App() {
   const dispatch = useDispatch();
-  const { socket } = useSelector(state => state.socket);
   const { user } = useSelector(state => state.user);
 
   useEffect(() => {
@@ -84,6 +88,13 @@ function App() {
     {
       path: '/users',
       element: <Contacts />,
+      loader: async () => {
+        return await dispatch(fetchTotalThunk()).unwrap();
+      },
+    },
+    {
+      path: '/profile',
+      element: <Profile />,
     },
     {
       path: '/auth',

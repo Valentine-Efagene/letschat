@@ -3,11 +3,12 @@
   max-width: 100%;
   scrollbar-color: #00000000 #00000000;
   overflow-x: scroll;
+  padding-inline: 1rem;
   position: relative;
 }
 
 .move {
-  position: sticky;
+  position: absolute;
   top: calc(50% - 1rem);
   border-radius: 50%;
   background-color: #00000068;
@@ -18,11 +19,6 @@
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  transition-duration: 300ms;
-}
-
-.move:hover{
-  background-color: rgba(0, 0, 0, 0.66);
 }
 
 .move:disabled {

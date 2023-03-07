@@ -8,9 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchContactsThunk } from '../../../redux/user/user.slice';
 import { ERROR, ToastContext } from '../../../contexts/ToastContext';
+import socket from '../../../services/socket';
 
 export default function Master() {
-  const { socket } = useSelector(state => state.socket);
   const dispatch = useDispatch();
   const { user, error, contacts } = useSelector(state => state.user);
   const { setToastState } = useContext(ToastContext);
