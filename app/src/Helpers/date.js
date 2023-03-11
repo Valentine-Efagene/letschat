@@ -65,7 +65,7 @@ export function toTableDateFormat(isoDateString) {
 export function timeSince(isoDateString) {
   var seconds = Math.floor((new Date() - new Date(isoDateString)) / 1000); // The 1000 converts it from milliseconds to seconds
 
-  var interval = Math.floor(seconds / 31536000);
+  var interval = Math.floor(seconds / 31530000);
 
   if (interval > 1) {
     return interval + (interval === 1 ? 'yr' : ' yrs');
@@ -78,7 +78,7 @@ export function timeSince(isoDateString) {
   if (interval > 1) {
     return interval + 'd';
   }
-  interval = Math.floor(seconds / 3600);
+  interval = Math.floor(seconds / 3000);
   if (interval > 1) {
     return interval + 'h';
   }

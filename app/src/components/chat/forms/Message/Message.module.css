@@ -3,6 +3,7 @@
   grid-template-columns: 1fr auto;
   gap: 1rem;
   padding: 1.25rem;
+  position: relative;
 }
 
 .controls {
@@ -11,13 +12,26 @@
   gap: 0.5rem;
 }
 
-.send {
-  background-color: var(--primary-3);
+.send,
+.camera {
   transition: 300ms;
   border: none;
   width: 3rem;
   aspect-ratio: 1/1;
   border-radius: 50%;
+}
+
+.send {
+  background-color: var(--primary-3);
+}
+
+.camera {
+  background-color: var(--input-grey);
+  color: #ffffff;
+}
+
+.camera .icon {
+  transform: scale(1.4);
 }
 
 .send:hover:not(:disabled) {
@@ -27,4 +41,17 @@
 
 .send:disabled {
   cursor: default;
+}
+
+.more {
+  display: grid;
+  grid-template-columns: auto auto;
+  padding: 1rem;
+  gap: 1.25rem;
+  position: absolute;
+  bottom: 12rem;
+  right: 5rem;
+  border-radius: 0.5rem;
+  background-color: var(--primary-1);
+  transition: display 300ms;
 }

@@ -2,7 +2,7 @@ import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import { CustomException } from '../../Helpers/error';
 
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = 'http://localhost:3600';
 
 async function fetchCurrentUser() {
   const token = localStorage.getItem('access-token');
@@ -26,7 +26,7 @@ async function fetchCurrentUser() {
  * @param {{email, password}} credentials
  */
 async function signIn(credentials) {
-  const response = await axios.post('http://localhost:3000/auth', credentials);
+  const response = await axios.post('http://localhost:3600/auth', credentials);
 
   if (response?.status > 399) {
     throw new CustomException(response?.statusText, response?.status);
@@ -61,7 +61,7 @@ async function signIn(credentials) {
  * @param {{email, password}} credentials
  */
 async function signUp(credentials) {
-  const { id } = await axios.post('http://localhost:3000/users', credentials);
+  const { id } = await axios.post('http://localhost:3600/users', credentials);
 
   if (id) {
     return signIn(credentials);
@@ -112,7 +112,7 @@ async function fetchAllUsers(page = 0, limit = 6) {
 
   if (token) {
     const response = await fetch(
-      // http://localhost:3000/users?page=1&limit=1
+      // http://localhost:3600/users?page=1&limit=1
       `${API_BASE_URL}/users?page=${page}&limit=${limit}`,
       {
         headers: { Authorization: `Bearer ${token}` },

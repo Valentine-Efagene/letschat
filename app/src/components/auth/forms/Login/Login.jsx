@@ -2,7 +2,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { PENDING, SUCCEEDED } from '../../../../Helpers/loadingStates';
+import { PENDING } from '../../../../Helpers/loadingStates';
 import Button from '../../../inputs/Button/Button';
 import TextField from '../../../inputs/TextField/TextField';
 import styles from './Login.module.css';
@@ -40,7 +40,7 @@ export default function Login() {
             show: error != null,
             message: error?.message,
             title: error?.code,
-            delay: 3000,
+            delay: 3600,
             type: ERROR,
           };
         });
@@ -56,7 +56,7 @@ export default function Login() {
           show: true,
           message: error?.message,
           title: error?.code,
-          delay: 3000,
+          delay: 3600,
           type: ERROR,
         };
       });

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { ERROR, ToastContext } from '../../../contexts/ToastContext';
@@ -9,6 +9,7 @@ import styles from './Detail.module.css';
 import { sendMessageThunk } from '../../../redux/message/message.slice';
 import socket from '../../../services/socket';
 import FilesSection from '../forms/FilesSection/FilesSection';
+import VideoPane from '../VideoPane';
 
 export default function Detail() {
   const { user } = useSelector(state => state.user);
@@ -24,6 +25,10 @@ export default function Detail() {
 
   const { setToastState } = useContext(ToastContext);
   const [data, setData] = useState(defaultData);
+  const [isCapturing, setIsCapturing] = useState(false);
+  const [videoPaneImg, setVideoPaneImg] = useState();
+  const [cameraStream, setCameraStream] = useState();
+
   const dispatch = useDispatch();
 
   const handleChange = e => {
@@ -56,7 +61,7 @@ export default function Detail() {
           show: true,
           message: error?.message,
           title: 'Error',
-          delay: 3000,
+          delay: 3600,
           type: ERROR,
         };
       });
@@ -67,15 +72,103 @@ export default function Detail() {
     handleChange({ target: { name: 'files', value: ref.current?.files } });
   };
 
-  return (
-    <div className={styles.container}>
-      <Header />
-      {data?.files ? (
+  const videoRef = useRef();
+  const canvasRef = useRef();
+
+  const stopStreaming = () => {
+    if (cameraStream == null) return;
+
+    const video = videoRef.current;
+    const track = cameraStream.getTracks()[0];
+    track.stop();
+    video.load();
+
+    setCameraStream(null);
+  };
+
+  const startStreaming = () => {
+    setIsCapturing(true);
+    navigator.mediaDevices
+      .getUserMedia({
+        audio: false,
+        video: true,
+        preferCurrentTab: false,
+      })
+      .then(stream => {
+        setCameraStream(stream);
+
+        if (videoRef?.current == null) return;
+
+        const video = videoRef?.video;
+        video.srcObject = stream;
+        video.play();
+      })
+      .catch(error => {
+        console.log(`An error occurred: ${error}`);
+      });
+  };
+
+  // https://codepen.io/bhagwatchouhan/pen/jjLJoB
+  const takePhoto = () => {
+    const video = videoRef?.current;
+
+    if (video == null) return;
+
+    const mediaSupport = 'mediaDevices' in navigator;
+
+    if (mediaSupport == null) return;
+
+    setIsCapturing(true);
+    navigator.mediaDevices
+      .getUserMedia({
+        audio: false,
+        video: true,
+      })
+      .then(stream => {
+        video.srcObject = stream;
+        video.innerHTML = 'fdfs';
+        video.play();
+      })
+      .catch(error => {
+        console.log(`An error occurred: ${error}`);
+      });
+
+    const canvas = canvasRef?.current;
+
+    if (canvas == null) return;
+
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    setVideoPaneImg(canvas.toDataURL('image/png'));
+  };
+
+  const getCurrentDisplay = () => {
+    if (isCapturing) {
+      return (
+        <VideoPane
+          img={videoPaneImg}
+          canvasRef={canvasRef}
+          videoRef={videoRef}
+        />
+      );
+    } else {
+      return data?.files ? (
         <FilesSection files={Array.from(data?.files)} />
       ) : (
         <Messages />
-      )}
+      );
+    }
+  };
+
+  return (
+    <div className={styles.container}>
+      <Header />
+      {getCurrentDisplay()}
       <MessageForm
+        startStreaming={startStreaming}
+        stopStreaming={stopStreaming}
+        setIsCapturing={setIsCapturing}
+        takePhoto={takePhoto}
         text={data?.text}
         handleFilesPicked={handleFilesPicked}
         handleChange={handleChange}

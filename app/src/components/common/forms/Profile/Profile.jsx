@@ -47,7 +47,7 @@ export default function Profile() {
           //message: (status % 10) - status / 10 === 20 ? 'Updated' : '',
           message: JSON.stringify(result),
           title: SUCCESS,
-          delay: 3000,
+          delay: 3600,
         };
       });
     } catch (error) {
@@ -57,7 +57,7 @@ export default function Profile() {
           show: true,
           message: error.message,
           title: 'Error',
-          delay: 3000,
+          delay: 3600,
         };
       });
     }

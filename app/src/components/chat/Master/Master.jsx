@@ -29,7 +29,7 @@ export default function Master() {
             show: error != null,
             message: error?.message,
             title: error?.code,
-            delay: 3000,
+            delay: 3600,
             type: ERROR,
           };
         });

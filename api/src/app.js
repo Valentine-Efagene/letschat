@@ -2,21 +2,23 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const http = require("http");
-const server = http.createServer(app);
 const { Server } = require("socket.io");
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
-  },
-});
 const morgan = require("morgan");
 const multer = require("multer");
 const userRouter = require("./user/routes");
 const authRouter = require("./authorization/routes");
 const messageRouter = require("./message/routes");
-const MessageModel = require("./message/models/message.model");
+
+// https://socket.io/docs/v4/handling-cors/
 require("dotenv").config();
+const httpServer = http.createServer(app);
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:5173", // 127.0.0.1 is considered different from localhost here
+    methods: ["GET", "POST"],
+  },
+});
 
 app.use(express.json());
 app.use(cors());
@@ -26,7 +28,7 @@ app.use(messageRouter);
 app.use(morgan("dev"));
 app.use(express.static("uploads"));
 
-const PORT = 3000;
+const PORT = 3600;
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -65,7 +67,6 @@ io.on("connection", (client) => {
 
   client.on("message", (data) => {
     const { receiver } = data;
-    console.table(data);
 
     io.to(userToSocketMap[receiver]).emit("message-response", data);
   });
@@ -92,6 +93,6 @@ app.get("/", (req, res) => {
   res.send("Smth");
 });
 
-server.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Listening in port ${PORT}`);
 });

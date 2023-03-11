@@ -46,7 +46,7 @@ export default function Messages() {
             show: true,
             message: error?.message,
             title: 'Error',
-            delay: 3000,
+            delay: 3600,
             type: ERROR,
           };
         });

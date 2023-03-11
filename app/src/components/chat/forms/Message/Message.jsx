@@ -1,10 +1,17 @@
 import styles from './Message.module.css';
 import TextArea from '../../../inputs/TextArea/TextArea';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCamera,
+  faPaperPlane,
+  faPlus,
+  faSpinner,
+  faVideo,
+} from '@fortawesome/free-solid-svg-icons';
 import { PENDING } from '../../../../Helpers/loadingStates';
 import AttachmentPicker from '../../../inputs/AttachmentPicker/AttachmentPicker';
 import { func, object, string } from 'prop-types';
+import { useState } from 'react';
 
 Message.propTypes = {
   handleSubmit: func,
@@ -14,6 +21,9 @@ Message.propTypes = {
   handleTyping: func,
   handleDoneTyping: func,
   text: string,
+  takePhoto: func,
+  startStreaming: func,
+  stopStreaming: func,
 };
 
 export default function Message({
@@ -23,7 +33,13 @@ export default function Message({
   handleChange,
   handleDoneTyping,
   handleTyping,
+  takePhoto,
+  startStreaming,
+  stopStreaming,
 }) {
+  const [showMore, setShowMore] = useState(false);
+  const toggleShowMore = () => setShowMore(prevState => !prevState);
+
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <TextArea
@@ -42,7 +58,21 @@ export default function Message({
             icon={status === PENDING ? faSpinner : faPaperPlane}
           />
         </button>
+        <button className={styles.camera} onClick={toggleShowMore}>
+          <FontAwesomeIcon className={styles.icon} icon={faPlus} />
+        </button>
+      </div>
+
+      <div
+        className={styles.more}
+        style={{ display: showMore ? 'grid' : 'none' }}>
         <AttachmentPicker multiple={true} onChange={handleFilesPicked} />
+        <button className={styles.camera} onClick={takePhoto}>
+          <FontAwesomeIcon className={styles.icon} icon={faCamera} />
+        </button>
+        <button className={styles.camera} onClick={startStreaming}>
+          <FontAwesomeIcon className={styles.icon} icon={faVideo} />
+        </button>
       </div>
     </form>
   );

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { CustomException } from '../../Helpers/error';
 
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = 'http://localhost:3600';
 
 async function sendMessage(messageData) {
   const token = localStorage.getItem('access-token');

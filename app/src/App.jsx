@@ -67,6 +67,8 @@ function App() {
           socket.connect();
         }
       });
+
+      dispatch(fetchTotalThunk());
     };
 
     init();
@@ -88,9 +90,6 @@ function App() {
     {
       path: '/users',
       element: <Contacts />,
-      loader: async () => {
-        return await dispatch(fetchTotalThunk()).unwrap();
-      },
     },
     {
       path: '/profile',

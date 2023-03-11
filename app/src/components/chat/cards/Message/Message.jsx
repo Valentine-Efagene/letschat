@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './Message.module.css';
 
-import { bool, func, number } from 'prop-types';
+import { bool, func } from 'prop-types';
 import { messageProp } from '../../../../prop-types/message';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFile } from '@fortawesome/free-solid-svg-icons';

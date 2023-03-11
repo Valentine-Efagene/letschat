@@ -6,7 +6,7 @@
   width: 3rem;
   aspect-ratio: 1/1;
   border-radius: 50%;
-  background-color: #0000005a;
+  background-color: var(--input-grey);
   overflow: hidden;
   cursor: pointer;
 
