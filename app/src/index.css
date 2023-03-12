@@ -1,14 +1,24 @@
+/* https://digitalsynopsis.com/design/beautiful-color-gradient-palettes/?fbclid=IwAR2435FDfIm2VKU1KJEVVbyHSJIZVr6JN01p5CJGgF78yzh2GHRZLIbSbtM */
+
 :root {
   /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
   font-family: Poppins, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color: #242424;
-  --primary-0: #2e3c5d;
-  --primary-1: #47577b;
-  --primary-2: #8e9cbc;
-  --primary-3: lightblue;
-  --primary-4: rgb(228, 241, 245);
+
+  --primary-0: #2c6975;
+  --primary-1: #68b2a0;
+  --primary-2: #cde0c9;
+  --primary-3: #e0ecde;
+  --primary-4: #ffffff;
+
+  /* --primary-0: #4a707a;
+  --primary-1: #7697a0;
+  --primary-2: #94b0b7;
+  --primary-3: #c2c8c5;
+  --primary-4: #ddddda; */
+
   --secondary: #ffffff;
   --accent: #47577b;
   --input-grey: #0000005a;

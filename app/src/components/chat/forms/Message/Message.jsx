@@ -58,7 +58,10 @@ export default function Message({
             icon={status === PENDING ? faSpinner : faPaperPlane}
           />
         </button>
-        <button className={styles.camera} onClick={toggleShowMore}>
+        <button
+          type="button"
+          className={styles.camera}
+          onClick={toggleShowMore}>
           <FontAwesomeIcon className={styles.icon} icon={faPlus} />
         </button>
       </div>
@@ -68,10 +71,13 @@ export default function Message({
           className={styles.more}
           style={{ display: showMore ? 'grid' : 'none' }}>
           <AttachmentPicker multiple={true} onChange={handleFilesPicked} />
-          <button className={styles.camera} onClick={takePhoto}>
+          <button type="button" className={styles.camera} onClick={takePhoto}>
             <FontAwesomeIcon className={styles.icon} icon={faCamera} />
           </button>
-          <button className={styles.camera} onClick={startStreaming}>
+          <button
+            type="button"
+            className={styles.camera}
+            onClick={startStreaming}>
             <FontAwesomeIcon className={styles.icon} icon={faVideo} />
           </button>
         </div>

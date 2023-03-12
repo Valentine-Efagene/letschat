@@ -30,6 +30,11 @@ export default function Detail() {
   const [videoSrc, setVideoSrc] = useState();
   const [cameraStream, setCameraStream] = useState();
 
+  // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+  const [cameraConstraints, setCameraConstraints] = useState({
+    facingMode: 'environment', // 'user'
+  });
+
   const dispatch = useDispatch();
 
   const handleChange = e => {
@@ -68,6 +73,33 @@ export default function Detail() {
       });
     }
   };
+
+  /*useEffect(() => {
+    const video = videoRef.current;
+
+    video.addEventListener(
+      'canplay',
+      ev => {
+        if (!isCapturing) {
+          const canvas = canvasRef.current;
+
+          const width = video.width;
+          let height = (video.videoHeight / video.videoWidth) * width;
+
+          if (isNaN(height)) {
+            height = width / (4 / 3);
+          }
+
+          video.setAttribute('width', width);
+          video.setAttribute('height', height);
+          canvas.setAttribute('width', width);
+          canvas.setAttribute('height', height);
+          setIsCapturing(true);
+        }
+      },
+      false,
+    );
+  }, []);*/
 
   const handleFilesPicked = ref => {
     handleChange({ target: { name: 'files', value: ref.current?.files } });
