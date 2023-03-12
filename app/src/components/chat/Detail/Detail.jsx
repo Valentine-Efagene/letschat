@@ -176,6 +176,9 @@ export default function Detail() {
     const canvas = canvasRef?.current;
     const video = videoRef?.current;
 
+    canvas.width = screen.width;
+    canvas.height = screen.height;
+
     const ctx = canvas.getContext('2d');
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     setVideoPaneImg(canvas.toDataURL('image/png'));
@@ -202,11 +205,6 @@ export default function Detail() {
   };
 
   const clearPhoto = () => {
-    // const canvas = canvasRef?.current;
-    // const ctx = canvas.getContext('2d');
-    // ctx.fillStyle = 'AAA';
-    // ctx.fillRect(0, 0, canvas.width, canvas.height);
-    // const data = canvas.toDataURL('image/png');
     setVideoPaneImg(null);
   };
 
