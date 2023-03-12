@@ -200,6 +200,7 @@ export default function Detail() {
 
         setVideoPaneImg(null);
         setIsCapturing(false);
+        stopStreaming();
       })
       .catch(err => console.log(err));
   };
