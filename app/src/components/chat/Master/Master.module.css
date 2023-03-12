@@ -5,6 +5,9 @@
   box-shadow: 1px 1px 4px var(--primary-1);
 }
 
+.cl {
+}
+
 .top {
   display: grid;
   grid-template-columns: auto auto auto;
@@ -82,7 +85,4 @@
 .chatIcon:hover {
   /* transform: translateY(-2px) scale(1.2); */
   /* box-shadow: rgba(0, 0, 0, 0.08) 0px 12px 20px 0px; */
-}
-
-.cl {
 }

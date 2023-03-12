@@ -16,6 +16,7 @@ export default function FilesSection({ files }) {
   return (
     <div className={styles.container}>
       {files?.map(file => {
+        console.log(file);
         const { name, type } = file;
 
         return (

@@ -181,7 +181,25 @@ export default function Detail() {
     setVideoPaneImg(canvas.toDataURL('image/png'));
   };
 
-  const addPhoto = () => {};
+  const addPhoto = () => {
+    fetch(videoPaneImg)
+      .then(res => res.blob())
+      .then(blob => {
+        const file = new File([blob], 'capture.png', { type: blob.type });
+
+        if (data?.files == null) {
+          handleChange({ target: { name: 'files', value: [file] } });
+        } else {
+          handleChange({
+            target: { name: 'files', value: [...data.files, file] },
+          });
+        }
+
+        setVideoPaneImg(null);
+        setIsCapturing(false);
+      })
+      .catch(err => console.log(err));
+  };
 
   const clearPhoto = () => {
     // const canvas = canvasRef?.current;
