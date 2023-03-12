@@ -63,17 +63,19 @@ export default function Message({
         </button>
       </div>
 
-      <div
-        className={styles.more}
-        style={{ display: showMore ? 'grid' : 'none' }}>
-        <AttachmentPicker multiple={true} onChange={handleFilesPicked} />
-        <button className={styles.camera} onClick={takePhoto}>
-          <FontAwesomeIcon className={styles.icon} icon={faCamera} />
-        </button>
-        <button className={styles.camera} onClick={startStreaming}>
-          <FontAwesomeIcon className={styles.icon} icon={faVideo} />
-        </button>
-      </div>
+      {showMore && (
+        <div
+          className={styles.more}
+          style={{ display: showMore ? 'grid' : 'none' }}>
+          <AttachmentPicker multiple={true} onChange={handleFilesPicked} />
+          <button className={styles.camera} onClick={takePhoto}>
+            <FontAwesomeIcon className={styles.icon} icon={faCamera} />
+          </button>
+          <button className={styles.camera} onClick={startStreaming}>
+            <FontAwesomeIcon className={styles.icon} icon={faVideo} />
+          </button>
+        </div>
+      )}
     </form>
   );
 }

@@ -27,6 +27,7 @@ export default function Detail() {
   const [data, setData] = useState(defaultData);
   const [isCapturing, setIsCapturing] = useState(false);
   const [videoPaneImg, setVideoPaneImg] = useState();
+  const [videoSrc, setVideoSrc] = useState();
   const [cameraStream, setCameraStream] = useState();
 
   const dispatch = useDispatch();
@@ -112,8 +113,6 @@ export default function Detail() {
   const takePhoto = () => {
     const video = videoRef?.current;
 
-    if (video == null) return;
-
     const mediaSupport = 'mediaDevices' in navigator;
 
     if (mediaSupport == null) return;
@@ -125,27 +124,42 @@ export default function Detail() {
         video: true,
       })
       .then(stream => {
+        alert('started streaming');
         video.srcObject = stream;
-        video.innerHTML = 'fdfs';
         video.play();
       })
       .catch(error => {
         console.log(`An error occurred: ${error}`);
       });
+  };
 
+  const capture = () => {
     const canvas = canvasRef?.current;
-
-    if (canvas == null) return;
+    const video = videoRef?.current;
 
     const ctx = canvas.getContext('2d');
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     setVideoPaneImg(canvas.toDataURL('image/png'));
   };
 
+  const addPhoto = () => {};
+
+  const clearPhoto = () => {
+    // const canvas = canvasRef?.current;
+    // const ctx = canvas.getContext('2d');
+    // ctx.fillStyle = 'AAA';
+    // ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // const data = canvas.toDataURL('image/png');
+    setVideoPaneImg(null);
+  };
+
   const getCurrentDisplay = () => {
     if (isCapturing) {
       return (
         <VideoPane
+          addPhoto={addPhoto}
+          clearPhoto={clearPhoto}
+          capture={capture}
           img={videoPaneImg}
           canvasRef={canvasRef}
           videoRef={videoRef}

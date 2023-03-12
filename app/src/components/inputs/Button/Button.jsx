@@ -10,7 +10,7 @@ Button.propTypes = {
   iconLeft: node,
   iconRight: node,
   children: node,
-  variant: oneOf(['outline', 'primary', 'light']),
+  variant: oneOf(['outline', 'primary', 'light', 'round']),
 };
 
 export default function Button({
@@ -27,6 +27,7 @@ export default function Button({
     primary: styles.primary,
     outline: styles.outline,
     light: styles.light,
+    round: styles.round,
   };
 
   return (
