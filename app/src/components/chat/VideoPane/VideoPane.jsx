@@ -1,12 +1,13 @@
 import {
   faCheck,
-  faTrash,
+  faTimes,
   faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { func, object } from 'prop-types';
+import { bool, func, object } from 'prop-types';
 import React from 'react';
 import styles from './VideoPane.module.css';
+// https://webrtc.org/getting-started/media-devices
 
 VideoPane.propTypes = {
   videoRef: object,
@@ -15,6 +16,9 @@ VideoPane.propTypes = {
   capture: func,
   clearPhoto: func,
   addPhoto: func,
+  isCapturing: bool,
+  setIsCapturing: func,
+  stopStreaming: func,
 };
 
 export default function VideoPane({
@@ -24,10 +28,30 @@ export default function VideoPane({
   canvasRef,
   capture,
   addPhoto,
+  setIsCapturing,
+  isCapturing,
+  stopStreaming,
 }) {
   return (
-    <div className={styles.container}>
-      {img && <img src={img} alt="" className={styles.img} />}
+    <div
+      className={styles.container}
+      style={{ display: isCapturing ? 'grid' : 'none' }}>
+      {!img && (
+        <button
+          className={styles.close}
+          onClick={() => {
+            setIsCapturing(false);
+            stopStreaming();
+          }}>
+          <FontAwesomeIcon icon={faTimes} />
+        </button>
+      )}
+      <img
+        src={img}
+        alt=""
+        className={styles.img}
+        style={{ display: img ? 'block' : 'none' }}
+      />
       <video
         style={{ display: img ? 'none' : 'block' }}
         ref={videoRef}
@@ -53,12 +77,7 @@ export default function VideoPane({
         )}
       </div>
       {/* For constructing the image in the background */}
-      <canvas
-        style={{ display: 'none' }}
-        className={styles.canvas}
-        ref={canvasRef}
-        width={320}
-        height={240}></canvas>
+      <canvas className={styles.canvas} ref={canvasRef}></canvas>
     </div>
   );
 }

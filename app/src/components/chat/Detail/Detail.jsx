@@ -80,8 +80,12 @@ export default function Detail() {
     if (cameraStream == null) return;
 
     const video = videoRef.current;
-    const track = cameraStream.getTracks()[0];
-    track.stop();
+    const tracks = cameraStream.getTracks();
+
+    tracks.forEach(track => {
+      track.stop();
+    });
+
     video.load();
 
     setCameraStream(null);
@@ -102,6 +106,7 @@ export default function Detail() {
 
         const video = videoRef?.video;
         video.srcObject = stream;
+
         video.play();
       })
       .catch(error => {
@@ -111,20 +116,22 @@ export default function Detail() {
 
   // https://codepen.io/bhagwatchouhan/pen/jjLJoB
   const takePhoto = () => {
+    setIsCapturing(true);
     const video = videoRef?.current;
+
+    if (video == null) return;
 
     const mediaSupport = 'mediaDevices' in navigator;
 
     if (mediaSupport == null) return;
 
-    setIsCapturing(true);
     navigator.mediaDevices
       .getUserMedia({
         audio: false,
         video: true,
       })
       .then(stream => {
-        alert('started streaming');
+        setCameraStream(stream);
         video.srcObject = stream;
         video.play();
       })
@@ -155,16 +162,7 @@ export default function Detail() {
 
   const getCurrentDisplay = () => {
     if (isCapturing) {
-      return (
-        <VideoPane
-          addPhoto={addPhoto}
-          clearPhoto={clearPhoto}
-          capture={capture}
-          img={videoPaneImg}
-          canvasRef={canvasRef}
-          videoRef={videoRef}
-        />
-      );
+      return null;
     } else {
       return data?.files ? (
         <FilesSection files={Array.from(data?.files)} />
@@ -177,19 +175,32 @@ export default function Detail() {
   return (
     <div className={styles.container}>
       <Header />
-      {getCurrentDisplay()}
-      <MessageForm
-        startStreaming={startStreaming}
+      <VideoPane
         stopStreaming={stopStreaming}
+        isCapturing={isCapturing}
         setIsCapturing={setIsCapturing}
-        takePhoto={takePhoto}
-        text={data?.text}
-        handleFilesPicked={handleFilesPicked}
-        handleChange={handleChange}
-        handleDoneTyping={handleDoneTyping}
-        handleTyping={handleTyping}
-        handleSubmit={handleSubmit}
+        addPhoto={addPhoto}
+        clearPhoto={clearPhoto}
+        capture={capture}
+        img={videoPaneImg}
+        canvasRef={canvasRef}
+        videoRef={videoRef}
       />
+      {getCurrentDisplay()}
+      {!isCapturing && (
+        <MessageForm
+          startStreaming={startStreaming}
+          stopStreaming={stopStreaming}
+          setIsCapturing={setIsCapturing}
+          takePhoto={takePhoto}
+          text={data?.text}
+          handleFilesPicked={handleFilesPicked}
+          handleChange={handleChange}
+          handleDoneTyping={handleDoneTyping}
+          handleTyping={handleTyping}
+          handleSubmit={handleSubmit}
+        />
+      )}
     </div>
   );
 }
