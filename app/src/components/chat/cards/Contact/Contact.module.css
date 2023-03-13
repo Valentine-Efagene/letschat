@@ -10,6 +10,7 @@
   color: #000000;
   text-decoration: none;
   transition: 300ms;
+  position: relative;
 }
 
 .container {
@@ -31,9 +32,9 @@
   width: 0.7rem;
   aspect-ratio: 1/1;
   position: absolute;
-  top: -1px;
-  right: -1px;
-  background-color: var(--primary-1);
+  top: 0.3rem;
+  left: 0.3rem;
+  background-color: var(--primary-0);
   border-radius: 50%;
 }
 

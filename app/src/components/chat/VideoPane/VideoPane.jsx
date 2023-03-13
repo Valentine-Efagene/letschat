@@ -59,14 +59,14 @@ export default function VideoPane({
       <div className={styles.controls}>
         {img ? (
           <>
-            <button className={styles.capture} onClick={clearPhoto}>
+            <button className={styles.delete} onClick={clearPhoto}>
               <FontAwesomeIcon
                 size="2x"
                 icon={faTrashAlt}
                 style={{ color: 'red' }}
               />
             </button>
-            <button className={styles.capture} onClick={addPhoto}>
+            <button className={styles.save} onClick={addPhoto}>
               <FontAwesomeIcon size="2x" icon={faCheck} />
             </button>
           </>

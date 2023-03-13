@@ -20,14 +20,13 @@ Message.propTypes = {
   handleChange: func,
   handleTyping: func,
   handleDoneTyping: func,
-  text: string,
   takePhoto: func,
   initStream: func,
 };
 
 export default function Message({
   handleSubmit,
-  text,
+  data,
   handleFilesPicked,
   handleChange,
   handleDoneTyping,
@@ -50,13 +49,13 @@ export default function Message({
     <form onSubmit={handleSubmit} className={styles.form}>
       <TextArea
         name="text"
-        required={true}
+        required={data.files == null || data.files?.length < 1}
         onChange={handleChange}
         placeholder="Talk"
         onKeyDown={handleTyping}
         onKeyUp={handleDoneTyping}
         className={styles.textArea}
-        value={text}
+        value={data.text}
         rows={computeRows()}
       />
       <div className={styles.controls}>

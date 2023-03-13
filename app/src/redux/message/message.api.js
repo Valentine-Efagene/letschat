@@ -41,6 +41,23 @@ async function fetchMessages(target, page, limit = 5) {
   return response.json();
 }
 
+async function fetchLastMessages(contacts) {
+  const userId = localStorage.getItem('user-id');
+  const token = localStorage.getItem('access-token');
+
+  const response = await axios.post(
+    `${API_BASE_URL}/${userId}/messages/last`,
+    { contacts },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
+
+  const { data } = response;
+
+  return data;
+}
+
 async function fetchCountByContactId(contactId) {
   const userId = localStorage.getItem('user-id');
   const accessToken = localStorage.getItem('access-token');
@@ -60,4 +77,4 @@ async function fetchCountByContactId(contactId) {
   return data;
 }
 
-export { sendMessage, fetchMessages, fetchCountByContactId };
+export { sendMessage, fetchMessages, fetchCountByContactId, fetchLastMessages };

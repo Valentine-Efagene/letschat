@@ -3,8 +3,11 @@ import {
   fetchMessages,
   sendMessage,
   fetchCountByContactId,
+  fetchLastMessages,
 } from './message.api';
 import { IDLE, PENDING, SUCCEEDED, FAILED } from '../../Helpers/loadingStates';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFile } from '@fortawesome/free-solid-svg-icons';
 
 const initialState = {
   messages: null,
@@ -14,6 +17,7 @@ const initialState = {
   count: null,
   typing: [],
   peers: [],
+  lastMessages: [],
 };
 
 const fetchMessagesThunk = createAsyncThunk(
@@ -23,6 +27,20 @@ const fetchMessagesThunk = createAsyncThunk(
 
     try {
       const result = await fetchMessages(target, page, limit);
+      return result;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+const fetchLastMessagesThunk = createAsyncThunk(
+  'message/fetchLast',
+  async (contacts, { rejectWithValue }) => {
+    if (contacts == null || contacts?.length < 1) return null;
+
+    try {
+      const result = await fetchLastMessages(contacts);
       return result;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -61,6 +79,7 @@ export const messageSlice = createSlice({
   reducers: {
     appendMessage: (state, { payload }) => {
       state.messages.push(payload);
+      state.lastMessages = getUpdatedLastMessages({ ...state }, payload);
     },
     setTarget: (state, { payload }) => {
       state.target = payload;
@@ -92,8 +111,24 @@ export const messageSlice = createSlice({
       state.status = FAILED;
     });
 
+    buiilder.addCase(fetchLastMessagesThunk.fulfilled, (state, { payload }) => {
+      //alert(JSON.stringify(payload));
+      // console.log(JSON.stringify(payload));
+      state.lastMessages = payload;
+      state.status = SUCCEEDED;
+    });
+    buiilder.addCase(fetchLastMessagesThunk.pending, (state, { payload }) => {
+      state.status = PENDING;
+    });
+    buiilder.addCase(fetchLastMessagesThunk.rejected, (state, { payload }) => {
+      //alert(JSON.stringify(payload));
+      // console.log(JSON.stringify(payload));
+      state.status = FAILED;
+    });
+
     buiilder.addCase(sendMessageThunk.fulfilled, (state, { payload }) => {
       state.messages = [...state.messages, payload];
+      state.lastMessages = getUpdatedLastMessages(state, payload);
       state.status = SUCCEEDED;
     });
     buiilder.addCase(sendMessageThunk.pending, (state, { payload }) => {
@@ -127,7 +162,33 @@ export const messageSlice = createSlice({
   },
 });
 
-export { sendMessageThunk, fetchMessagesThunk, fetchCountByContactIdThunk };
+function getUpdatedLastMessages(state, newMessage) {
+  const { sender, receiver } = newMessage;
+
+  const focus = state.lastMessages.findIndex(message => {
+    if (message == null) return null;
+
+    return (
+      (message.sender === sender && message.receiver === receiver) ||
+      (message.sender === receiver && message.receiver === sender)
+    );
+  });
+
+  if (focus == null) {
+    state.lastMessages = [...state.lastMessages, newMessage];
+  } else {
+    state.lastMessages[focus] = newMessage;
+  }
+
+  return state.lastMessages;
+}
+
+export {
+  sendMessageThunk,
+  fetchLastMessagesThunk,
+  fetchMessagesThunk,
+  fetchCountByContactIdThunk,
+};
 export const {
   appendMessage,
   setTarget,

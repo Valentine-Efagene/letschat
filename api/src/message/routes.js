@@ -51,6 +51,12 @@ router.get("/messages", [
   MessageController.list,
 ]);
 
+router.post("/:userId/messages/last", [
+  ValidationMiddleware.validJWTNeeded,
+  PermissionMiddleware.minimumPermissionLevelRequired(FREE),
+  MessageController.last,
+]);
+
 router.get("/:userId/messages/:contactId/count", [
   ValidationMiddleware.validJWTNeeded,
   PermissionMiddleware.minimumPermissionLevelRequired(FREE),

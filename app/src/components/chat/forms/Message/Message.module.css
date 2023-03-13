@@ -44,6 +44,7 @@
 }
 
 .more {
+  border: 2px solid var(--primary-4);
   display: grid;
   grid-template-columns: auto auto;
   padding: 1rem;

@@ -54,18 +54,24 @@
   padding: 1rem;
 }
 
-.capture {
+.capture,
+.delete,
+.save {
   width: 3.5rem;
   height: 3.5rem;
   border-radius: 50%;
   border: 1px solid #ffffff;
-  background-color: #00000000;
+  background-color: #00000030;
   padding: 0.3rem;
   color: #ffffff;
   margin-inline: auto;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.delete {
+  background-color: #00000000;
 }
 
 .icon {

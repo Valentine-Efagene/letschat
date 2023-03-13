@@ -8,7 +8,7 @@ const messageSchema = new Schema({
   text: String,
   //images: [String],
   files: [{ path: String, mimeType: String, size: Number }],
-  date: { type: Date, default: Date.now },
+  created_at: { type: Date, default: Date.now },
 });
 
 messageSchema.virtual("id").get(function () {
@@ -29,14 +29,27 @@ exports.getCount = async (userId, contactId) => {
   });
 };
 
+exports.getLastMessages = async (contacts) => {
+  const promises = contacts.map(async (contactId) => {
+    return await Message.findOne({
+      $or: [{ sender: contactId }, { receiver: contactId }],
+    })
+      .sort({ created_at: -1 })
+      .limit(1);
+  });
+
+  const messages = await Promise.all(promises);
+  return messages;
+};
+
 messageSchema.findById = function (cb) {
   return this.model("Message").find({ id: this.id }, cb);
 };
 
 const Message = mongoose.model("Message", messageSchema);
 
-exports.findById = (id) => {
-  return Message.findById(id).then((result) => {
+exports.findById = async (id) => {
+  return await Message.findById(id).then((result) => {
     result = result.toJSON();
     delete result._id;
     delete result.__v;

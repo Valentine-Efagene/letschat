@@ -9,6 +9,7 @@ const userSchema = new Schema({
   password: String,
   permissionLevel: Number,
   contacts: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  created_at: { type: Date, default: Date.now },
 });
 
 userSchema.virtual("id").get(function () {
@@ -26,23 +27,21 @@ userSchema.findById = function (cb) {
 
 const User = mongoose.model("User", userSchema);
 
-exports.findByEmail = (email) => {
-  return User.find({ email: email }); //.populate("contacts");
+exports.findByEmail = async (email) => {
+  return await User.find({ email: email }); //.populate("contacts");
 };
 
-exports.findById = (id) => {
-  return (
-    User.findById(id)
-      //.populate("contacts")
-      .then((result) => {
-        if (result == null) return null;
+exports.findById = async (id) => {
+  return await User.findById(id)
+    //.populate("contacts")
+    .then((result) => {
+      if (result == null) return null;
 
-        result = result.toJSON();
-        delete result._id;
-        delete result.__v;
-        return result;
-      })
-  );
+      result = result.toJSON();
+      delete result._id;
+      delete result.__v;
+      return result;
+    });
 };
 
 exports.createUser = (userData) => {

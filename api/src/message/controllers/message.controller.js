@@ -17,6 +17,15 @@ exports.insert = (req, res) => {
   });
 };
 
+exports.last = (req, res) => {
+  const contacts = req.body.contacts;
+
+  MessageModel.getLastMessages(contacts).then((result) => {
+    //console.log(result?.length);
+    res.status(200).send(result);
+  });
+};
+
 exports.count = (req, res) => {
   MessageModel.getCount(req.params.userId, req.params.contactId).then(
     (result) => {

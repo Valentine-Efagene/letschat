@@ -235,7 +235,7 @@ export default function Detail() {
           initStream={initStream}
           stopStreaming={stopStreaming}
           setIsCameraOn={setIsCameraOn}
-          text={data?.text}
+          data={data}
           handleFilesPicked={handleFilesPicked}
           handleChange={handleChange}
           handleDoneTyping={handleDoneTyping}

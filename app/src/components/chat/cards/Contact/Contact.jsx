@@ -13,24 +13,27 @@ Contact.propTypes = {
   isTarget: bool,
   to: string,
   online: bool,
+  snippet: string,
 };
 
-export default function Contact({ isTarget, user, onClick, online }) {
-  const { firstName, lastName, snippet, id } = user ?? {};
+export default function Contact({ isTarget, user, onClick, online, snippet }) {
+  const { firstName, lastName, id } = user ?? {};
   const { typing } = useSelector(state => state.message);
 
   return (
     <div
       onClick={onClick}
       className={`${isTarget ? styles.isTarget : null} ${styles.container}`}>
+      {online && <div className={styles.onlineIndicator}></div>}
       <Avatar className={styles.avatar} user={user} />
       <div className={styles.name}>{`${firstName ? firstName : ''} ${
         lastName ? lastName : ''
       }`}</div>
-      {/* <div className={styles.snippet}>{snippet}</div> */}
       {Array.isArray(typing) && typing?.find(_user => _user === id) ? (
         <FontAwesomeIcon icon={faKeyboard} />
-      ) : null}
+      ) : (
+        <div className={styles.snippet}>{snippet}</div>
+      )}
     </div>
   );
 }
