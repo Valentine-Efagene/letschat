@@ -22,6 +22,7 @@ import {
 } from './redux/message/message.slice';
 import Profile from './pages/Profile';
 import socket from './services/socket';
+// https://codesandbox.io/s/react-router-tutorial-loader-and-action-3qr3p8?file=/src/routes/contact.jsx
 
 function App() {
   const dispatch = useDispatch();

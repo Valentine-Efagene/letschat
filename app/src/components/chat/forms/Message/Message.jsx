@@ -22,7 +22,7 @@ Message.propTypes = {
   handleDoneTyping: func,
   text: string,
   takePhoto: func,
-  startStreaming: func,
+  initStream: func,
   stopStreaming: func,
 };
 
@@ -34,7 +34,7 @@ export default function Message({
   handleDoneTyping,
   handleTyping,
   takePhoto,
-  startStreaming,
+  initStream,
   stopStreaming,
 }) {
   const [showMore, setShowMore] = useState(false);
@@ -71,13 +71,10 @@ export default function Message({
           className={styles.more}
           style={{ display: showMore ? 'grid' : 'none' }}>
           <AttachmentPicker multiple={true} onChange={handleFilesPicked} />
-          <button type="button" className={styles.camera} onClick={takePhoto}>
+          <button type="button" className={styles.camera} onClick={initStream}>
             <FontAwesomeIcon className={styles.icon} icon={faCamera} />
           </button>
-          <button
-            type="button"
-            className={styles.camera}
-            onClick={startStreaming}>
+          <button type="button" className={styles.camera} onClick={initStream}>
             <FontAwesomeIcon className={styles.icon} icon={faVideo} />
           </button>
         </div>

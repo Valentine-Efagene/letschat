@@ -12,8 +12,9 @@ import FilesSection from '../forms/FilesSection/FilesSection';
 import VideoPane from '../VideoPane';
 
 export default function Detail() {
+  const dispatch = useDispatch();
+  const { setToastState } = useContext(ToastContext);
   const { user } = useSelector(state => state.user);
-  const { status } = useSelector(state => state.message);
   const { id: receiver } = useParams();
 
   const defaultData = {
@@ -23,19 +24,25 @@ export default function Detail() {
     sender: user?.id,
   };
 
-  const { setToastState } = useContext(ToastContext);
   const [data, setData] = useState(defaultData);
-  const [isCapturing, setIsCapturing] = useState(false);
+  const [cameraState, setCameraState] = useState({
+    on: false,
+    mode: 'photo',
+    // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+    facingMode: 'environment', // user
+  });
   const [videoPaneImg, setVideoPaneImg] = useState();
-  const [videoSrc, setVideoSrc] = useState();
   const [cameraStream, setCameraStream] = useState();
 
-  // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
-  const [cameraConstraints, setCameraConstraints] = useState({
-    facingMode: 'environment', // 'user'
-  });
+  let { on: isCameraOn } = cameraState;
 
-  const dispatch = useDispatch();
+  const setIsCameraOn = val => {
+    setCameraState(prevState => ({ ...prevState, on: val }));
+  };
+
+  const setCameraMode = mode => {
+    setCameraState(prevState => ({ ...prevState, mode }));
+  };
 
   const handleChange = e => {
     const {
@@ -74,33 +81,11 @@ export default function Detail() {
     }
   };
 
-  /*useEffect(() => {
-    const video = videoRef.current;
-
-    video.addEventListener(
-      'canplay',
-      ev => {
-        if (!isCapturing) {
-          const canvas = canvasRef.current;
-
-          const width = video.width;
-          let height = (video.videoHeight / video.videoWidth) * width;
-
-          if (isNaN(height)) {
-            height = width / (4 / 3);
-          }
-
-          video.setAttribute('width', width);
-          video.setAttribute('height', height);
-          canvas.setAttribute('width', width);
-          canvas.setAttribute('height', height);
-          setIsCapturing(true);
-        }
-      },
-      false,
-    );
-  }, []);*/
-
+  /**
+   * Handler for the attachment picker
+   *
+   * @param {*} ref
+   */
   const handleFilesPicked = ref => {
     handleChange({ target: { name: 'files', value: ref.current?.files } });
   };
@@ -108,6 +93,11 @@ export default function Detail() {
   const videoRef = useRef();
   const canvasRef = useRef();
 
+  /**
+   * Release the camera
+   *
+   * @returns
+   */
   const stopStreaming = () => {
     if (cameraStream == null) return;
 
@@ -123,32 +113,14 @@ export default function Detail() {
     setCameraStream(null);
   };
 
-  const startStreaming = () => {
-    setIsCapturing(true);
-    navigator.mediaDevices
-      .getUserMedia({
-        audio: false,
-        video: true,
-        preferCurrentTab: false,
-      })
-      .then(stream => {
-        setCameraStream(stream);
-
-        if (videoRef?.current == null) return;
-
-        const video = videoRef?.video;
-        video.srcObject = stream;
-
-        video.play();
-      })
-      .catch(error => {
-        console.log(`An error occurred: ${error}`);
-      });
-  };
-
   // https://codepen.io/bhagwatchouhan/pen/jjLJoB
-  const takePhoto = () => {
-    setIsCapturing(true);
+  /**
+   * Start up the camera
+   *
+   * @returns void
+   */
+  const initStream = () => {
+    setIsCameraOn(true);
     const video = videoRef?.current;
 
     if (video == null) return;
@@ -172,7 +144,10 @@ export default function Detail() {
       });
   };
 
-  const capture = () => {
+  /**
+   * Take a still photo
+   */
+  const capturePhoto = () => {
     const canvas = canvasRef?.current;
     const video = videoRef?.current;
 
@@ -184,6 +159,9 @@ export default function Detail() {
     setVideoPaneImg(canvas.toDataURL('image/png'));
   };
 
+  /**
+   * Save photo
+   */
   const addPhoto = () => {
     fetch(videoPaneImg)
       .then(res => res.blob())
@@ -199,18 +177,26 @@ export default function Detail() {
         }
 
         setVideoPaneImg(null);
-        setIsCapturing(false);
+        setIsCameraOn(false);
         stopStreaming();
       })
       .catch(err => console.log(err));
   };
 
+  /**
+   * Reject a captured photo
+   */
   const clearPhoto = () => {
     setVideoPaneImg(null);
   };
 
+  /**
+   * Decide what to display
+   *
+   * @returns
+   */
   const getCurrentDisplay = () => {
-    if (isCapturing) {
+    if (isCameraOn) {
       return null;
     } else {
       return data?.files ? (
@@ -226,22 +212,21 @@ export default function Detail() {
       <Header />
       <VideoPane
         stopStreaming={stopStreaming}
-        isCapturing={isCapturing}
-        setIsCapturing={setIsCapturing}
+        isCameraOn={isCameraOn}
+        setIsCameraOn={setIsCameraOn}
         addPhoto={addPhoto}
         clearPhoto={clearPhoto}
-        capture={capture}
+        capturePhoto={capturePhoto}
         img={videoPaneImg}
         canvasRef={canvasRef}
         videoRef={videoRef}
       />
       {getCurrentDisplay()}
-      {!isCapturing && (
+      {!isCameraOn && (
         <MessageForm
-          startStreaming={startStreaming}
+          initStream={initStream}
           stopStreaming={stopStreaming}
-          setIsCapturing={setIsCapturing}
-          takePhoto={takePhoto}
+          setIsCameraOn={setIsCameraOn}
           text={data?.text}
           handleFilesPicked={handleFilesPicked}
           handleChange={handleChange}

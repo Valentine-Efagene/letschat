@@ -13,11 +13,11 @@ VideoPane.propTypes = {
   videoRef: object,
   canvasRef: object,
   img: object,
-  capture: func,
+  capturePhoto: func,
   clearPhoto: func,
   addPhoto: func,
-  isCapturing: bool,
-  setIsCapturing: func,
+  isCameraOn: bool,
+  setIsCameraOn: func,
   stopStreaming: func,
 };
 
@@ -26,21 +26,21 @@ export default function VideoPane({
   img,
   videoRef,
   canvasRef,
-  capture,
+  capturePhoto,
   addPhoto,
-  setIsCapturing,
-  isCapturing,
+  setIsCameraOn,
+  isCameraOn,
   stopStreaming,
 }) {
   return (
     <div
       className={styles.container}
-      style={{ display: isCapturing ? 'grid' : 'none' }}>
+      style={{ display: isCameraOn ? 'grid' : 'none' }}>
       {!img && (
         <button
           className={styles.close}
           onClick={() => {
-            setIsCapturing(false);
+            setIsCameraOn(false);
             stopStreaming();
           }}>
           <FontAwesomeIcon icon={faTimes} />
@@ -71,7 +71,7 @@ export default function VideoPane({
             </button>
           </>
         ) : (
-          <button className={styles.capture} onClick={capture}>
+          <button className={styles.capture} onClick={capturePhoto}>
             <div className={styles.icon}></div>
           </button>
         )}
