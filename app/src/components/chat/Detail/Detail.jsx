@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ERROR, ToastContext } from '../../../contexts/ToastContext';
 import Header from '../../messages/Header/Header';
@@ -47,11 +47,9 @@ export default function Detail() {
     setData(initialData);
   };
 
-  /*
   useEffect(() => {
     resetData();
   }, [receiver]);
-  */
 
   const handleChange = e => {
     const {
@@ -232,7 +230,7 @@ export default function Detail() {
         videoRef={videoRef}
       />
       {getCurrentDisplay()}
-      {!isCameraOn && (
+      {!isCameraOn && receiver != null && (
         <MessageForm
           initStream={initStream}
           stopStreaming={stopStreaming}

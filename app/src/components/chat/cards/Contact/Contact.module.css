@@ -25,14 +25,6 @@
   grid-row: 1 / span 2;
   margin: auto;
   margin-right: 1rem;
-  border-radius: 50%;
-  width: 2.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  aspect-ratio: 1/1;
-  background-color: #00000020;
-  position: relative;
 }
 
 .onlineIndicator {
@@ -45,11 +37,9 @@
   border-radius: 50%;
 }
 
+/* For the window-like look */
 .avatar img {
-  border-radius: 50%;
   width: 2.5rem;
-  aspect-ratio: 1/1;
-  object-fit: cover;
 }
 
 .name {

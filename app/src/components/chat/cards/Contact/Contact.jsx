@@ -5,6 +5,7 @@ import { bool, func, string } from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKeyboard, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
+import Avatar from '../../../common/Avatar/Avatar';
 
 Contact.propTypes = {
   user: userProp,
@@ -15,25 +16,14 @@ Contact.propTypes = {
 };
 
 export default function Contact({ isTarget, user, onClick, online }) {
-  const { avatar, firstName, lastName, snippet, id } = user ?? {};
+  const { firstName, lastName, snippet, id } = user ?? {};
   const { typing } = useSelector(state => state.message);
 
   return (
     <div
       onClick={onClick}
       className={`${isTarget ? styles.isTarget : null} ${styles.container}`}>
-      <div className={styles.avatar}>
-        {online && (
-          <div
-            className={styles.onlineIndicator}
-            style={isTarget ? { backgroundColor: '#ffffff' } : {}}></div>
-        )}
-        {avatar ? (
-          <img src={avatar} alt="" />
-        ) : (
-          <FontAwesomeIcon icon={faUser} />
-        )}
-      </div>
+      <Avatar className={styles.avatar} user={user} />
       <div className={styles.name}>{`${firstName ? firstName : ''} ${
         lastName ? lastName : ''
       }`}</div>
