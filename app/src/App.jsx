@@ -36,7 +36,6 @@ function App() {
     socket?.on('connection', () => {});
 
     socket?.on('connect-response', data => {
-      alert(JSON.stringify(data));
       dispatch(setPeers(data));
     });
 
@@ -44,8 +43,8 @@ function App() {
       dispatch(removeTyping(data));
     });
 
-    socket?.on('typing-response', data => {
-      dispatch(pushTyping(data));
+    socket?.on('typing-response', sender => {
+      dispatch(pushTyping(sender));
     });
 
     socket?.on('message-response', message => {

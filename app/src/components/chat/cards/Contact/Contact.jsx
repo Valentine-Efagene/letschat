@@ -25,7 +25,11 @@ export default function Contact({ isTarget, to, user, onClick, online }) {
       onClick={onClick}
       className={`${isTarget ? styles.isTarget : null} ${styles.container}`}>
       <div className={styles.avatar}>
-        {online && <div className={styles.onlineIndicator}></div>}
+        {online && (
+          <div
+            className={styles.onlineIndicator}
+            style={isTarget ? { backgroundColor: '#ffffff' } : {}}></div>
+        )}
         {avatar ? (
           <img src={avatar} alt="" />
         ) : (

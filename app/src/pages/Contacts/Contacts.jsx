@@ -37,7 +37,6 @@ const STEP = 4;
 
 export default function Contacts() {
   //const total = useLoaderData();
-  //alert(JSON.stringify(total));
   let [searchParams, setSearchParams] = useSearchParams();
   const { user, users, error, total } = useSelector(state => state.user);
   const { setToastState } = useContext(ToastContext);

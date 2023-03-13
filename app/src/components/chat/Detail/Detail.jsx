@@ -17,14 +17,14 @@ export default function Detail() {
   const { user } = useSelector(state => state.user);
   const { id: receiver } = useParams();
 
-  const defaultData = {
+  const initialData = {
     text: '',
     files: null,
     receiver,
     sender: user?.id,
   };
 
-  const [data, setData] = useState(defaultData);
+  const [data, setData] = useState(initialData);
   const [cameraState, setCameraState] = useState({
     on: false,
     mode: 'photo',
@@ -44,6 +44,14 @@ export default function Detail() {
     setCameraState(prevState => ({ ...prevState, mode }));
   };
 
+  const resetData = () => {
+    setData(initialData);
+  };
+
+  useEffect(() => {
+    resetData();
+  }, [receiver]);
+
   const handleChange = e => {
     const {
       target: { name, value },
@@ -52,11 +60,11 @@ export default function Detail() {
   };
 
   const handleTyping = () => {
-    socket?.emit('typing', user?.id);
+    socket?.emit('typing', { receiver, sender: user?.id });
   };
 
   const handleDoneTyping = () => {
-    socket?.emit('done-typing', user?.id);
+    socket?.emit('done-typing', { receiver, sender: user?.id });
   };
 
   const handleSubmit = async e => {
@@ -66,7 +74,7 @@ export default function Detail() {
         sendMessageThunk({ ...data, sender: user?.id, receiver }),
       ).unwrap();
       socket?.send(message);
-      setData(defaultData);
+      setData(initialData);
     } catch (error) {
       setToastState(prevState => {
         return {

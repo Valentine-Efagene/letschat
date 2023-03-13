@@ -76,14 +76,16 @@ io.on("connection", (client) => {
     console.log("A user disconnected");
   });
 
-  client.on("done-typing", (data) => {
-    client.broadcast.emit("done-typing-response", data);
+  client.on("done-typing", ({ receiver, sender }) => {
+    //client.broadcast.emit("done-typing-response", data);
+    io.to(userToSocketMap[receiver]).emit("done-typing-response", sender);
     //client.broadcast.emit("typing-response", data);
     console.log(".");
   });
 
-  client.on("typing", (data) => {
-    client.broadcast.emit("typing-response", data);
+  client.on("typing", ({ receiver, sender }) => {
+    //client.broadcast.emit("typing-response", target);
+    io.to(userToSocketMap[receiver]).emit("typing-response", sender);
     //client.broadcast.emit("typing-response", data);
     console.log(".");
   });

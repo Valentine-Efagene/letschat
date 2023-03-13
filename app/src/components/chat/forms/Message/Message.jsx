@@ -23,7 +23,6 @@ Message.propTypes = {
   text: string,
   takePhoto: func,
   initStream: func,
-  stopStreaming: func,
 };
 
 export default function Message({
@@ -33,9 +32,7 @@ export default function Message({
   handleChange,
   handleDoneTyping,
   handleTyping,
-  takePhoto,
   initStream,
-  stopStreaming,
 }) {
   const [showMore, setShowMore] = useState(false);
   const toggleShowMore = () => setShowMore(prevState => !prevState);

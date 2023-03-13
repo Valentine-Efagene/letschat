@@ -7,11 +7,13 @@ import { ERROR, ToastContext } from '../../../contexts/ToastContext';
 import NavLink from '../../common/NavLink/NavLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAddressBook, faHome } from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from 'react-redux';
 
 export default function Header() {
   const { id } = useParams();
   const [target, setTarget] = useState();
   const { setToastState } = useContext(ToastContext);
+  const { peers } = useSelector(state => state.message);
 
   useEffect(() => {
     fetchUserById(id)
@@ -42,7 +44,12 @@ export default function Header() {
           <FontAwesomeIcon icon={faAddressBook} className={styles.icon} />
         </NavLink>
       </div>
-      <Avatar user={target} />
+      <div className={styles.user}>
+        {peers?.find(peer => peer === id) && (
+          <div className={styles.online}>Online</div>
+        )}
+        <Avatar user={target} />
+      </div>
     </div>
   );
 }

@@ -8,6 +8,18 @@
   height: 4rem;
 }
 
+.user {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+.online {
+  color: #ffffff;
+}
+
 .navLink {
   color: #ffffff;
   width: 3rem;
@@ -26,7 +38,6 @@
 }
 
 .avatar {
-  margin-left: auto;
 }
 
 .links {
