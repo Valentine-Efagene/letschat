@@ -37,17 +37,27 @@ export default function Message({
   const [showMore, setShowMore] = useState(false);
   const toggleShowMore = () => setShowMore(prevState => !prevState);
 
+  /**
+   * TODO: Implement algorithm/heuristic
+   *
+   * @returns
+   */
+  const computeRows = () => {
+    return 5;
+  };
+
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <TextArea
         name="text"
+        required={true}
         onChange={handleChange}
         placeholder="Talk"
         onKeyDown={handleTyping}
         onKeyUp={handleDoneTyping}
         className={styles.textArea}
         value={text}
-        rows={5}
+        rows={computeRows()}
       />
       <div className={styles.controls}>
         <button className={styles.send} disabled={status === PENDING}>

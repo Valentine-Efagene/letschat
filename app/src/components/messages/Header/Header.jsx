@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import Avatar from '../../common/Avatar/Avatar';
 import styles from './Header.module.css';
 import { fetchUserById } from '../../../redux/user/user.api';
@@ -10,15 +9,14 @@ import { faAddressBook, faHome } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 
 export default function Header() {
-  const { id } = useParams();
-  const [target, setTarget] = useState();
+  const [targetUserData, setTargetUserData] = useState();
   const { setToastState } = useContext(ToastContext);
-  const { peers } = useSelector(state => state.message);
+  const { peers, target } = useSelector(state => state.message);
 
   useEffect(() => {
-    fetchUserById(id)
+    fetchUserById(target)
       .then(result => {
-        setTarget(result);
+        setTargetUserData(result);
       })
       .catch(error => {
         setToastState(prevState => {
@@ -32,7 +30,7 @@ export default function Header() {
           };
         });
       });
-  }, [id]);
+  }, [target]);
 
   return (
     <div className={styles.container}>
@@ -45,10 +43,10 @@ export default function Header() {
         </NavLink>
       </div>
       <div className={styles.user}>
-        {peers?.find(peer => peer === id) && (
+        {peers?.find(peer => peer === target) && (
           <div className={styles.online}>Online</div>
         )}
-        <Avatar user={target} />
+        <Avatar user={targetUserData} />
       </div>
     </div>
   );

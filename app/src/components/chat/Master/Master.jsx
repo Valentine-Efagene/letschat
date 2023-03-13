@@ -5,18 +5,19 @@ import { faComment, faUser } from '@fortawesome/free-solid-svg-icons';
 import QuickProfile from '../QuickProfile/QuickProfile';
 import Contact from '../cards/Contact/Contact';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { fetchContactsThunk } from '../../../redux/user/user.slice';
 import { ERROR, ToastContext } from '../../../contexts/ToastContext';
 import socket from '../../../services/socket';
+import { setTarget } from '../../../redux/message/message.slice';
 
 export default function Master() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user, error, contacts } = useSelector(state => state.user);
-  const { peers } = useSelector(state => state.message);
+  const { peers, target } = useSelector(state => state.message);
   const { setToastState } = useContext(ToastContext);
   const [showQuickProfile, setShowQuickProfile] = useState(false);
-  const { id: target } = useParams();
 
   const showQuick = () => setShowQuickProfile(true);
   const hideQuick = () => setShowQuickProfile(false);
@@ -65,8 +66,11 @@ export default function Master() {
 
           return (
             <Contact
+              onClick={() => {
+                dispatch(setTarget(id));
+                navigate('/chat');
+              }}
               online={peers?.find(peer => peer === id)}
-              to={`/chat/${id}`}
               isTarget={id === target}
               user={contact}
               key={contact}></Contact>

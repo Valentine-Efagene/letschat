@@ -65,6 +65,9 @@ io.on("connection", (client) => {
 
   io.emit("connect-response", Array.from(clients));
 
+  /**
+   * data: Message Object: {receiver, sender, files, text}
+   */
   client.on("message", (data) => {
     const { receiver } = data;
 

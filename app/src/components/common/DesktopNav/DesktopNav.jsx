@@ -7,7 +7,6 @@ import styles from './DesktopNav.module.css';
 import Profile from '../forms/Profile/Profile';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../../redux/user/user.slice';
-import { useParams } from 'react-router-dom';
 
 DesktopNav.propTypes = {
   className: string,

@@ -46,7 +46,10 @@ export default function Message({ message, isLastMessage }) {
       <p>{text ?? ''}</p>
       {files?.length > 0 && (
         <div className={styles.files}>
-          <hr />
+          {text != null &&
+            text?.length > 0 &&
+            files != null &&
+            files?.length > 0 && <hr />}
           {files?.map(file => {
             const { path, mimeType, size, id } = file;
 

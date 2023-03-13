@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './Contact.module.css';
-import { Link } from 'react-router-dom';
 import { userProp } from '../../../../prop-types/user';
 import { bool, func, string } from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,13 +14,12 @@ Contact.propTypes = {
   online: bool,
 };
 
-export default function Contact({ isTarget, to, user, onClick, online }) {
+export default function Contact({ isTarget, user, onClick, online }) {
   const { avatar, firstName, lastName, snippet, id } = user ?? {};
   const { typing } = useSelector(state => state.message);
 
   return (
-    <Link
-      to={to}
+    <div
       onClick={onClick}
       className={`${isTarget ? styles.isTarget : null} ${styles.container}`}>
       <div className={styles.avatar}>
@@ -43,6 +41,6 @@ export default function Contact({ isTarget, to, user, onClick, online }) {
       {Array.isArray(typing) && typing?.find(_user => _user === id) ? (
         <FontAwesomeIcon icon={faKeyboard} />
       ) : null}
-    </Link>
+    </div>
   );
 }

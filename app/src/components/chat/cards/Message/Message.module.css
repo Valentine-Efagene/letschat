@@ -27,7 +27,6 @@
 
 .files hr {
   border: 1px solid var(--primary-2);
-  margin-block: 1rem;
 }
 
 .files img {

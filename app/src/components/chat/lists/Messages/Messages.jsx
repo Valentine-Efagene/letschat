@@ -7,7 +7,6 @@ import {
 } from '../../../../redux/message/message.slice';
 import MessageCard from '../../cards/Message';
 import styles from './Messages.module.css';
-import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 
@@ -18,8 +17,7 @@ const STEP = 10;
 export default function Messages() {
   const { setToastState } = useContext(ToastContext);
   const dispatch = useDispatch();
-  const { messages } = useSelector(state => state.message);
-  const { id: target } = useParams();
+  const { messages, target } = useSelector(state => state.message);
   const [page, setPage] = useState(null);
 
   useEffect(() => {

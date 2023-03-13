@@ -5,7 +5,6 @@ import {
   fetchCountByContactId,
 } from './message.api';
 import { IDLE, PENDING, SUCCEEDED, FAILED } from '../../Helpers/loadingStates';
-import socket from '../../services/socket';
 
 const initialState = {
   messages: null,
@@ -61,7 +60,6 @@ export const messageSlice = createSlice({
   initialState,
   reducers: {
     appendMessage: (state, { payload }) => {
-      socket?.send(payload);
       state.messages.push(payload);
     },
     setTarget: (state, { payload }) => {

@@ -85,10 +85,6 @@ function App() {
       element: <Chat />,
     },
     {
-      path: '/chat/:id',
-      element: <Chat />,
-    },
-    {
       path: '/users',
       element: <Contacts />,
     },

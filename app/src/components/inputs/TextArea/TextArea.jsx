@@ -1,4 +1,12 @@
-import { func, number, object, oneOf, oneOfType, string } from 'prop-types';
+import {
+  bool,
+  func,
+  number,
+  object,
+  oneOf,
+  oneOfType,
+  string,
+} from 'prop-types';
 import React from 'react';
 import styles from './TextArea.module.css';
 
@@ -16,6 +24,7 @@ TextArea.propTypes = {
   rows: number,
   cols: number,
   onKeyUp: func,
+  required: bool,
   onKeyDown: func,
 };
 
@@ -25,6 +34,7 @@ export default function TextArea({
   id,
   placeholder,
   style,
+  required,
   className,
   onChange,
   value,
@@ -42,6 +52,7 @@ export default function TextArea({
 
   return (
     <textarea
+      required={required}
       rows={rows}
       cols={cols}
       id={id}

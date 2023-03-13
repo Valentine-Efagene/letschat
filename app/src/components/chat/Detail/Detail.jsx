@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { ERROR, ToastContext } from '../../../contexts/ToastContext';
 import Header from '../../messages/Header/Header';
 import MessageForm from '../forms/Message';
@@ -15,7 +14,7 @@ export default function Detail() {
   const dispatch = useDispatch();
   const { setToastState } = useContext(ToastContext);
   const { user } = useSelector(state => state.user);
-  const { id: receiver } = useParams();
+  const { target: receiver } = useSelector(state => state.message);
 
   const initialData = {
     text: '',
@@ -48,9 +47,11 @@ export default function Detail() {
     setData(initialData);
   };
 
+  /*
   useEffect(() => {
     resetData();
   }, [receiver]);
+  */
 
   const handleChange = e => {
     const {
@@ -69,6 +70,7 @@ export default function Detail() {
 
   const handleSubmit = async e => {
     e.preventDefault();
+
     try {
       const message = await dispatch(
         sendMessageThunk({ ...data, sender: user?.id, receiver }),
