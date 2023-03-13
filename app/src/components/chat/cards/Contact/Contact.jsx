@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { userProp } from '../../../../prop-types/user';
 import { bool, func, string } from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faKeyboard, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 
 Contact.propTypes = {
@@ -12,9 +12,10 @@ Contact.propTypes = {
   onClick: func,
   isTarget: bool,
   to: string,
+  online: bool,
 };
 
-export default function Contact({ isTarget, to, user, onClick }) {
+export default function Contact({ isTarget, to, user, onClick, online }) {
   const { avatar, firstName, lastName, snippet, id } = user ?? {};
   const { typing } = useSelector(state => state.message);
 
@@ -24,6 +25,7 @@ export default function Contact({ isTarget, to, user, onClick }) {
       onClick={onClick}
       className={`${isTarget ? styles.isTarget : null} ${styles.container}`}>
       <div className={styles.avatar}>
+        {online && <div className={styles.onlineIndicator}></div>}
         {avatar ? (
           <img src={avatar} alt="" />
         ) : (
@@ -35,7 +37,7 @@ export default function Contact({ isTarget, to, user, onClick }) {
       }`}</div>
       {/* <div className={styles.snippet}>{snippet}</div> */}
       {Array.isArray(typing) && typing?.find(_user => _user === id) ? (
-        <div>Typing</div>
+        <FontAwesomeIcon icon={faKeyboard} />
       ) : null}
     </Link>
   );

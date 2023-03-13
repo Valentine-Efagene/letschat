@@ -13,6 +13,7 @@ import socket from '../../../services/socket';
 export default function Master() {
   const dispatch = useDispatch();
   const { user, error, contacts } = useSelector(state => state.user);
+  const { peers } = useSelector(state => state.message);
   const { setToastState } = useContext(ToastContext);
   const [showQuickProfile, setShowQuickProfile] = useState(false);
   const { id: target } = useParams();
@@ -64,6 +65,7 @@ export default function Master() {
 
           return (
             <Contact
+              online={peers?.find(peer => peer === id)}
               to={`/chat/${id}`}
               isTarget={id === target}
               user={contact}

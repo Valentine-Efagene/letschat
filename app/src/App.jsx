@@ -36,6 +36,7 @@ function App() {
     socket?.on('connection', () => {});
 
     socket?.on('connect-response', data => {
+      alert(JSON.stringify(data));
       dispatch(setPeers(data));
     });
 

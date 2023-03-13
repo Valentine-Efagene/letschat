@@ -63,7 +63,7 @@ io.on("connection", (client) => {
 
   userToSocketMap[client.userId] = client.id;
 
-  io.emit("connect-response", clients);
+  io.emit("connect-response", Array.from(clients));
 
   client.on("message", (data) => {
     const { receiver } = data;
