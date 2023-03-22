@@ -1,12 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useEffect, useState } from 'react';
 import styles from './Master.module.css';
-import {
-  faComment,
-  faFile,
-  faFileAlt,
-  faUser,
-} from '@fortawesome/free-solid-svg-icons';
+import { FaComment, FaFileAlt, FaUser } from 'react-icons/fa';
 import QuickProfile from '../QuickProfile/QuickProfile';
 import Contact from '../cards/Contact/Contact';
 import { useDispatch, useSelector } from 'react-redux';
@@ -75,11 +69,11 @@ export default function Master() {
           {user?.avatar ? (
             <img src={user?.avatar} alt="" />
           ) : (
-            <FontAwesomeIcon size="1x" icon={faUser} />
+            <FaUser size="1x" />
           )}
         </button>
         <button className={styles.newChat}>
-          <FontAwesomeIcon className={styles.chatIcon} icon={faComment} />
+          <FaComment className={styles.chatIcon} />
         </button>
         <span
           className={`${
@@ -105,7 +99,7 @@ export default function Master() {
             (lastMessage.text == null || lastMessage.text?.length < 1) &&
             lastMessage.files?.length > 0
           ) {
-            snippet = <FontAwesomeIcon icon={faFileAlt} size="1x" />;
+            snippet = <FaFileAlt size="1x" />;
           }
 
           return (

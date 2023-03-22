@@ -5,13 +5,23 @@ import {
   fetchCountByContactId,
   fetchLastMessages,
 } from './message.api';
-import { IDLE, PENDING, SUCCEEDED, FAILED } from '../../Helpers/loadingStates';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFile } from '@fortawesome/free-solid-svg-icons';
+import { IDLE, PENDING, SUCCEEDED, FAILED } from '../../helpers/loadingStates';
+import { IMessage } from '../../types/message';
 
-const initialState = {
-  messages: null,
-  target: null,
+interface IState {
+  messages: IMessage[];
+  target?: string;
+  status: 'idle' | 'pending' | 'succeeded' | 'failed';
+  error: any;
+  count: null;
+  typing: string[];
+  peers: string[];
+  lastMessages: IMessage[];
+}
+
+const initialState: IState = {
+  messages: [],
+  target: undefined,
   status: IDLE,
   error: null,
   count: null,
@@ -22,13 +32,13 @@ const initialState = {
 
 const fetchMessagesThunk = createAsyncThunk(
   'message/fetch',
-  async ({ target, page, limit }, { rejectWithValue }) => {
+  async ({ target, page, limit }: any, { rejectWithValue }) => {
     if (target == null) return null;
 
     try {
       const result = await fetchMessages(target, page, limit);
       return result;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
   },
@@ -36,13 +46,13 @@ const fetchMessagesThunk = createAsyncThunk(
 
 const fetchLastMessagesThunk = createAsyncThunk(
   'message/fetchLast',
-  async (contacts, { rejectWithValue }) => {
+  async (contacts: any, { rejectWithValue }) => {
     if (contacts == null || contacts?.length < 1) return null;
 
     try {
       const result = await fetchLastMessages(contacts);
       return result;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
   },
@@ -50,13 +60,13 @@ const fetchLastMessagesThunk = createAsyncThunk(
 
 const fetchCountByContactIdThunk = createAsyncThunk(
   'message/count',
-  async (contactId, { rejectWithValue }) => {
+  async (contactId: string, { rejectWithValue }) => {
     if (contactId == null) return null;
 
     try {
       const result = await fetchCountByContactId(contactId);
       return result;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
   },
@@ -64,10 +74,10 @@ const fetchCountByContactIdThunk = createAsyncThunk(
 
 const sendMessageThunk = createAsyncThunk(
   'message/send',
-  async (data, { rejectWithValue }) => {
+  async (data: any, { rejectWithValue }) => {
     try {
       return await sendMessage(data);
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
   },
@@ -77,7 +87,7 @@ export const messageSlice = createSlice({
   name: 'message',
   initialState,
   reducers: {
-    appendMessage: (state, { payload }) => {
+    appendMessage: (state, { payload }: { payload: IMessage }) => {
       state.messages.push(payload);
       state.lastMessages = getUpdatedLastMessages({ ...state }, payload);
     },
@@ -162,7 +172,7 @@ export const messageSlice = createSlice({
   },
 });
 
-function getUpdatedLastMessages(state, newMessage) {
+function getUpdatedLastMessages(state: IState, newMessage: IMessage) {
   const { sender, receiver } = newMessage;
 
   const focus = state.lastMessages.findIndex(message => {

@@ -1,16 +1,21 @@
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
-import { CustomException } from '../../Helpers/error';
+import { CustomException } from '../../helpers/error';
+import { IAuthCredentials, IUser } from '../../types/user';
 
 const API_BASE_URL = 'http://localhost:3600';
 
-async function fetchCurrentUser() {
+const getCurrentUser: () => { user: IUser | null, token: string | null } = () => {
   const token = localStorage.getItem('access-token');
+  const user = token ? jwt_decode(token) as IUser : null;
+  return { user, token }
+}
 
-  const _user = token ? jwt_decode(localStorage.getItem('access-token')) : null;
+async function fetchCurrentUser() {
+  const { user, token } = getCurrentUser()
 
-  if (_user) {
-    const res = await fetch(`${API_BASE_URL}/users/${_user.id}`, {
+  if (user) {
+    const res = await fetch(`${API_BASE_URL}/users/${user.id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     //fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${_user.id}`)
@@ -25,7 +30,7 @@ async function fetchCurrentUser() {
  *
  * @param {{email, password}} credentials
  */
-async function signIn(credentials) {
+async function signIn(credentials: IAuthCredentials) {
   const response = await axios.post('http://localhost:3600/auth', credentials);
 
   if (response?.status > 399) {
@@ -60,7 +65,7 @@ async function signIn(credentials) {
  *
  * @param {{email, password}} credentials
  */
-async function signUp(credentials) {
+async function signUp(credentials: IAuthCredentials) {
   const { id } = await axios.post('http://localhost:3600/users', credentials);
 
   if (id) {
@@ -88,14 +93,12 @@ async function fetchTotal() {
   return data;
 }
 
-async function fetchUserById(id) {
+async function fetchUserById(id: string) {
   if (id == null) return null;
 
-  const token = localStorage.getItem('access-token');
+  const { user, token } = getCurrentUser()
 
-  const _user = token ? jwt_decode(localStorage.getItem('access-token')) : null;
-
-  if (_user) {
+  if (user) {
     const response = await fetch(`${API_BASE_URL}/users/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -107,7 +110,7 @@ async function fetchUserById(id) {
   return null;
 }
 
-async function fetchAllUsers(page = 0, limit = 6) {
+async function fetchAllUsers(page: number | null = 0, limit = 6) {
   const token = localStorage.getItem('access-token');
 
   if (token) {
@@ -128,16 +131,15 @@ async function fetchAllUsers(page = 0, limit = 6) {
 }
 
 async function fetchContacts() {
-  const token = localStorage.getItem('access-token');
+  const { user, token } = getCurrentUser()
 
   if (token == null) return null;
 
-  const _user = token ? jwt_decode(localStorage.getItem('access-token')) : null;
 
-  if (_user == null && _user?.id == null) return null;
+  if (user == null || user?.id == null) return null;
 
   const response = await axios.get(
-    `${API_BASE_URL}/users/${_user.id}/contacts`,
+    `${API_BASE_URL}/users/${user.id}/contacts`,
     {
       headers: { Authorization: `Bearer ${token}` },
     },
@@ -148,12 +150,12 @@ async function fetchContacts() {
   return data;
 }
 
-async function addContactById(id) {
+async function addContactById(id: string) {
   if (id == null) return null;
 
   const token = localStorage.getItem('access-token');
 
-  const _user = token ? jwt_decode(localStorage.getItem('access-token')) : null;
+  const _user = token ? jwt_decode(token) as IUser : null;
 
   if (_user) {
     const response = await axios.patch(
@@ -174,12 +176,12 @@ async function addContactById(id) {
   return null;
 }
 
-async function removeContactById(id) {
+async function removeContactById(id: string) {
   if (id == null) return null;
 
   const token = localStorage.getItem('access-token');
 
-  const _user = token ? jwt_decode(localStorage.getItem('access-token')) : null;
+  const _user = token ? jwt_decode(token) as IUser : null;
 
   if (_user) {
     const response = await axios.patch(
@@ -202,11 +204,12 @@ async function removeContactById(id) {
  *
  * @param {{email, password}} credentials
  */
-async function updateUser(userData) {
+async function updateUser(userData: any) {
   const id = localStorage.getItem('user-id');
   const token = localStorage.getItem('access-token');
 
   const formData = new FormData();
+
   for (const key in userData) {
     formData.set(key, userData[key]);
   }

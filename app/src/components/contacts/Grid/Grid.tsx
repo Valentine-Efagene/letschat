@@ -1,16 +1,19 @@
 import React from 'react';
-import { userProp, usersProp } from '../../../prop-types/user';
+import { IUser } from '../../../types/user';
 import { Link } from 'react-router-dom';
 import styles from './Grid.module.css';
 import { func } from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { setTarget } from '../../../redux/message/message.slice';
+import Avatar from '../../common/Avatar/Avatar';
 
-Grid.propTypes = {
-  users: usersProp,
-  user: userProp,
-  handleAddContact: func,
-};
+interface IGridProps {
+  users: IUser[];
+  user: IUser | null;
+  handleAddContact: (contactId: string) => void;
+}
 
-export default function Grid({ user, users, handleAddContact }) {
+export default function Grid({ user, users, handleAddContact }: IGridProps) {
   return (
     <div className={styles.container}>
       {users?.map(_user => {
@@ -19,18 +22,25 @@ export default function Grid({ user, users, handleAddContact }) {
         const isContact = user?.contacts?.find(
           contactId => _user.id === contactId,
         );
+        const dispatch = useDispatch();
 
-        const { id, avatar, email, firstName, lastName } = _user;
+        const { id, email, firstName, lastName } = _user;
 
         return (
           <div key={id} className={styles.card}>
-            <img className={styles.avatar} src={`${avatar}`} alt="" />
+            <Avatar user={_user} />
             <div className={styles.text}>{email}</div>
             <div className={styles.text}>{`${firstName ?? ''} ${
               lastName ?? ''
             }`}</div>
             {isContact ? (
-              <Link to={`/chat/${id}`}>Chat</Link>
+              <Link
+                to="/chat"
+                onClick={() => {
+                  dispatch(setTarget(id));
+                }}>
+                Chat
+              </Link>
             ) : (
               <button
                 className={styles.cta}

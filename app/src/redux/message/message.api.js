@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CustomException } from '../../Helpers/error';
+import { CustomException } from '../../helpers/error';
 
 const API_BASE_URL = 'http://localhost:3600';
 

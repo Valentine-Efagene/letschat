@@ -1,28 +1,32 @@
 import styles from './Message.module.css';
 import TextArea from '../../../inputs/TextArea/TextArea';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCamera,
-  faPaperPlane,
-  faPlus,
-  faSpinner,
-  faVideo,
-} from '@fortawesome/free-solid-svg-icons';
-import { PENDING } from '../../../../Helpers/loadingStates';
+  FaSpinner,
+  FaPaperPlane,
+  FaPlus,
+  FaCamera,
+  FaVideo,
+} from 'react-icons/fa';
+import { PENDING } from '../../../../helpers/loadingStates';
 import AttachmentPicker from '../../../inputs/AttachmentPicker/AttachmentPicker';
-import { func, object, string } from 'prop-types';
-import { useState } from 'react';
+import {
+  ChangeEventHandler,
+  FormEventHandler,
+  KeyboardEventHandler,
+  useState,
+  RefObject,
+} from 'react';
+import { IMessage } from '../../../../types/message';
 
-Message.propTypes = {
-  handleSubmit: func,
-  data: object,
-  handleFilesPicked: func,
-  handleChange: func,
-  handleTyping: func,
-  handleDoneTyping: func,
-  takePhoto: func,
-  initStream: func,
-};
+interface IMessageProps {
+  handleSubmit: FormEventHandler;
+  data: IMessage;
+  handleFilesPicked: (ref: RefObject<HTMLInputElement>) => void;
+  handleChange: ChangeEventHandler;
+  handleTyping: KeyboardEventHandler;
+  handleDoneTyping: KeyboardEventHandler;
+  initStream: () => void;
+}
 
 export default function Message({
   handleSubmit,
@@ -32,7 +36,7 @@ export default function Message({
   handleDoneTyping,
   handleTyping,
   initStream,
-}) {
+}: IMessageProps) {
   const [showMore, setShowMore] = useState(false);
   const toggleShowMore = () => setShowMore(prevState => !prevState);
 
@@ -60,15 +64,13 @@ export default function Message({
       />
       <div className={styles.controls}>
         <button className={styles.send} disabled={status === PENDING}>
-          <FontAwesomeIcon
-            icon={status === PENDING ? faSpinner : faPaperPlane}
-          />
+          {status === PENDING ? <FaSpinner /> : <FaPaperPlane />}
         </button>
         <button
           type="button"
           className={styles.camera}
           onClick={toggleShowMore}>
-          <FontAwesomeIcon className={styles.icon} icon={faPlus} />
+          <FaPlus />
         </button>
       </div>
 
@@ -78,10 +80,10 @@ export default function Message({
           style={{ display: showMore ? 'grid' : 'none' }}>
           <AttachmentPicker multiple={true} onChange={handleFilesPicked} />
           <button type="button" className={styles.camera} onClick={initStream}>
-            <FontAwesomeIcon className={styles.icon} icon={faCamera} />
+            <FaCamera className={styles.icon} />
           </button>
           <button type="button" className={styles.camera} onClick={initStream}>
-            <FontAwesomeIcon className={styles.icon} icon={faVideo} />
+            <FaVideo className={styles.icon} />
           </button>
         </div>
       )}

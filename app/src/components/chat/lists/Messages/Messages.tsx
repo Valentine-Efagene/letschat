@@ -1,5 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {
+  MutableRefObject,
+  RefObject,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { ERROR, ToastContext } from '../../../../contexts/ToastContext';
 import {
   fetchCountByContactIdThunk,
@@ -7,8 +13,8 @@ import {
 } from '../../../../redux/message/message.slice';
 import MessageCard from '../../cards/Message';
 import styles from './Messages.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { FaArrowUp } from 'react-icons/fa';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 
 // https://dev.to/novu/building-a-chat-app-with-socketio-and-react-2edj
 
@@ -16,15 +22,15 @@ const STEP = 10;
 
 export default function Messages() {
   const { setToastState } = useContext(ToastContext);
-  const dispatch = useDispatch();
-  const { messages, target } = useSelector(state => state.message);
-  const [page, setPage] = useState(null);
+  const dispatch = useAppDispatch();
+  const { messages, target } = useAppSelector(state => state.message);
+  const [page, setPage] = useState<number>(1);
 
   useEffect(() => {
     const init = async () => {
       try {
         const total = await dispatch(
-          fetchCountByContactIdThunk(target),
+          fetchCountByContactIdThunk(target!),
         ).unwrap();
         setPage(prevState =>
           prevState == null ? Math.floor(total / STEP) : prevState,
@@ -37,8 +43,8 @@ export default function Messages() {
             STEP,
           }),
         );
-      } catch (error) {
-        setToastState(prevState => {
+      } catch (error: any) {
+        setToastState!(prevState => {
           return {
             ...prevState,
             show: true,
@@ -63,13 +69,15 @@ export default function Messages() {
     });
   };
 
-  const containerRef = useRef();
+  const containerRef = useRef<HTMLDivElement>();
 
   return (
-    <div className={styles.container} ref={containerRef}>
+    <div
+      className={styles.container}
+      ref={containerRef as RefObject<HTMLDivElement>}>
       {page != null && page !== 0 && (
         <button className={styles.loadMore} onClick={loadMore}>
-          <FontAwesomeIcon icon={faArrowUp} />
+          <FaArrowUp />
         </button>
       )}
       {messages?.map((message, index) => (

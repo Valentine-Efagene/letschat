@@ -1,13 +1,12 @@
 import React, { useContext } from 'react';
 import styles from './Profile.module.css';
 import { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FaSave, FaSpinner } from 'react-icons/fa';
 import ImagePicker from '../../../inputs/ImagePicker/ImagePicker';
 import TextField from '../../../inputs/TextField/TextField';
 import Button from '../../../inputs/Button/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { PENDING } from '../../../../Helpers/loadingStates';
+import { PENDING } from '../../../../helpers/loadingStates';
 import { SUCCESS, ToastContext } from '../../../../contexts/ToastContext';
 import { updateUserThunk } from '../../../../redux/user/user.slice';
 
@@ -103,13 +102,8 @@ export default function Profile() {
         />
       </label>
       <Button variant="primary" type="submit">
-        <FontAwesomeIcon
-          style={{ width: '1rem', height: '1rem' }}
-          icon={faSave}
-        />
-        {status === PENDING && (
-          <FontAwesomeIcon icon={faSpinner} className={styles.spinner} />
-        )}
+        <FaSave style={{ width: '1rem', height: '1rem' }} />
+        {status === PENDING && <FaSpinner className={styles.spinner} />}
       </Button>
     </form>
   );

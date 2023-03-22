@@ -1,8 +1,7 @@
 import React from 'react';
 import styles from './QuickProfile.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { bool, func, string } from 'prop-types';
-import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
+import { FaArrowLeft } from 'react-icons/fa';
 import Profile from '../../common/forms/Profile';
 
 QuickProfile.propTypes = {
@@ -19,7 +18,7 @@ export default function QuickProfile({ className, hide, show }) {
       }`}>
       <div className={styles.top}>
         <button onClick={hide} className={styles.back}>
-          <FontAwesomeIcon className={styles.icon} icon={faArrowLeftLong} />
+          <FaArrowLeft className={styles.icon} />
         </button>
       </div>
       <Profile />

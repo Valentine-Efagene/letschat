@@ -1,50 +1,49 @@
-import React, { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useRef, MouseEventHandler, RefObject } from 'react';
 import styles from './Message.module.css';
 
-import { bool, func } from 'prop-types';
-import { messageProp } from '../../../../prop-types/message';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFile } from '@fortawesome/free-solid-svg-icons';
-import { byteFormatter } from '../../../../Helpers/formatters';
+import { IMessage } from '../../../../types/message';
+import { FaFile } from 'react-icons/fa';
+import { byteFormatter } from '../../../../helpers/formatters';
+import { useAppSelector } from '../../../../redux/hooks';
 
-Message.propTypes = {
-  message: messageProp,
-  onClick: func,
-  isLastMessage: bool,
-  isFirstMessage: bool,
-};
+interface IMessageProps {
+  message: IMessage;
+  isLastMessage: boolean;
+  isFirstMessage: boolean;
+}
 
-export default function Message({ message, isLastMessage }) {
-  const { user } = useSelector(state => state.user);
+export default function Message({ message, isLastMessage }: IMessageProps) {
+  const { user } = useAppSelector(state => state.user);
   const { text, sender, files } = message;
 
   useEffect;
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
+    const timeout: any = setTimeout(() => {
       if (isLastMessage) {
         // 👇️ scroll to bottom every time messages change
-        ref.current
-          .scrollIntoView
-          //{ behavior: 'smooth' }
-          ();
+        if (ref?.current) {
+          (ref.current as HTMLElement)
+            .scrollIntoView
+            //{ behavior: 'smooth' }
+            ();
+        }
       }
 
       return clearTimeout(timeout);
     }, 100);
   }, []);
 
-  const ref = useRef();
+  const ref = useRef<HTMLDivElement>();
 
   return (
     <div
-      ref={ref}
+      ref={ref as RefObject<HTMLDivElement>}
       className={`${user?.id === sender ? styles.sender : styles.receiver} ${
         styles.container
       }`}>
       <p>{text ?? ''}</p>
-      {files?.length > 0 && (
+      {Array.isArray(files) && (
         <div className={styles.files}>
           {text != null &&
             text?.length > 0 &&
@@ -61,7 +60,7 @@ export default function Message({ message, isLastMessage }) {
                 target="_blank"
                 rel="noreferrer">
                 {mimeType === 'application/pdf' && (
-                  <FontAwesomeIcon size="10x" color="cadetblue" icon={faFile} />
+                  <FaFile size="10x" color="cadetblue" />
                 )}
                 {mimeType.split('/').includes('image') && (
                   <img src={path} alt="" />

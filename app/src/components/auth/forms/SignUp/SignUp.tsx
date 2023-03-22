@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { ChangeEventHandler, FormEventHandler, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { SUCCEEDED } from '../../../../Helpers/loadingStates';
+import { SUCCEEDED } from '../../../../helpers/loadingStates';
+import { useAppDispatch } from '../../../../redux/hooks';
 import { signUpThunk } from '../../../../redux/user/user.slice';
 import Button from '../../../inputs/Button/Button';
 import TextField from '../../../inputs/TextField/TextField';
@@ -13,11 +13,11 @@ export default function SignUp() {
     password: '',
   });
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleChange = event => {
-    const { name, value, type, checked } = event.target;
+  const handleChange: ChangeEventHandler = event => {
+    const { name, value, type, checked } = event.target as HTMLInputElement;
 
     setData(prevState => ({
       ...prevState,
@@ -25,7 +25,7 @@ export default function SignUp() {
     }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit: FormEventHandler = async e => {
     e.preventDefault();
     try {
       await dispatch(signUpThunk(data));

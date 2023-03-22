@@ -1,14 +1,22 @@
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useContext, useState } from 'react';
+import React, {
+  ChangeEventHandler,
+  FormEventHandler,
+  useContext,
+  useState,
+} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { PENDING } from '../../../../Helpers/loadingStates';
+import { PENDING } from '../../../../helpers/loadingStates';
 import Button from '../../../inputs/Button/Button';
 import TextField from '../../../inputs/TextField/TextField';
 import styles from './Login.module.css';
-import { useDispatch, useSelector } from 'react-redux';
 import { signInThunk } from '../../../../redux/user/user.slice';
-import { ERROR, ToastContext } from '../../../../contexts/ToastContext';
+import {
+  ERROR,
+  IToastState,
+  ToastContext,
+} from '../../../../contexts/ToastContext';
+import { FaSpinner } from 'react-icons/fa';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 
 export default function Login() {
   const [credentials, setCredentials] = useState({
@@ -16,13 +24,13 @@ export default function Login() {
     password: '',
   });
 
-  const dispatch = useDispatch();
-  const { setToastState } = useContext(ToastContext);
-  const { status, error } = useSelector(state => state.user);
+  const dispatch = useAppDispatch();
+  const { toastState, setToastState } = useContext(ToastContext);
+  const { status, error } = useAppSelector(state => state.user);
   const navigate = useNavigate();
 
-  const handleChange = event => {
-    const { name, value, type, checked } = event.target;
+  const handleChange: ChangeEventHandler = event => {
+    const { name, value, type, checked } = event.target as HTMLInputElement;
 
     setCredentials(prevState => ({
       ...prevState,
@@ -30,11 +38,11 @@ export default function Login() {
     }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit: FormEventHandler = e => {
     e.preventDefault();
     try {
       dispatch(signInThunk(credentials)).then(res => {
-        setToastState(prevState => {
+        setToastState!(prevState => {
           return {
             ...prevState,
             show: error != null,
@@ -49,8 +57,10 @@ export default function Login() {
           navigate('/chat');
         }
       });
-    } catch (error) {
-      setToastState(prevState => {
+    } catch (err) {
+      const error = err as { message: string; code: string };
+
+      setToastState!(prevState => {
         return {
           ...prevState,
           show: true,
@@ -58,7 +68,7 @@ export default function Login() {
           title: error?.code,
           delay: 3600,
           type: ERROR,
-        };
+        } as IToastState;
       });
     }
   };
@@ -88,9 +98,7 @@ export default function Login() {
           value={credentials.password}
         />
       </label>
-      <Button type="submit">
-        Login {status === PENDING && <FontAwesomeIcon icon={faSpinner} />}
-      </Button>
+      <Button type="submit">Login {status === PENDING && <FaSpinner />}</Button>
       <Link to={'/auth/signup'} className={styles.signInLink}>
         Create an account
       </Link>

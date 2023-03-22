@@ -1,5 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {
+  ChangeEvent,
+  ChangeEventHandler,
+  FormEventHandler,
+  RefObject,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { ERROR, ToastContext } from '../../../contexts/ToastContext';
 import Header from '../../messages/Header/Header';
 import MessageForm from '../forms/Message';
@@ -9,37 +17,39 @@ import { sendMessageThunk } from '../../../redux/message/message.slice';
 import socket from '../../../services/socket';
 import FilesSection from '../forms/FilesSection/FilesSection';
 import VideoPane from '../VideoPane';
+import { IMessage } from '../../../types/message';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 export default function Detail() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { setToastState } = useContext(ToastContext);
-  const { user } = useSelector(state => state.user);
-  const { target: receiver } = useSelector(state => state.message);
+  const { user } = useAppSelector(state => state.user);
+  const { target: receiver } = useAppSelector(state => state.message);
 
-  const initialData = {
+  const initialData: IMessage = {
     text: '',
     files: null,
-    receiver,
-    sender: user?.id,
+    receiver: receiver ?? '',
+    sender: user?.id ?? '',
   };
 
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState<IMessage>(initialData);
   const [cameraState, setCameraState] = useState({
     on: false,
     mode: 'photo',
     // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
     facingMode: 'environment', // user
   });
-  const [videoPaneImg, setVideoPaneImg] = useState();
-  const [cameraStream, setCameraStream] = useState();
+  const [videoPaneImg, setVideoPaneImg] = useState<string | URL | null>();
+  const [cameraStream, setCameraStream] = useState<MediaStream | null>();
 
   let { on: isCameraOn } = cameraState;
 
-  const setIsCameraOn = val => {
+  const setIsCameraOn = (val: boolean) => {
     setCameraState(prevState => ({ ...prevState, on: val }));
   };
 
-  const setCameraMode = mode => {
+  const setCameraMode = (mode: string) => {
     setCameraState(prevState => ({ ...prevState, mode }));
   };
 
@@ -51,10 +61,10 @@ export default function Detail() {
     resetData();
   }, [receiver]);
 
-  const handleChange = e => {
+  const handleChange: ChangeEventHandler = e => {
     const {
       target: { name, value },
-    } = e;
+    } = e as ChangeEvent<HTMLInputElement>;
     setData(prev => ({ ...prev, [name]: value }));
   };
 
@@ -66,7 +76,7 @@ export default function Detail() {
     socket?.emit('done-typing', { receiver, sender: user?.id });
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit: FormEventHandler = async e => {
     e.preventDefault();
 
     try {
@@ -75,8 +85,8 @@ export default function Detail() {
       ).unwrap();
       socket?.send(message);
       setData(initialData);
-    } catch (error) {
-      setToastState(prevState => {
+    } catch (error: any) {
+      setToastState!(prevState => {
         return {
           ...prevState,
           show: true,
@@ -94,12 +104,14 @@ export default function Detail() {
    *
    * @param {*} ref
    */
-  const handleFilesPicked = ref => {
-    handleChange({ target: { name: 'files', value: ref.current?.files } });
+  const handleFilesPicked = (ref: RefObject<HTMLInputElement>) => {
+    handleChange({
+      target: { name: 'files', value: ref.current?.files },
+    } as unknown as ChangeEvent);
   };
 
-  const videoRef = useRef();
-  const canvasRef = useRef();
+  const videoRef = useRef<HTMLVideoElement>();
+  const canvasRef = useRef<HTMLCanvasElement>();
 
   /**
    * Release the camera
@@ -109,7 +121,7 @@ export default function Detail() {
   const stopStreaming = () => {
     if (cameraStream == null) return;
 
-    const video = videoRef.current;
+    const video = videoRef.current as unknown as HTMLVideoElement;
     const tracks = cameraStream.getTracks();
 
     tracks.forEach(track => {
@@ -129,7 +141,7 @@ export default function Detail() {
    */
   const initStream = () => {
     setIsCameraOn(true);
-    const video = videoRef?.current;
+    const video = videoRef?.current as HTMLVideoElement;
 
     if (video == null) return;
 
@@ -156,14 +168,20 @@ export default function Detail() {
    * Take a still photo
    */
   const capturePhoto = () => {
-    const canvas = canvasRef?.current;
+    const canvas = canvasRef?.current as HTMLCanvasElement;
+
+    if (canvas == null) return;
+
     const video = videoRef?.current;
 
     canvas.width = screen.width;
     canvas.height = screen.height;
 
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    if (ctx == null) return;
+
+    ctx.drawImage(video!, 0, 0, canvas.width, canvas.height);
     setVideoPaneImg(canvas.toDataURL('image/png'));
   };
 
@@ -171,17 +189,24 @@ export default function Detail() {
    * Save photo
    */
   const addPhoto = () => {
+    if (videoPaneImg == null) return;
+
     fetch(videoPaneImg)
       .then(res => res.blob())
       .then(blob => {
         const file = new File([blob], 'capture.png', { type: blob.type });
 
         if (data?.files == null) {
-          handleChange({ target: { name: 'files', value: [file] } });
+          handleChange({
+            target: { name: 'files', value: [file] },
+          } as unknown as ChangeEvent);
         } else {
           handleChange({
-            target: { name: 'files', value: [...data.files, file] },
-          });
+            target: {
+              name: 'files',
+              value: [...data.files, file],
+            },
+          } as unknown as ChangeEvent);
         }
 
         setVideoPaneImg(null);
@@ -233,8 +258,6 @@ export default function Detail() {
       {!isCameraOn && receiver != null && (
         <MessageForm
           initStream={initStream}
-          stopStreaming={stopStreaming}
-          setIsCameraOn={setIsCameraOn}
           data={data}
           handleFilesPicked={handleFilesPicked}
           handleChange={handleChange}

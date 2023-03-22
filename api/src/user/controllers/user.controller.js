@@ -12,7 +12,7 @@ exports.insert = (req, res) => {
   req.body.password = salt + "$" + hash;
   req.body.permissionLevel = 1;
   UserModel.createUser(req.body).then((result) => {
-    res.status(201).send({ id: result._id });
+    res.status(201).json({ id: result._id });
   });
 };
 
@@ -29,7 +29,7 @@ exports.contacts = (req, res) => {
   }
 
   UserModel.contacts(req.params.id, limit, page).then((result) => {
-    res.status(200).send(result);
+    res.status(200).json(result);
   });
 };
 
@@ -37,11 +37,11 @@ exports.addContactById = (req, res) => {
   try {
     UserModel.addContactById(req.params.id, req.body.contactId).then(
       (result) => {
-        res.status(200).send(result);
+        res.status(200).json(result);
       }
     );
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).json(error.message);
   }
 };
 
@@ -49,11 +49,11 @@ exports.removeContactById = (req, res) => {
   try {
     UserModel.removeContactById(req.params.id, req.body.contactId).then(
       (result) => {
-        res.status(200).send(result);
+        res.status(200).json(result);
       }
     );
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).json(error.message);
   }
 };
 
@@ -70,10 +70,10 @@ exports.list = (req, res) => {
   }
 
   if (page * limit < 0) {
-    res.status(400).send();
+    res.status(400).json();
   } else {
     UserModel.list(limit, page).then((result) => {
-      res.status(200).send(result);
+      res.status(200).json(result);
     });
   }
 };
@@ -82,13 +82,13 @@ exports.total = (req, res) => {
   UserModel.getTotal().then((result) => {
     // https://www.reddit.com/r/learnjavascript/comments/vowzmw/comment/iehnpgw/?utm_source=share&utm_medium=web2x&context=3
     // Explains the need for the string conversion
-    res.status(200).send(String(result));
+    res.status(200).json(String(result));
   });
 };
 
 exports.getById = (req, res) => {
   UserModel.findById(req.params.id).then((result) => {
-    res.status(200).send(result);
+    res.status(200).json(result);
   });
 };
 
@@ -110,15 +110,15 @@ exports.patchById = (req, res) => {
     }
 
     UserModel.patchUser(req.params?.id, req.body).then((result) => {
-      res.status(200).send(result);
+      res.status(200).json(result);
     });
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).json(error.message);
   }
 };
 
 exports.removeById = (req, res) => {
   UserModel.removeById(req.params.id).then((result) => {
-    res.status(204).send({});
+    res.status(204).json({});
   });
 };

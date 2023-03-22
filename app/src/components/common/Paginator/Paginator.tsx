@@ -1,6 +1,4 @@
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { arrayOf, number, object, string } from 'prop-types';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Paginator.module.css';
@@ -26,7 +24,7 @@ export default function Paginator({
   prevPageUrl,
   links,
   style,
-}) {
+}: IPaginatorProps) {
   return (
     <>
       {links?.length > 0 && (
@@ -34,12 +32,14 @@ export default function Paginator({
           className={`${className} ${styles.container}`}
           style={style}
           aria-label="Page navigation example">
-          <Link
-            className={`${currentPage == 1 ? styles.disabled : null}`}
-            to={prevPageUrl}>
-            <FontAwesomeIcon icon={faArrowLeft} />
-          </Link>
-          {links?.map((link, index) => (
+          {prevPageUrl && (
+            <Link
+              className={`${currentPage == 1 ? styles.disabled : null}`}
+              to={prevPageUrl}>
+              <FaArrowLeft />
+            </Link>
+          )}
+          {links?.map((link: string, index: number) => (
             <Link
               key={link}
               className={`${currentPage == index + 1 ? styles.active : null}`}
@@ -47,23 +47,25 @@ export default function Paginator({
               {index + 1}
             </Link>
           ))}
-          <Link
-            className={`${currentPage == lastPage ? styles.disabled : null}`}
-            to={nextPageUrl}>
-            <FontAwesomeIcon icon={faArrowRight} />
-          </Link>
+          {nextPageUrl && (
+            <Link
+              className={`${currentPage == lastPage ? styles.disabled : null}`}
+              to={nextPageUrl}>
+              <FaArrowRight />
+            </Link>
+          )}
         </nav>
       )}
     </>
   );
 }
 
-Paginator.propTypes = {
-  className: string,
-  style: object,
-  nextPageUrl: string,
-  prevPageUrl: string,
-  currentPage: number,
-  links: arrayOf(string),
-  lastPage: number,
-};
+interface IPaginatorProps {
+  className?: string;
+  style?: object;
+  nextPageUrl: string | null;
+  prevPageUrl: string | null;
+  currentPage: number;
+  links: string[];
+  lastPage: number;
+}

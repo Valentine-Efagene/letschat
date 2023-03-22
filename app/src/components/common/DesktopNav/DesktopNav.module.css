@@ -9,7 +9,10 @@
 }
 
 .logo {
-  color: rgb(87, 86, 85);
+  /* color: rgb(87, 86, 85); */
+  color: var(--primary-1);
+  width: 3rem;
+  height: 3rem;
 }
 
 .navItemsWrapper {

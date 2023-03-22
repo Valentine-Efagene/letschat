@@ -1,5 +1,4 @@
-import { faPaperclip } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaPaperclip } from 'react-icons/fa';
 import { bool, func, object, shape, string } from 'prop-types';
 import React from 'react';
 import { useRef } from 'react';
@@ -35,7 +34,7 @@ export default function AttachmentPicker({
       htmlFor={id}
       className={`${className} ${styles.container}`}
       style={style}>
-      <FontAwesomeIcon icon={faPaperclip} className={styles.icon} />
+      <FaPaperclip className={styles.icon} />
       <input
         multiple={multiple}
         disabled={disabled}

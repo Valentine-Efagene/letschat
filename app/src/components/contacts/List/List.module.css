@@ -16,11 +16,16 @@
 }
 
 .card:hover {
+  border-color: var(--primary-1);
+}
+
+/* 
+.card:hover {
   border: 1px solid var(--primary-3);
 
   transform: translateY(-8px);
   box-shadow: var(--primary-4) 0px 12px 20px 0px;
-}
+} */
 
 .card:hover .icon {
   animation: var(--oscillation-animation);
@@ -33,12 +38,16 @@
   }
 
   50% {
-    font-size: 1.14rem;
+    font-size: 1.2rem;
+    text-decoration: none;
   }
 }
 
 .card:hover .cta {
-  animation: font-single-pulse 1s ease-in-out;
+  /* animation: font-single-pulse 600ms ease-in-out; */
+  font-size: 1.25rem;
+  transition: all 0.3s;
+  font-weight: 600;
 }
 
 .card > *:not(:first-child) {
@@ -56,6 +65,7 @@
 .avatar {
   width: 4rem;
   aspect-ratio: 1/1;
+  object-fit: cover;
   border-radius: 50%;
   animation: var(--pulse-animation);
 }
@@ -67,6 +77,10 @@
   font-family: Poppins, sans-serif;
   margin-right: 1.25rem;
   color: rgb(85, 26, 139);
+  text-decoration: none;
+}
+
+.cta:hover {
   text-decoration: underline;
 }
 

@@ -11,14 +11,24 @@ import {
   fetchCurrentUser,
   fetchTotal,
 } from './user.api';
-import { IDLE, PENDING, SUCCEEDED, FAILED } from '../../Helpers/loadingStates';
+import { IDLE, PENDING, SUCCEEDED, FAILED } from '../../helpers/loadingStates';
+import { IUser } from '../../types/user';
 
-const initialState = {
+interface IState {
+  user: IUser | null,
+  users: IUser[],
+  status: 'idle' | 'pending' | 'succeeded' | 'failed',
+  error: any,
+  contacts: string[] | null,
+  total: number | null
+}
+
+const initialState: IState = {
   user: null,
-  users: null,
+  users: [],
   status: IDLE,
   error: null,
-  contacts: null,
+  contacts: [],
   total: null,
 };
 
@@ -36,9 +46,11 @@ const fetchCurrentUserThunk = createAsyncThunk(
 
 const signInThunk = createAsyncThunk(
   'user/signIn',
-  async (credentials, { rejectWithValue }) => {
+  async (credentials: { email: string, password: string }, { rejectWithValue }) => {
     try {
-      return await signIn(credentials);
+      const response = await signIn(credentials);
+      console.log(response)
+      return response
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -47,7 +59,7 @@ const signInThunk = createAsyncThunk(
 
 const signUpThunk = createAsyncThunk(
   'user/signUp',
-  async (credentials, { rejectWithValue }) => {
+  async (credentials: { email: string, password: string }, { rejectWithValue }) => {
     try {
       return await signUp(credentials);
     } catch (error) {
@@ -83,10 +95,14 @@ const fetchByIdThunk = createAsyncThunk(
 
 const fetchAllUsersThunk = createAsyncThunk(
   'user/fetchAllUsers',
-  async (page, { rejectWithValue }) => {
+  async (page: number, { rejectWithValue }) => {
     try {
       return await fetchAllUsers(page);
     } catch (error) {
+      /**
+       * const err = error as AxiosError
+        return rejectWithValue(ErrorHelper.simplifyAxiosError(err))
+       */
       return rejectWithValue(error);
     }
   },
@@ -106,7 +122,7 @@ const updateUserThunk = createAsyncThunk(
 
 const addContactThunk = createAsyncThunk(
   'user/addContact',
-  async (contactId, { rejectWithValue }) => {
+  async (contactId: string, { rejectWithValue }) => {
     try {
       return await addContactById(contactId);
     } catch (error) {
@@ -117,7 +133,7 @@ const addContactThunk = createAsyncThunk(
 
 const removeContactThunk = createAsyncThunk(
   'user/removeContact',
-  async (contactId, { rejectWithValue }) => {
+  async (contactId: string, { rejectWithValue }) => {
     try {
       return await removeContactById(contactId);
     } catch (error) {
@@ -232,7 +248,7 @@ export const userSlice = createSlice({
     });
 
     buiilder.addCase(removeContactThunk.fulfilled, (state, { payload }) => {
-      state.user = payload;
+      state.user = payload as unknown as IUser; // TODO
       state.status = SUCCEEDED;
     });
     buiilder.addCase(removeContactThunk.pending, (state, { payload }) => {

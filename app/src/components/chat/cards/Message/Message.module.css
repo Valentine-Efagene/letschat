@@ -18,6 +18,10 @@
   margin-right: auto;
 }
 
+.receiver .size {
+  color: #ffffff;
+}
+
 .files {
   display: grid;
   grid-template-columns: 1fr;

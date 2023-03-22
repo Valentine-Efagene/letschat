@@ -1,16 +1,18 @@
 import React from 'react';
-import { userProp, usersProp } from '../../../prop-types/user';
-import { func } from 'prop-types';
+import { IUser } from '../../../types/user';
 import { Link } from 'react-router-dom';
 import styles from './List.module.css';
+import { useDispatch } from 'react-redux';
+import { setTarget } from '../../../redux/message/message.slice';
+import Avatar from '../../common/Avatar/Avatar';
 
-List.propTypes = {
-  users: usersProp,
-  user: userProp,
-  handleAddContact: func,
-};
+interface IListProps {
+  users: IUser[];
+  user: IUser | null;
+  handleAddContact: (contactId: string) => void;
+}
 
-export default function List({ user, users, handleAddContact }) {
+export default function List({ user, users, handleAddContact }: IListProps) {
   return (
     <div className={styles.container}>
       {users?.map(_user => {
@@ -20,11 +22,13 @@ export default function List({ user, users, handleAddContact }) {
           contactId => _user.id === contactId,
         );
 
-        const { id, firstName, lastName, avatar, email } = _user;
+        const dispatch = useDispatch();
+
+        const { id, firstName, lastName, email } = _user;
 
         return (
           <div key={id} className={styles.card}>
-            <img className={styles.avatar} src={`${avatar}`} alt="" />
+            <Avatar user={_user} />
             <div className={styles.nameNEmail}>
               <div className={styles.email}>{email}</div>
               <div className={styles.name}>{`${firstName ?? ''} ${
@@ -32,7 +36,14 @@ export default function List({ user, users, handleAddContact }) {
               }`}</div>
             </div>
             {isContact ? (
-              <Link to={`/chat/${id}`}>Chat</Link>
+              <Link
+                className={styles.cta}
+                to="/chat"
+                onClick={() => {
+                  dispatch(setTarget(id));
+                }}>
+                Chat
+              </Link>
             ) : (
               <button
                 className={styles.cta}

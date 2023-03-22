@@ -1,5 +1,4 @@
-import { faClose } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaTimesCircle } from 'react-icons/fa';
 import { bool, func, number, oneOf, string } from 'prop-types';
 import React, { useEffect } from 'react';
 import { ERROR, SUCCESS } from '../../contexts/ToastContext';
@@ -38,7 +37,7 @@ export default function Toast({ message, title, show, onClose, delay, type }) {
       <div className={styles.top}>
         <h4 className={styles.title}>{title}</h4>
         <button className={styles.close} onClick={onClose}>
-          <FontAwesomeIcon icon={faClose} />
+          <FaTimesCircle />
         </button>
       </div>
       <p>{message}</p>

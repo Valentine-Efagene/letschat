@@ -1,5 +1,4 @@
-import { faCamera } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaCamera } from 'react-icons/fa';
 import { bool, func, object, oneOfType, shape, string } from 'prop-types';
 import React from 'react';
 import { useRef } from 'react';
@@ -50,7 +49,7 @@ export default function ImagePicker({
       htmlFor="avatar"
       className={`${className} ${styles.container}`}
       style={_style}>
-      <FontAwesomeIcon icon={faCamera} className={styles.icon} />
+      <FaCamera className={styles.icon} />
       <input
         disabled={disabled}
         ref={avatarInputRef}

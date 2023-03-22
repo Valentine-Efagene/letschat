@@ -1,18 +1,18 @@
-import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import styles from "./Hero.module.css";
-import heroImage from "../../../assets/img/hero.jpg";
-import { string } from "prop-types";
+import { FaLongArrowAltRight } from 'react-icons/fa';
+import React from 'react';
+import styles from './Hero.module.css';
+import heroImage from '../../../assets/img/hero.jpg';
 
-Hero.propTypes = {className: string};
+interface IHeroProps {
+  className?: string;
+}
 
 /**
  * @example
  * @returns
  */
 
-export default function Hero({className}) {
+export default function Hero({ className }: IHeroProps) {
   return (
     <div className={`${className} ${styles.container}`}>
       <div className={styles.content}>
@@ -23,8 +23,7 @@ export default function Hero({className}) {
             qui optio quibusdam debitis animi.
           </p>
           <button className={styles.cta}>
-            Explore{" "}
-            <FontAwesomeIcon className={styles.icon} icon={faArrowRightLong} />
+            Explore <FaLongArrowAltRight className={styles.icon} />
           </button>
         </div>
         <div className={styles.right}>

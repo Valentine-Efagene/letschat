@@ -22,11 +22,12 @@ import {
 } from './redux/message/message.slice';
 import Profile from './pages/Profile';
 import socket from './services/socket';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
 // https://codesandbox.io/s/react-router-tutorial-loader-and-action-3qr3p8?file=/src/routes/contact.jsx
 
 function App() {
-  const dispatch = useDispatch();
-  const { user } = useSelector(state => state.user);
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector(state => state.user);
 
   useEffect(() => {
     socket?.on('disconnect', () => {
@@ -113,7 +114,7 @@ function App() {
     title: null,
     message: null,
     type: SUCCESS,
-    delay: null,
+    delay: 3000,
   });
 
   const closeToast = () =>
@@ -124,7 +125,7 @@ function App() {
       <RouterProvider router={router} />
       <Toast
         show={toastState?.show}
-        onClose={() => closeToast(false)}
+        onClose={() => closeToast()}
         type={toastState?.type}
         delay={toastState?.delay}
         message={toastState?.message}

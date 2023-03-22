@@ -4,8 +4,7 @@ import styles from './Header.module.css';
 import { fetchUserById } from '../../../redux/user/user.api';
 import { ERROR, ToastContext } from '../../../contexts/ToastContext';
 import NavLink from '../../common/NavLink/NavLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAddressBook, faHome } from '@fortawesome/free-solid-svg-icons';
+import { FaAddressBook, FaHome } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 
 export default function Header() {
@@ -36,10 +35,10 @@ export default function Header() {
     <div className={styles.container}>
       <div className={styles.links}>
         <NavLink className={styles.navLink} to="/">
-          <FontAwesomeIcon className={styles.icon} icon={faHome} />
+          <FaHome className={styles.icon} />
         </NavLink>
         <NavLink className={styles.navLink} to="/users">
-          <FontAwesomeIcon icon={faAddressBook} className={styles.icon} />
+          <FaAddressBook className={styles.icon} />
         </NavLink>
       </div>
       <div className={styles.user}>

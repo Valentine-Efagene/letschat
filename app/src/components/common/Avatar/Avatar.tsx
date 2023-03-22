@@ -1,19 +1,17 @@
 import React from 'react';
-import { userProp } from '../../../prop-types/user';
+import { IUser } from '../../../types/user';
 import { Link } from 'react-router-dom';
 import styles from './Avatar.module.css';
-import { object, string } from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { FaUser } from 'react-icons/fa';
 
-Avatar.propTypes = {
-  user: userProp,
-  className: string,
-  style: object,
-  to: string,
-};
+interface IAvatarProps {
+  user?: IUser;
+  className?: string;
+  style?: object;
+  to?: string;
+}
 
-export default function Avatar({ user, className, style, to }) {
+export default function Avatar({ user, className, style, to }: IAvatarProps) {
   if (user == null) return null;
 
   const { avatar, firstName, lastName } = user;
@@ -31,11 +29,14 @@ export default function Avatar({ user, className, style, to }) {
       );
     }
 
-    return <FontAwesomeIcon icon={faUser} />;
+    return <FaUser />;
   };
 
   return (
-    <Link to={to} style={style} className={`${className} ${styles.container}`}>
+    <Link
+      to={to ?? ''}
+      style={style}
+      className={`${className} ${styles.container}`}>
       {resolveAvatar()}
     </Link>
   );

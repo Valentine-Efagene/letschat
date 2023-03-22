@@ -1,24 +1,28 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import styles from './Contact.module.css';
-import { userProp } from '../../../../prop-types/user';
-import { bool, func, string } from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faKeyboard, faUser } from '@fortawesome/free-solid-svg-icons';
-import { useSelector } from 'react-redux';
+import { FaKeyboard } from 'react-icons/fa';
 import Avatar from '../../../common/Avatar/Avatar';
+import { IUser } from '../../../../types/user';
+import { useAppSelector } from '../../../../redux/hooks';
 
-Contact.propTypes = {
-  user: userProp,
-  onClick: func,
-  isTarget: bool,
-  to: string,
-  online: bool,
-  snippet: string,
-};
+interface IContact {
+  user: IUser;
+  onClick: MouseEventHandler;
+  isTarget: boolean;
+  to: string;
+  online: boolean;
+  snippet: string;
+}
 
-export default function Contact({ isTarget, user, onClick, online, snippet }) {
+export default function Contact({
+  isTarget,
+  user,
+  onClick,
+  online,
+  snippet,
+}: IContact) {
   const { firstName, lastName, id } = user ?? {};
-  const { typing } = useSelector(state => state.message);
+  const { typing } = useAppSelector(state => state.message);
 
   return (
     <div
@@ -30,7 +34,7 @@ export default function Contact({ isTarget, user, onClick, online, snippet }) {
         lastName ? lastName : ''
       }`}</div>
       {Array.isArray(typing) && typing?.find(_user => _user === id) ? (
-        <FontAwesomeIcon icon={faKeyboard} />
+        <FaKeyboard />
       ) : (
         <div className={styles.snippet}>{snippet}</div>
       )}

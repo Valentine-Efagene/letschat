@@ -71,6 +71,8 @@ io.on("connection", (client) => {
   client.on("message", (data) => {
     const { receiver } = data;
 
+    console.log("message");
+
     io.to(userToSocketMap[receiver]).emit("message-response", data);
   });
 
@@ -80,16 +82,12 @@ io.on("connection", (client) => {
   });
 
   client.on("done-typing", ({ receiver, sender }) => {
-    //client.broadcast.emit("done-typing-response", data);
     io.to(userToSocketMap[receiver]).emit("done-typing-response", sender);
-    //client.broadcast.emit("typing-response", data);
     console.log(".");
   });
 
   client.on("typing", ({ receiver, sender }) => {
-    //client.broadcast.emit("typing-response", target);
     io.to(userToSocketMap[receiver]).emit("typing-response", sender);
-    //client.broadcast.emit("typing-response", data);
     console.log(".");
   });
 });

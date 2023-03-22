@@ -13,7 +13,7 @@ exports.insert = (req, res) => {
   }
 
   MessageModel.createMessage(req.body).then((result) => {
-    res.status(201).send(result);
+    res.status(201).json(result);
   });
 };
 
@@ -22,7 +22,7 @@ exports.last = (req, res) => {
 
   MessageModel.getLastMessages(contacts).then((result) => {
     //console.log(result?.length);
-    res.status(200).send(result);
+    res.status(200).json(result);
   });
 };
 
@@ -31,7 +31,7 @@ exports.count = (req, res) => {
     (result) => {
       // https://www.reddit.com/r/learnjavascript/comments/vowzmw/comment/iehnpgw/?utm_source=share&utm_medium=web2x&context=3
       // Explains the need for the string conversion
-      res.status(200).send(String(result));
+      res.status(200).json(String(result));
     }
   );
 };
@@ -49,7 +49,7 @@ exports.list = (req, res) => {
   }
 
   MessageModel.list(limit, page).then((result) => {
-    res.status(200).send(result);
+    res.status(200).json(result);
   });
 };
 
@@ -66,7 +66,7 @@ exports.listByUser = (req, res) => {
   }
 
   MessageModel.list(limit, page, req.params.userId).then((result) => {
-    res.status(200).send(result);
+    res.status(200).json(result);
   });
 };
 
@@ -86,14 +86,14 @@ exports.listBySenderReceiver = (req, res) => {
 
   MessageModel.listBySenderReceiver(limit, page, senderId, receiverId).then(
     (result) => {
-      res.status(200).send(result);
+      res.status(200).json(result);
     }
   );
 };
 
 exports.getById = (req, res) => {
   MessageModel.findById(req.params.id).then((result) => {
-    res.status(200).send(result);
+    res.status(200).json(result);
   });
 };
 
@@ -102,15 +102,15 @@ exports.patchById = async (req, res) => {
     req.body.avatar = req?.file?.filename;
 
     MessageModel.patchMessage(req.params.id, req.body).then((result) => {
-      res.status(200).send(result);
+      res.status(200).json(result);
     });
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).json(error.message);
   }
 };
 
 exports.removeById = (req, res) => {
   MessageModel.removeById(req.params.id).then((result) => {
-    res.status(204).send({});
+    res.status(204).json({});
   });
 };

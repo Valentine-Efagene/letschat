@@ -9,15 +9,11 @@ import {
   scrollPickerLeft,
   scrollPickerRight,
   transformScroll,
-} from '../../../Helpers/domPhysics';
+} from '../../../helpers/domPhysics';
 import { useState } from 'react';
 import { useRef } from 'react';
 import { useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faChevronLeft,
-  faChevronRight,
-} from '@fortawesome/free-solid-svg-icons';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 HorizontalScrollContainer.propTypes = {
   children: node,
@@ -115,7 +111,7 @@ export default function HorizontalScrollContainer({
           disabled={!canGoLeft}
           className={`${styles.left} ${styles.move}`}
           onClick={goLeft}>
-          <FontAwesomeIcon icon={faChevronLeft} className={styles.chevron} />
+          <faChevronLeft className={styles.chevron} />
         </button>
       )}
       {children}
@@ -125,7 +121,7 @@ export default function HorizontalScrollContainer({
           disabled={!canGoRight}
           className={`${styles.right} ${styles.move}`}
           onClick={goRight}>
-          <FontAwesomeIcon icon={faChevronRight} className={styles.chevron} />
+          <FaChevronRight className={styles.chevron} />
         </button>
       )}
     </div>

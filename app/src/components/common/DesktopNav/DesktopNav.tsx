@@ -1,21 +1,19 @@
-import { faCommenting } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { string } from 'prop-types';
 import React, { useState } from 'react';
 import NavLink from '../NavLink/NavLink';
 import styles from './DesktopNav.module.css';
 import Profile from '../forms/Profile/Profile';
-import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../../redux/user/user.slice';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { FaComment } from 'react-icons/fa';
 
-DesktopNav.propTypes = {
-  className: string,
-};
+interface IDesktopNavProps {
+  className?: string;
+}
 
-export default function DesktopNav({ className }) {
-  const dispatch = useDispatch();
+export default function DesktopNav({ className }: IDesktopNavProps) {
+  const dispatch = useAppDispatch();
 
-  const { user } = useSelector(state => state.user);
+  const { user } = useAppSelector(state => state.user);
   const [showProfile, setShowProfile] = useState(false);
 
   const toggleShowProfile = () => setShowProfile(prevState => !prevState);
@@ -26,7 +24,7 @@ export default function DesktopNav({ className }) {
 
   return (
     <nav className={`${className} ${styles.container}`}>
-      <FontAwesomeIcon icon={faCommenting} size="3x" className={styles.logo} />
+      <FaComment className={styles.logo} />
       <div className={styles.navItemsWrapper}>
         <NavLink to="/">Home</NavLink>
         {user != null && (

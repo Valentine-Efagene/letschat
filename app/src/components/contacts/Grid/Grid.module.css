@@ -15,11 +15,8 @@
   transition: 300ms;
 }
 
-.text {
-  overflow: hidden;
+.card > * {
   margin: auto;
-  max-width: 100%;
-  text-overflow: ellipsis;
 }
 
 .card:hover {
@@ -27,6 +24,13 @@
 
   transform: translateY(-8px);
   box-shadow: var(--primary-4) 0px 12px 20px 0px;
+}
+
+.text {
+  overflow: hidden;
+  margin: auto;
+  max-width: 100%;
+  text-overflow: ellipsis;
 }
 
 .avatar {

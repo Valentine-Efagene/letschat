@@ -1,5 +1,4 @@
-import { faList, faTh } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaList, FaTh } from 'react-icons/fa';
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Grid from '../../components/contacts/Grid/Grid';
@@ -13,15 +12,17 @@ import {
 import styles from './Contacts.module.css';
 import { addContactThunk } from '../../redux/user/user.slice';
 import Paginator from '../../components/common/Paginator/Paginator';
-const API_BASE_URL = 'http://localhost:3600';
-import { useLoaderData, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import Layout from '../../components/layouts/Layout';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+
+const API_BASE_URL = 'http://localhost:3600';
 
 const GRID = 'grid';
 const LIST = 'list';
 
 // 4 is the default value in the front-end API
-const generatePaginationLinks = (total, perPage = 4) => {
+const generatePaginationLinks = (total: number, perPage = 4) => {
   const count = Math.ceil(total / perPage);
   const links = Array(count).fill('');
 
@@ -38,16 +39,16 @@ const STEP = 4;
 export default function Contacts() {
   //const total = useLoaderData();
   let [searchParams, setSearchParams] = useSearchParams();
-  const { user, users, error, total } = useSelector(state => state.user);
+  const { user, users, error, total } = useAppSelector(state => state.user);
   const { setToastState } = useContext(ToastContext);
-  const page = searchParams.get('page') ?? 1;
+  const page = Number(searchParams.get('page')) ?? 1;
 
   const [layout, setLayout] = useState(GRID);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchTotalThunk()).then(() => {
-      setToastState(prevState => {
+      setToastState!(prevState => {
         return {
           ...prevState,
           show: error != null,
@@ -64,7 +65,7 @@ export default function Contacts() {
     const init = async () => {
       await dispatch(fetchAllUsersThunk(page - 1));
 
-      setToastState(prevState => {
+      setToastState!(prevState => {
         return {
           ...prevState,
           show: error != null,
@@ -79,10 +80,10 @@ export default function Contacts() {
     init();
   }, [page]);
 
-  const handleAddContact = async id => {
+  const handleAddContact = async (id: string) => {
     await dispatch(addContactThunk(id));
 
-    setToastState(prevState => {
+    setToastState!(prevState => {
       return {
         ...prevState,
         show: error != null,
@@ -94,7 +95,7 @@ export default function Contacts() {
     });
   };
 
-  const generateURL = (page, limit = 4) => {
+  const generateURL = (page: number, limit = 4) => {
     return page > 0
       ? `${API_BASE_URL}/users?page=${page}&limit=${limit}`
       : null;
@@ -109,7 +110,7 @@ export default function Contacts() {
     <Layout>
       <div className={styles.container}>
         <Button variant="outline" onClick={toggleLayout}>
-          <FontAwesomeIcon icon={layout === GRID ? faList : faTh} />
+          {layout === GRID ? <FaList /> : <FaTh />}
         </Button>
 
         {layout === GRID ? (
@@ -129,8 +130,8 @@ export default function Contacts() {
           currentPage={page}
           nextPageUrl={generateURL(page + 1)}
           prevPageUrl={generateURL(page - 1)}
-          links={generatePaginationLinks(total, STEP)}
-          lastPage={Math.floor(total / STEP)}
+          links={generatePaginationLinks(total ?? 0, STEP)}
+          lastPage={Math.floor(total ?? 0 / STEP)}
         />
       </div>
     </Layout>
