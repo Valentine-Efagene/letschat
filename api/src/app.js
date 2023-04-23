@@ -6,7 +6,7 @@ const { Server } = require("socket.io");
 const morgan = require("morgan");
 const multer = require("multer");
 const userRouter = require("./user/routes");
-const authRouter = require("./authorization/routes");
+const authRouter = require("./auth/routes");
 const messageRouter = require("./message/routes");
 
 // https://socket.io/docs/v4/handling-cors/
