@@ -25,10 +25,13 @@ interface IToastState {
 //   delay: 3000,
 // });
 
-const ToastContext = createContext<{ toastState: IToastState | undefined, setToastState: Dispatch<SetStateAction<IToastState>> | undefined }>({
+const ToastContext = createContext<{
+  toastState: IToastState | undefined;
+  setToastState: Dispatch<SetStateAction<IToastState>> | undefined;
+}>({
   toastState: undefined,
   setToastState: undefined,
 });
 
-export type { IToastState }
+export type { IToastState };
 export { ToastContext, SUCCESS, ERROR };

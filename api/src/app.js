@@ -1,3 +1,6 @@
+// https://socket.io/docs/v4/handling-cors/
+require("dotenv").config();
+
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -9,8 +12,6 @@ const userRouter = require("./user/routes");
 const authRouter = require("./auth/routes");
 const messageRouter = require("./message/routes");
 
-// https://socket.io/docs/v4/handling-cors/
-require("dotenv").config();
 const httpServer = http.createServer(app);
 
 const io = new Server(httpServer, {

@@ -16,7 +16,7 @@ import { useSearchParams } from 'react-router-dom';
 import Layout from '../../components/layouts/Layout';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
-const API_BASE_URL = 'http://localhost:3600';
+const API_BASE_URL = 'http://localhost:5173';
 
 const GRID = 'grid';
 const LIST = 'list';
@@ -41,7 +41,7 @@ export default function Contacts() {
   let [searchParams, setSearchParams] = useSearchParams();
   const { user, users, error, total } = useAppSelector(state => state.user);
   const { setToastState } = useContext(ToastContext);
-  const page = Number(searchParams.get('page')) ?? 1;
+  const page = Number(searchParams.get('page')) || 1;
 
   const [layout, setLayout] = useState(GRID);
   const dispatch = useAppDispatch();

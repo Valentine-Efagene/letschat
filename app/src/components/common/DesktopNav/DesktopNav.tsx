@@ -2,24 +2,22 @@ import React, { useState } from 'react';
 import NavLink from '../NavLink/NavLink';
 import styles from './DesktopNav.module.css';
 import Profile from '../forms/Profile/Profile';
-import { logout } from '../../../redux/user/user.slice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { FaComment } from 'react-icons/fa';
+import { persistor } from '../../../redux/store';
 
 interface IDesktopNavProps {
   className?: string;
 }
 
 export default function DesktopNav({ className }: IDesktopNavProps) {
-  const dispatch = useAppDispatch();
-
   const { user } = useAppSelector(state => state.user);
   const [showProfile, setShowProfile] = useState(false);
 
   const toggleShowProfile = () => setShowProfile(prevState => !prevState);
 
   const handleLogout = () => {
-    dispatch(logout());
+    persistor.purge();
   };
 
   return (

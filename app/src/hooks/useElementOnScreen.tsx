@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, MutableRefObject } from "react";
 
 /**
  *
@@ -9,14 +9,19 @@ import { useState, useEffect, useRef } from 'react';
  * @param {func} cleanup
  * @returns
  */
-const useElementOnScreen = (options, cleanup) => {
-  const containerRef = useRef(null);
+const useElementOnScreen = (
+  options?: object,
+  cleanup?: boolean,
+  ref: any = null
+) => {
+  let containerRef = useRef(ref);
+
   const [isVisible, setIsVisible] = useState();
 
-  const callback = (entries, observer) => {
+  const callback = (entries: any, observer: any) => {
     const [entry] = entries;
-    setIsVisible(prevState =>
-      prevState === true ? prevState : entry.isIntersecting,
+    setIsVisible((prevState) =>
+      prevState === true ? prevState : entry.isIntersecting
     );
 
     if (cleanup && isVisible) {

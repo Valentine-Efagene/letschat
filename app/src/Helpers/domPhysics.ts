@@ -1,10 +1,12 @@
+import { MouseEvent, UIEvent } from 'react'
+
 /**
  * Center a child in a scrollable container
  *
  * @param {HtmlElement} parentElement
  * @param {HtmlElement} childElement
  */
-const scrollToChild = (containerElement, activeElement) => {
+const scrollToChild = (containerElement: HTMLElement, activeElement: HTMLElement) => {
   if (containerElement == null || activeElement == null) return;
 
   containerElement.scrollLeft +=
@@ -16,7 +18,7 @@ const scrollToChild = (containerElement, activeElement) => {
  * @param {HtmlElement} event
  * @returns
  */
-function transformScroll(event) {
+function transformScroll(event: any) {
   if (window?.innerWidth < 800) return;
 
   event.preventDefault();
@@ -29,7 +31,7 @@ function transformScroll(event) {
  *
  * @returns
  */
-function scrollPickerLeft(element, distance) {
+function scrollLeft(element: HTMLElement, distance?: number) {
   const dx = Math.min(element.scrollLeft, element.clientWidth / 2);
 
   element.scrollBy({
@@ -44,7 +46,7 @@ function scrollPickerLeft(element, distance) {
  *
  * @returns
  */
-function scrollPickerRight(element, distance) {
+function scrollRight(element: HTMLElement, distance?: number) {
   const spaceLeft =
     element.scrollWidth - element.scrollLeft - element.clientWidth;
 
@@ -60,7 +62,7 @@ function scrollPickerRight(element, distance) {
  * @param {HtmlElement} element
  * @returns
  */
-function canScrollLeft(element) {
+function canScrollLeft(element: HTMLElement) {
   if (element == null) return false;
 
   return element.scrollLeft > 0;
@@ -70,7 +72,7 @@ function canScrollLeft(element) {
  * @param {HtmlElement} element
  * @returns
  */
-function canScrollRight(element) {
+function canScrollRight(element: HTMLElement) {
   if (element == null) return false;
 
   return element.scrollWidth - element.clientWidth - element.scrollLeft > 0;
@@ -80,7 +82,7 @@ function canScrollRight(element) {
  * @param {HtmlElement} element
  * @returns
  */
-function overflowingX(element) {
+function overflowingX(element: HTMLElement) {
   if (element == null) return false;
 
   return element.scrollWidth > element.clientWidth;
@@ -90,14 +92,14 @@ function overflowingX(element) {
  * @param {HtmlElement} element
  * @returns
  */
-function getTopRelativeToDOM(element) {
+function getTopRelativeToDOM(element: HTMLElement) {
   let offsetTop = 0;
 
   do {
     if (!isNaN(element.offsetTop)) {
       offsetTop += element.offsetTop;
     }
-  } while ((element = element.offsetParent));
+  } while ((element = element.offsetParent as HTMLElement));
   return offsetTop;
 }
 
@@ -107,7 +109,7 @@ function getTopRelativeToDOM(element) {
  * @param {HtmlElement} element
  * @returns
  */
-function findPosRelativeToDOM(element) {
+function findPosRelativeToDOM(element: HTMLElement) {
   let curLeft = 0;
   let curTop = 0;
 
@@ -115,55 +117,21 @@ function findPosRelativeToDOM(element) {
     do {
       curLeft += element.offsetLeft;
       curTop += element.offsetTop;
-    } while ((element = element.offsetParent));
+    } while ((element = element.offsetParent as HTMLElement));
   }
 
   return { x: curLeft, y: curTop };
 }
 
-/**
- *
- * @param {HtmlElement: defaults to document} element
- * @param {{key: string, ref: ReactRef, displayName: string}} sections
- * @param {number} padding Value to vary when the position is accepted
- * @returns
- */
-const getActiveSection = (element = document, sections, padding = 0) => {
-  if (element == null) return false;
-
-  if (element === document) {
-    element = document.documentElement;
-  }
-
-  const _sections = [...sections];
-
-  // Reverse the list
-  _sections.sort(
-    (sectionA, sectionB) =>
-      getTopRelativeToDOM(sectionB?.ref?.current) -
-      getTopRelativeToDOM(sectionA?.ref?.current),
-  );
-
-  for (let section of _sections) {
-    const top = getTopRelativeToDOM(section?.ref?.current);
-
-    if (element.scrollTop >= top - padding) {
-      return section?.key;
-    }
-  }
-
-  return null;
-};
 
 export {
   scrollToChild,
   transformScroll,
-  scrollPickerLeft,
-  scrollPickerRight,
+  scrollLeft,
+  scrollRight,
   canScrollLeft,
   canScrollRight,
   getTopRelativeToDOM,
   findPosRelativeToDOM,
-  getActiveSection,
   overflowingX,
 };

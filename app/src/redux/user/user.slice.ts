@@ -13,14 +13,17 @@ import {
 } from './user.api';
 import { IDLE, PENDING, SUCCEEDED, FAILED } from '../../helpers/loadingStates';
 import { IUser } from '../../types/user';
+import { PURGE } from 'redux-persist';
+import { RootState } from '../store';
 
 interface IState {
-  user: IUser | null,
-  users: IUser[],
-  status: 'idle' | 'pending' | 'succeeded' | 'failed',
-  error: any,
-  contacts: string[] | null,
-  total: number | null
+  user: IUser | null;
+  users: IUser[];
+  status: 'idle' | 'pending' | 'succeeded' | 'failed';
+  error: any;
+  contacts: string[] | null;
+  total: number | null;
+  token: string | null | undefined;
 }
 
 const initialState: IState = {
@@ -30,13 +33,22 @@ const initialState: IState = {
   error: null,
   contacts: [],
   total: null,
+  token: null,
 };
 
 const fetchCurrentUserThunk = createAsyncThunk(
   'user/fetchCurrentUser',
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, getState }) => {
     try {
-      const res = await fetchCurrentUser();
+      const state: RootState = getState() as unknown as RootState;
+      const token = state.user?.token;
+      const uid = state.user?.user?.id;
+
+      if (uid == null || token == null) {
+        return rejectWithValue({ summary: 'Please sign in' });
+      }
+
+      const res = await fetchCurrentUser(uid, token);
       return res;
     } catch (error) {
       rejectWithValue(error);
@@ -46,11 +58,14 @@ const fetchCurrentUserThunk = createAsyncThunk(
 
 const signInThunk = createAsyncThunk(
   'user/signIn',
-  async (credentials: { email: string, password: string }, { rejectWithValue }) => {
+  async (
+    credentials: { email: string; password: string },
+    { rejectWithValue },
+  ) => {
     try {
       const response = await signIn(credentials);
-      console.log(response)
-      return response
+      console.log(response);
+      return response;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -59,7 +74,10 @@ const signInThunk = createAsyncThunk(
 
 const signUpThunk = createAsyncThunk(
   'user/signUp',
-  async (credentials: { email: string, password: string }, { rejectWithValue }) => {
+  async (
+    credentials: { email: string; password: string },
+    { rejectWithValue },
+  ) => {
     try {
       return await signUp(credentials);
     } catch (error) {
@@ -70,9 +88,16 @@ const signUpThunk = createAsyncThunk(
 
 const fetchTotalThunk = createAsyncThunk(
   'user/fetchTotal',
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, getState }) => {
     try {
-      return await fetchTotal();
+      const state: RootState = getState() as unknown as RootState;
+      const token = state.user?.token;
+
+      if (token == null) {
+        return rejectWithValue({ summary: 'Please sign in' });
+      }
+
+      return await fetchTotal(token);
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -95,9 +120,16 @@ const fetchByIdThunk = createAsyncThunk(
 
 const fetchAllUsersThunk = createAsyncThunk(
   'user/fetchAllUsers',
-  async (page: number, { rejectWithValue }) => {
+  async (page: number, { rejectWithValue, getState }) => {
     try {
-      return await fetchAllUsers(page);
+      const state: RootState = getState() as unknown as RootState;
+      const token = state.user?.token;
+
+      if (token == null) {
+        return rejectWithValue({ summary: 'Please sign in' });
+      }
+
+      return await fetchAllUsers(token, page);
     } catch (error) {
       /**
        * const err = error as AxiosError
@@ -157,130 +189,133 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    logout: state => {
-      localStorage.clear();
-      state.user = null;
-    },
+    logout: () => {},
   },
-  extraReducers: buiilder => {
-    buiilder.addCase(fetchCurrentUserThunk.fulfilled, (state, { payload }) => {
+  extraReducers: builder => {
+    builder.addCase(PURGE, () => {
+      return initialState;
+    });
+
+    builder.addCase(fetchCurrentUserThunk.fulfilled, (state, { payload }) => {
       state.user = payload;
       state.status = SUCCEEDED;
     });
-    buiilder.addCase(fetchCurrentUserThunk.pending, (state, { payload }) => {
+    builder.addCase(fetchCurrentUserThunk.pending, (state, { payload }) => {
       state.status = PENDING;
     });
-    buiilder.addCase(fetchCurrentUserThunk.rejected, (state, { payload }) => {
+    builder.addCase(fetchCurrentUserThunk.rejected, (state, { payload }) => {
       state.error = payload;
       state.status = FAILED;
     });
 
-    buiilder.addCase(signInThunk.fulfilled, (state, { payload }) => {
-      state.user = payload;
+    builder.addCase(signInThunk.fulfilled, (state, { payload }) => {
+      state.user = payload?.user;
+      state.token = payload?.token;
       state.status = SUCCEEDED;
     });
-    buiilder.addCase(signInThunk.pending, (state, { payload }) => {
+    builder.addCase(signInThunk.pending, (state, { payload }) => {
       state.status = PENDING;
     });
-    buiilder.addCase(signInThunk.rejected, (state, { payload }) => {
+    builder.addCase(signInThunk.rejected, (state, { payload }) => {
       state.error = payload;
       state.status = FAILED;
     });
 
-    buiilder.addCase(fetchTotalThunk.fulfilled, (state, { payload }) => {
+    builder.addCase(fetchTotalThunk.fulfilled, (state, { payload }) => {
       state.total = payload;
       state.status = SUCCEEDED;
     });
-    buiilder.addCase(fetchTotalThunk.pending, (state, { payload }) => {
+    builder.addCase(fetchTotalThunk.pending, (state, { payload }) => {
       state.status = PENDING;
     });
-    buiilder.addCase(fetchTotalThunk.rejected, (state, { payload }) => {
+    builder.addCase(fetchTotalThunk.rejected, (state, { payload }) => {
       state.error = payload;
       state.status = FAILED;
     });
 
-    buiilder.addCase(signUpThunk.fulfilled, (state, { payload }) => {
+    builder.addCase(signUpThunk.fulfilled, (state, { payload }) => {
+      state.user = payload?.user;
+      state.token = payload?.token;
+      state.status = SUCCEEDED;
+    });
+    builder.addCase(signUpThunk.pending, (state, { payload }) => {
+      state.status = PENDING;
+    });
+    builder.addCase(signUpThunk.rejected, (state, { payload }) => {
+      state.error = payload;
+      state.status = FAILED;
+    });
+
+    builder.addCase(fetchByIdThunk.fulfilled, (state, { payload }) => {
       state.user = payload;
       state.status = SUCCEEDED;
     });
-    buiilder.addCase(signUpThunk.pending, (state, { payload }) => {
+    builder.addCase(fetchByIdThunk.pending, (state, { payload }) => {
       state.status = PENDING;
     });
-    buiilder.addCase(signUpThunk.rejected, (state, { payload }) => {
+    builder.addCase(fetchByIdThunk.rejected, (state, { payload }) => {
       state.error = payload;
       state.status = FAILED;
     });
 
-    buiilder.addCase(fetchByIdThunk.fulfilled, (state, { payload }) => {
-      state.user = payload;
-      state.status = SUCCEEDED;
-    });
-    buiilder.addCase(fetchByIdThunk.pending, (state, { payload }) => {
-      state.status = PENDING;
-    });
-    buiilder.addCase(fetchByIdThunk.rejected, (state, { payload }) => {
-      state.error = payload;
-      state.status = FAILED;
-    });
-
-    buiilder.addCase(updateUserThunk.fulfilled, (state, { payload }) => {
+    builder.addCase(updateUserThunk.fulfilled, (state, { payload }) => {
       state.user = payload?.data;
       state.status = SUCCEEDED;
     });
-    buiilder.addCase(updateUserThunk.pending, (state, { payload }) => {
+    builder.addCase(updateUserThunk.pending, (state, { payload }) => {
       state.status = PENDING;
     });
-    buiilder.addCase(updateUserThunk.rejected, (state, { payload }) => {
+    builder.addCase(updateUserThunk.rejected, (state, { payload }) => {
       state.error = payload;
       state.status = FAILED;
     });
 
-    buiilder.addCase(fetchContactsThunk.fulfilled, (state, { payload }) => {
+    builder.addCase(fetchContactsThunk.fulfilled, (state, { payload }) => {
       state.contacts = payload;
       state.status = SUCCEEDED;
     });
-    buiilder.addCase(fetchContactsThunk.pending, (state, { payload }) => {
+    builder.addCase(fetchContactsThunk.pending, (state, { payload }) => {
       state.status = PENDING;
     });
-    buiilder.addCase(fetchContactsThunk.rejected, (state, { payload }) => {
+    builder.addCase(fetchContactsThunk.rejected, (state, { payload }) => {
       state.error = payload;
       state.status = FAILED;
     });
 
-    buiilder.addCase(removeContactThunk.fulfilled, (state, { payload }) => {
+    builder.addCase(removeContactThunk.fulfilled, (state, { payload }) => {
       state.user = payload as unknown as IUser; // TODO
       state.status = SUCCEEDED;
     });
-    buiilder.addCase(removeContactThunk.pending, (state, { payload }) => {
+    builder.addCase(removeContactThunk.pending, (state, { payload }) => {
       state.status = PENDING;
     });
-    buiilder.addCase(removeContactThunk.rejected, (state, { payload }) => {
+    builder.addCase(removeContactThunk.rejected, (state, { payload }) => {
       state.error = payload;
       state.status = FAILED;
     });
 
-    buiilder.addCase(addContactThunk.fulfilled, (state, { payload }) => {
+    builder.addCase(addContactThunk.fulfilled, (state, { payload }) => {
       state.user = payload;
       state.status = SUCCEEDED;
     });
-    buiilder.addCase(addContactThunk.pending, (state, { payload }) => {
+    builder.addCase(addContactThunk.pending, (state, { payload }) => {
       state.status = PENDING;
     });
-    buiilder.addCase(addContactThunk.rejected, (state, { payload }) => {
+    builder.addCase(addContactThunk.rejected, (state, { payload }) => {
       state.error = payload;
       state.status = FAILED;
     });
 
-    buiilder.addCase(fetchAllUsersThunk.fulfilled, (state, { payload }) => {
+    builder.addCase(fetchAllUsersThunk.fulfilled, (state, { payload }) => {
       state.users = payload;
       state.status = SUCCEEDED;
       state.error = null;
     });
-    buiilder.addCase(fetchAllUsersThunk.pending, (state, { payload }) => {
+    builder.addCase(fetchAllUsersThunk.pending, (state, { payload }) => {
       state.error = null;
       state.status = PENDING;
     });
-    buiilder.addCase(fetchAllUsersThunk.rejected, (state, { payload }) => {
+    builder.addCase(fetchAllUsersThunk.rejected, (state, { payload }) => {
       state.error = payload;
       state.status = FAILED;
     });

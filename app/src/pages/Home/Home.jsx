@@ -6,6 +6,7 @@ import Features from '../../components/home/Features/Features';
 import Footer from '../../components/common/Footer/Footer';
 
 export default function Home() {
+
   return (
     <div>
       <div className={styles.navnHero}>

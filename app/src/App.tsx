@@ -6,10 +6,9 @@ import Auth from './pages/Auth/Auth';
 import Login from './components/auth/forms/Login';
 import SignUp from './components/auth/forms/SignUp';
 import { useEffect, useState } from 'react';
-import { ToastContext, SUCCESS } from './contexts/ToastContext';
+import { ToastContext, SUCCESS, IToastState } from './contexts/ToastContext';
 import Toast from './components/Toast';
 import Contacts from './pages/Contacts';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchCurrentUserThunk,
   fetchTotalThunk,
@@ -23,11 +22,12 @@ import {
 import Profile from './pages/Profile';
 import socket from './services/socket';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
+import ProtectedRoute from './components/routes/ProtectedRoute';
 // https://codesandbox.io/s/react-router-tutorial-loader-and-action-3qr3p8?file=/src/routes/contact.jsx
 
 function App() {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector(state => state.user);
+  const { user, token } = useAppSelector(state => state.user);
 
   useEffect(() => {
     socket?.on('disconnect', () => {
@@ -83,15 +83,27 @@ function App() {
     },
     {
       path: '/chat',
-      element: <Chat />,
+      element: (
+        <ProtectedRoute token={token}>
+          <Chat />
+        </ProtectedRoute>
+      ),
     },
     {
       path: '/users',
-      element: <Contacts />,
+      element: (
+        <ProtectedRoute token={token}>
+          <Contacts />
+        </ProtectedRoute>
+      ),
     },
     {
       path: '/profile',
-      element: <Profile />,
+      element: (
+        <ProtectedRoute token={token}>
+          <Profile />
+        </ProtectedRoute>
+      ),
     },
     {
       path: '/auth',
@@ -109,7 +121,7 @@ function App() {
     },
   ]);
 
-  const [toastState, setToastState] = useState({
+  const [toastState, setToastState] = useState<IToastState>({
     show: false,
     title: null,
     message: null,

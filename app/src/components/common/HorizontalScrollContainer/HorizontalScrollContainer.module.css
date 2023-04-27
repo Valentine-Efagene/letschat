@@ -1,51 +1,88 @@
 .container {
-  width: 100%;
-  max-width: 100%;
+  padding-inline: 2rem;
   scrollbar-color: #00000000 #00000000;
-  overflow-x: scroll;
-  padding-inline: 1rem;
+  display: flex;
   position: relative;
+  overflow-x: hidden;
+}
+
+.container ::-webkit-scrollbar {
+  width: 3px;
+}
+
+.container ::-webkit-scrollbar-track {
+  background-color: transparent;
+  transition: 2s all;
+}
+
+.container ::-webkit-scrollbar-thumb {
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.container ::-webkit-scrollbar-thumb:hover {
+  background-color: #00000000;
+}
+
+.container * {
+  scrollbar-color: #00000000 #00000000;
+}
+
+.scroller {
+  display: flex;
+  overflow-x: auto;
+}
+
+.overflowContainer {
+  display: flex;
+  flex-flow: row nowrap;
 }
 
 .move {
-  position: absolute;
-  top: calc(50% - 1rem);
+  align-self: center;
   border-radius: 50%;
   background-color: #00000068;
-  border: 1px solid #cbcbcb;
+  border: 2px solid #a5a5a5;
   width: fit-content;
   height: fit-content;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  position: absolute;
+  cursor: pointer;
+  color: white;
+}
+
+.move:hover {
+  border: 2px solid #ffffff;
 }
 
 .move:disabled {
   background-color: #00000016;
   border: 1px solid #cbcbcb1c;
+  color: #cbcbcb1c;
 }
 
 .chevron {
   width: 1rem;
   height: 1rem;
-  color: white;
 }
 
 .left {
-  left: 1rem;
+  left: 0;
 }
 
 .right {
-  right: 1rem;
+  right: 0;
 }
 
-.container::-webkit-scrollbar {
+.container ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 
-.container::-webkit-scrollbar-track {
+.container ::-webkit-scrollbar-track {
   border-radius: 10px;
 }
 

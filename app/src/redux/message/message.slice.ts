@@ -7,6 +7,7 @@ import {
 } from './message.api';
 import { IDLE, PENDING, SUCCEEDED, FAILED } from '../../helpers/loadingStates';
 import { IMessage } from '../../types/message';
+import { PURGE } from 'redux-persist';
 
 interface IState {
   messages: IMessage[];
@@ -109,60 +110,64 @@ export const messageSlice = createSlice({
       state.peers = payload;
     },
   },
-  extraReducers: buiilder => {
-    buiilder.addCase(fetchMessagesThunk.fulfilled, (state, { payload }) => {
+  extraReducers: builder => {
+    builder.addCase(PURGE, () => {
+      return initialState;
+    });
+
+    builder.addCase(fetchMessagesThunk.fulfilled, (state, { payload }) => {
       state.messages = payload;
       state.status = SUCCEEDED;
     });
-    buiilder.addCase(fetchMessagesThunk.pending, (state, { payload }) => {
+    builder.addCase(fetchMessagesThunk.pending, (state, { payload }) => {
       state.status = PENDING;
     });
-    buiilder.addCase(fetchMessagesThunk.rejected, (state, { payload }) => {
+    builder.addCase(fetchMessagesThunk.rejected, (state, { payload }) => {
       state.status = FAILED;
     });
 
-    buiilder.addCase(fetchLastMessagesThunk.fulfilled, (state, { payload }) => {
+    builder.addCase(fetchLastMessagesThunk.fulfilled, (state, { payload }) => {
       //alert(JSON.stringify(payload));
       // console.log(JSON.stringify(payload));
       state.lastMessages = payload;
       state.status = SUCCEEDED;
     });
-    buiilder.addCase(fetchLastMessagesThunk.pending, (state, { payload }) => {
+    builder.addCase(fetchLastMessagesThunk.pending, (state, { payload }) => {
       state.status = PENDING;
     });
-    buiilder.addCase(fetchLastMessagesThunk.rejected, (state, { payload }) => {
+    builder.addCase(fetchLastMessagesThunk.rejected, (state, { payload }) => {
       //alert(JSON.stringify(payload));
       // console.log(JSON.stringify(payload));
       state.status = FAILED;
     });
 
-    buiilder.addCase(sendMessageThunk.fulfilled, (state, { payload }) => {
+    builder.addCase(sendMessageThunk.fulfilled, (state, { payload }) => {
       state.messages = [...state.messages, payload];
       state.lastMessages = getUpdatedLastMessages(state, payload);
       state.status = SUCCEEDED;
     });
-    buiilder.addCase(sendMessageThunk.pending, (state, { payload }) => {
+    builder.addCase(sendMessageThunk.pending, (state, { payload }) => {
       state.status = PENDING;
     });
-    buiilder.addCase(sendMessageThunk.rejected, (state, { payload }) => {
+    builder.addCase(sendMessageThunk.rejected, (state, { payload }) => {
       state.error = payload;
       state.status = FAILED;
     });
 
-    buiilder.addCase(
+    builder.addCase(
       fetchCountByContactIdThunk.fulfilled,
       (state, { payload }) => {
         state.count = payload;
         state.status = SUCCEEDED;
       },
     );
-    buiilder.addCase(
+    builder.addCase(
       fetchCountByContactIdThunk.pending,
       (state, { payload }) => {
         state.status = PENDING;
       },
     );
-    buiilder.addCase(
+    builder.addCase(
       fetchCountByContactIdThunk.rejected,
       (state, { payload }) => {
         state.error = payload;

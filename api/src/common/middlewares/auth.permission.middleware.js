@@ -17,7 +17,7 @@ exports.minimumPermissionLevelRequired = (required_permission_level) => {
     if (user_permission_level & required_permission_level) {
       return next();
     } else {
-      return res.status(403).send();
+      return res.status(403).json({});
     }
   };
 };
@@ -31,7 +31,9 @@ exports.onlySameUserOrAdminCanDoThisAction = (req, res, next) => {
     if (user_permission_level & ADMIN_PERMISSION) {
       return next();
     } else {
-      return res.status(403).send();
+      return res
+        .status(403)
+        .json({ errors: { summary: "Insufficient permission level" } });
     }
   }
 };
