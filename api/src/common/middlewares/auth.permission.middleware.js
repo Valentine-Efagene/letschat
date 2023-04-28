@@ -12,6 +12,7 @@ exports.minimumPermissionLevelRequired = (required_permission_level) => {
     // console.log({
     //   required: required_permission_level,
     //   user: user_permission_level,
+    //   anded: required_permission_level & user_permission_level,
     // });
 
     if (user_permission_level & required_permission_level) {

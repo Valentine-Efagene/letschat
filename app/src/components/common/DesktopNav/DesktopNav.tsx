@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import NavLink from '../NavLink/NavLink';
 import styles from './DesktopNav.module.css';
 import Profile from '../forms/Profile/Profile';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { useAppSelector } from '../../../redux/hooks';
 import { FaComment } from 'react-icons/fa';
 import { persistor } from '../../../redux/store';
 

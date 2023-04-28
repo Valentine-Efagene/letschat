@@ -8,6 +8,7 @@ import {
 import { IDLE, PENDING, SUCCEEDED, FAILED } from '../../helpers/loadingStates';
 import { IMessage } from '../../types/message';
 import { PURGE } from 'redux-persist';
+import { RootState } from '../store';
 
 interface IState {
   messages: IMessage[];
@@ -33,11 +34,18 @@ const initialState: IState = {
 
 const fetchMessagesThunk = createAsyncThunk(
   'message/fetch',
-  async ({ target, page, limit }: any, { rejectWithValue }) => {
+  async ({ target, page, limit }: any, { rejectWithValue, getState }) => {
     if (target == null) return null;
 
     try {
-      const result = await fetchMessages(target, page, limit);
+      const state: RootState = getState() as unknown as RootState;
+      const token = state.user?.token;
+      const uid = state.user?.user?.id;
+
+      if (token == null || uid == null) {
+        return rejectWithValue({ summary: 'Please sign in' });
+      }
+      const result = await fetchMessages(target, page, limit, uid, token);
       return result;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -47,11 +55,19 @@ const fetchMessagesThunk = createAsyncThunk(
 
 const fetchLastMessagesThunk = createAsyncThunk(
   'message/fetchLast',
-  async (contacts: any, { rejectWithValue }) => {
+  async (contacts: any, { rejectWithValue, getState }) => {
     if (contacts == null || contacts?.length < 1) return null;
 
     try {
-      const result = await fetchLastMessages(contacts);
+      const state: RootState = getState() as unknown as RootState;
+      const token = state.user?.token;
+      const uid = state.user?.user?.id;
+
+      if (uid == null || token == null) {
+        return rejectWithValue({ summary: 'Please sign in' });
+      }
+
+      const result = await fetchLastMessages(contacts, uid, token);
       return result;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -61,11 +77,19 @@ const fetchLastMessagesThunk = createAsyncThunk(
 
 const fetchCountByContactIdThunk = createAsyncThunk(
   'message/count',
-  async (contactId: string, { rejectWithValue }) => {
+  async (contactId: string, { rejectWithValue, getState }) => {
     if (contactId == null) return null;
 
     try {
-      const result = await fetchCountByContactId(contactId);
+      const state: RootState = getState() as unknown as RootState;
+      const token = state.user?.token;
+      const uid = state.user?.user?.id;
+
+      if (uid == null || token == null) {
+        return rejectWithValue({ summary: 'Please sign in' });
+      }
+
+      const result = await fetchCountByContactId(contactId, uid, token);
       return result;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -75,9 +99,17 @@ const fetchCountByContactIdThunk = createAsyncThunk(
 
 const sendMessageThunk = createAsyncThunk(
   'message/send',
-  async (data: any, { rejectWithValue }) => {
+  async (data: any, { rejectWithValue, getState }) => {
     try {
-      return await sendMessage(data);
+      const state: RootState = getState() as unknown as RootState;
+      const token = state.user?.token;
+      const uid = state.user?.user?.id;
+
+      if (uid == null || token == null) {
+        return rejectWithValue({ summary: 'Please sign in' });
+      }
+
+      return await sendMessage(data, token);
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }

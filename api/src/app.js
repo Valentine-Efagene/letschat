@@ -16,7 +16,9 @@ const httpServer = http.createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5173", // 127.0.0.1 is considered different from localhost here
+    // https://github.com/socketio/socket.io/issues/130#issuecomment-901960057
+    //origin: ["http://localhost:5173, 127.0.0.1:5173"], // 127.0.0.1 is considered different from localhost here
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
   },
 });

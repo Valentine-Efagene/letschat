@@ -9,7 +9,7 @@ import {
   fetchAllUsersThunk,
   fetchTotalThunk,
 } from '../../redux/user/user.slice';
-import styles from './Contacts.module.css';
+import styles from './Users.module.css';
 import { addContactThunk } from '../../redux/user/user.slice';
 import Paginator from '../../components/common/Paginator/Paginator';
 import { useSearchParams } from 'react-router-dom';

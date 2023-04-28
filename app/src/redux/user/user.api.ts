@@ -5,20 +5,25 @@ import { IAuthCredentials, IUser } from '../../types/user';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const getCurrentUser: () => {
-  user: IUser | null;
-  token: string | null;
-} = () => {
-  const token = localStorage.getItem('access-token');
-  const user = token ? (jwt_decode(token) as IUser) : null;
-  return { user, token };
-};
+// const getCurrentUser: () => {
+//   user: IUser | null;
+//   token: string | null;
+// } = () => {
+//   const token = localStorage.getItem('access-token');
+//   const user = token ? (jwt_decode(token) as IUser) : null;
+//   return { user, token };
+// };
 
-async function fetchCurrentUser(uid: string, token: string) {
-  const res = await fetch(`${API_BASE_URL}/users/${uid}`, {
+async function fetchCurrentUser(token: string) {
+  const _user = token ? (jwt_decode(token) as IUser) : null;
+
+  if (_user == null) {
+    return null;
+  }
+
+  const res = await fetch(`${API_BASE_URL}/users/${_user.id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-  //fetch(`${process.env.REACT_APP_API_BASE_URL}/users/${_user.id}`)
   const data = await res.json();
   return data;
 }
@@ -92,21 +97,13 @@ async function fetchTotal(token: string) {
   return data;
 }
 
-async function fetchUserById(id: string) {
-  if (id == null) return null;
+async function fetchUserById(uid: string, token: string) {
+  const response = await fetch(`${API_BASE_URL}/users/${uid}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
-  const { user, token } = getCurrentUser();
-
-  if (user) {
-    const response = await fetch(`${API_BASE_URL}/users/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    const data = await response.json();
-    return data;
-  }
-
-  return null;
+  const data = await response.json();
+  return data;
 }
 
 async function fetchAllUsers(
@@ -123,7 +120,6 @@ async function fetchAllUsers(
   );
 
   if (response?.status !== 200) {
-    alert(page);
     throw new CustomException(response?.statusText, response?.status);
   }
 
@@ -132,15 +128,22 @@ async function fetchAllUsers(
   return users;
 }
 
-async function fetchContacts() {
-  const { user, token } = getCurrentUser();
+async function fetchContacts(uid: string, token: string) {
+  const response = await axios.get(`${API_BASE_URL}/users/${uid}/contacts`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
-  if (token == null) return null;
+  const { data } = response;
 
-  if (user == null || user?.id == null) return null;
+  return data;
+}
 
-  const response = await axios.get(
-    `${API_BASE_URL}/users/${user.id}/contacts`,
+async function addContactById(contactId: string, uid: string, token: string) {
+  const response = await axios.patch(
+    `${API_BASE_URL}/users/${uid}/contacts/add`,
+    {
+      contactId,
+    },
     {
       headers: { Authorization: `Bearer ${token}` },
     },
@@ -149,32 +152,6 @@ async function fetchContacts() {
   const { data } = response;
 
   return data;
-}
-
-async function addContactById(id: string) {
-  if (id == null) return null;
-
-  const token = localStorage.getItem('access-token');
-
-  const _user = token ? (jwt_decode(token) as IUser) : null;
-
-  if (_user) {
-    const response = await axios.patch(
-      `${API_BASE_URL}/users/${_user.id}/contacts/add`,
-      {
-        contactId: id,
-      },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
-
-    const { data } = response;
-
-    return data;
-  }
-
-  return null;
 }
 
 async function removeContactById(id: string) {
@@ -205,17 +182,14 @@ async function removeContactById(id: string) {
  *
  * @param {{email, password}} credentials
  */
-async function updateUser(userData: any) {
-  const id = localStorage.getItem('user-id');
-  const token = localStorage.getItem('access-token');
-
+async function updateUser(userData: any, uid: string, token: string) {
   const formData = new FormData();
 
   for (const key in userData) {
     formData.set(key, userData[key]);
   }
 
-  const response = await axios.patch(`${API_BASE_URL}/users/${id}`, formData, {
+  const response = await axios.patch(`${API_BASE_URL}/users/${uid}`, formData, {
     headers: { Authorization: `Bearer ${token}` },
   });
 

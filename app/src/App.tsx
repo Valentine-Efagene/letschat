@@ -8,7 +8,7 @@ import SignUp from './components/auth/forms/SignUp';
 import { useEffect, useState } from 'react';
 import { ToastContext, SUCCESS, IToastState } from './contexts/ToastContext';
 import Toast from './components/Toast';
-import Contacts from './pages/Contacts';
+import Users from './pages/Users';
 import {
   fetchCurrentUserThunk,
   fetchTotalThunk,
@@ -23,6 +23,7 @@ import Profile from './pages/Profile';
 import socket from './services/socket';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import ProtectedRoute from './components/routes/ProtectedRoute';
+import AuthRoute from './components/routes/AuthRoute';
 // https://codesandbox.io/s/react-router-tutorial-loader-and-action-3qr3p8?file=/src/routes/contact.jsx
 
 function App() {
@@ -93,7 +94,7 @@ function App() {
       path: '/users',
       element: (
         <ProtectedRoute token={token}>
-          <Contacts />
+          <Users />
         </ProtectedRoute>
       ),
     },

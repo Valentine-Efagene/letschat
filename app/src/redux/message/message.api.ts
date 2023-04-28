@@ -3,9 +3,7 @@ import { CustomException } from '../../helpers/error';
 
 const API_BASE_URL = 'http://localhost:3600';
 
-async function sendMessage(messageData) {
-  const token = localStorage.getItem('access-token');
-
+async function sendMessage(messageData: any, token: string) {
   const formData = new FormData();
   const { text, sender, receiver, files } = messageData;
 
@@ -28,12 +26,15 @@ async function sendMessage(messageData) {
   return data;
 }
 
-async function fetchMessages(target, page, limit = 5) {
-  const userId = localStorage.getItem('user-id');
-  const token = localStorage.getItem('access-token');
-
+async function fetchMessages(
+  target: string,
+  page: number,
+  limit = 5,
+  uid: string,
+  token: string,
+) {
   const response = await fetch(
-    `${API_BASE_URL}/${userId}/messages/${target}?page=${page}&limit=${limit}`,
+    `${API_BASE_URL}/${uid}/messages/${target}?page=${page}&limit=${limit}`,
     {
       headers: { Authorization: `Bearer ${token}` },
     },
@@ -41,12 +42,9 @@ async function fetchMessages(target, page, limit = 5) {
   return response.json();
 }
 
-async function fetchLastMessages(contacts) {
-  const userId = localStorage.getItem('user-id');
-  const token = localStorage.getItem('access-token');
-
+async function fetchLastMessages(contacts: string, uid: string, token: string) {
   const response = await axios.post(
-    `${API_BASE_URL}/${userId}/messages/last`,
+    `${API_BASE_URL}/${uid}/messages/last`,
     { contacts },
     {
       headers: { Authorization: `Bearer ${token}` },
@@ -58,14 +56,15 @@ async function fetchLastMessages(contacts) {
   return data;
 }
 
-async function fetchCountByContactId(contactId) {
-  const userId = localStorage.getItem('user-id');
-  const accessToken = localStorage.getItem('access-token');
-
+async function fetchCountByContactId(
+  contactId: string,
+  uid: string,
+  token: string,
+) {
   const response = await fetch(
-    `${API_BASE_URL}/${userId}/messages/${contactId}/count`,
+    `${API_BASE_URL}/${uid}/messages/${contactId}/count`,
     {
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${token}` },
     },
   );
 

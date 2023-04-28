@@ -42,13 +42,12 @@ const fetchCurrentUserThunk = createAsyncThunk(
     try {
       const state: RootState = getState() as unknown as RootState;
       const token = state.user?.token;
-      const uid = state.user?.user?.id;
 
-      if (uid == null || token == null) {
+      if (token == null) {
         return rejectWithValue({ summary: 'Please sign in' });
       }
 
-      const res = await fetchCurrentUser(uid, token);
+      const res = await fetchCurrentUser(token);
       return res;
     } catch (error) {
       rejectWithValue(error);
@@ -106,11 +105,18 @@ const fetchTotalThunk = createAsyncThunk(
 
 const fetchByIdThunk = createAsyncThunk(
   'user/fetchById',
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue, getState }) => {
     if (id == null) return null;
 
     try {
-      const response = await fetchUserById(id);
+      const state: RootState = getState() as unknown as RootState;
+      const token = state.user?.token;
+
+      if (token == null) {
+        return rejectWithValue({ summary: 'Please sign in' });
+      }
+
+      const response = await fetchUserById(id, token);
       return response;
     } catch (error) {
       return rejectWithValue(error);
@@ -142,9 +148,17 @@ const fetchAllUsersThunk = createAsyncThunk(
 
 const updateUserThunk = createAsyncThunk(
   'user/updateUser',
-  async (data, { rejectWithValue }) => {
+  async (data, { rejectWithValue, getState }) => {
     try {
-      const res = await updateUser(data);
+      const state: RootState = getState() as unknown as RootState;
+      const token = state.user?.token;
+      const uid = state.user?.user?.id;
+
+      if (token == null || uid == null) {
+        return rejectWithValue({ summary: 'Please sign in' });
+      }
+
+      const res = await updateUser(data, uid, token);
       return res;
     } catch (error) {
       return rejectWithValue(error);
@@ -154,9 +168,16 @@ const updateUserThunk = createAsyncThunk(
 
 const addContactThunk = createAsyncThunk(
   'user/addContact',
-  async (contactId: string, { rejectWithValue }) => {
+  async (contactId: string, { rejectWithValue, getState }) => {
     try {
-      return await addContactById(contactId);
+      const state: RootState = getState() as unknown as RootState;
+      const token = state.user?.token;
+      const uid = state.user?.user?.id;
+
+      if (token == null || uid == null) {
+        return rejectWithValue({ summary: 'Please sign in' });
+      }
+      return await addContactById(contactId, uid, token);
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -176,9 +197,17 @@ const removeContactThunk = createAsyncThunk(
 
 const fetchContactsThunk = createAsyncThunk(
   'user/fetchContacts',
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, getState }) => {
     try {
-      return await fetchContacts();
+      const state: RootState = getState() as unknown as RootState;
+      const token = state.user?.token;
+      const uid = state.user?.user?.id;
+
+      if (token == null || uid == null) {
+        return rejectWithValue({ summary: 'Please sign in' });
+      }
+
+      return await fetchContacts(uid, token);
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -247,7 +276,7 @@ export const userSlice = createSlice({
     });
 
     builder.addCase(fetchByIdThunk.fulfilled, (state, { payload }) => {
-      state.user = payload;
+      //state.user = payload;
       state.status = SUCCEEDED;
     });
     builder.addCase(fetchByIdThunk.pending, (state, { payload }) => {

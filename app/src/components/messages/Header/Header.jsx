@@ -6,18 +6,21 @@ import { ERROR, ToastContext } from '../../../contexts/ToastContext';
 import NavLink from '../../common/NavLink/NavLink';
 import { FaAddressBook, FaHome } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
+import { fetchByIdThunk } from '../../../redux/user/user.slice';
+import { useAppDispatch } from '../../../redux/hooks';
 
 export default function Header() {
+  const dispatch = useAppDispatch();
   const [targetUserData, setTargetUserData] = useState();
   const { setToastState } = useContext(ToastContext);
   const { peers, target } = useSelector(state => state.message);
 
   useEffect(() => {
-    fetchUserById(target)
-      .then(result => {
-        setTargetUserData(result);
-      })
-      .catch(error => {
+    const getTarget = async () => {
+      try {
+        const targetUser = await dispatch(fetchByIdThunk(target)).unwrap();
+        setTargetUserData(targetUser);
+      } catch (error) {
         setToastState(prevState => {
           return {
             ...prevState,
@@ -28,7 +31,10 @@ export default function Header() {
             type: ERROR,
           };
         });
-      });
+      }
+    };
+
+    getTarget();
   }, [target]);
 
   return (

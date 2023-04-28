@@ -64,7 +64,7 @@ router.get("/users/total", [
 router.get("/users/:id", [
   ValidationMiddleware.validJWTNeeded,
   PermissionMiddleware.minimumPermissionLevelRequired(FREE),
-  PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
+  //PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
   UsersController.getById,
 ]);
 
