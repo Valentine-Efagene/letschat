@@ -10,6 +10,7 @@ import { IDLE, PENDING, SUCCEEDED, FAILED } from '../../helpers/loadingStates';
 import { IMessage } from '../../types/message';
 import { PURGE } from 'redux-persist';
 import { RootState } from '../store';
+import socket from '../../services/socket';
 
 interface IState {
   messages: IMessage[];
@@ -179,6 +180,7 @@ export const messageSlice = createSlice({
     builder.addCase(sendMessageThunk.fulfilled, (state, { payload }) => {
       state.messages = [...state.messages, payload];
       state.lastMessages = getUpdatedLastMessages(state, payload);
+      socket?.send(payload);
       state.status = SUCCEEDED;
     });
     builder.addCase(sendMessageThunk.pending, (state, { payload }) => {

@@ -80,10 +80,7 @@ export default function Detail() {
     e.preventDefault();
 
     try {
-      const message = await dispatch(
-        sendMessageThunk({ ...data, sender: user?.id, receiver }),
-      ).unwrap();
-      socket?.send(message);
+      await dispatch(sendMessageThunk({ ...data, sender: user?.id, receiver }));
       setData(initialData);
     } catch (error: any) {
       setToastState!(prevState => {
