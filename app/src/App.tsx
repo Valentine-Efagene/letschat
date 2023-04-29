@@ -75,6 +75,11 @@ function App() {
     };
 
     init();
+
+    return () => {
+      // To prevent side effects (Duplicate message display)
+      socket?.removeAllListeners();
+    };
   }, []);
 
   const router = createBrowserRouter([

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { cloneDeep } from 'lodash';
 import {
   fetchMessages,
   sendMessage,
@@ -121,7 +122,9 @@ export const messageSlice = createSlice({
   initialState,
   reducers: {
     appendMessage: (state, { payload }: { payload: IMessage }) => {
-      state.messages.push(payload);
+      const _messages = cloneDeep(state.messages);
+      _messages.push(payload);
+      state.messages = _messages;
       state.lastMessages = getUpdatedLastMessages({ ...state }, payload);
     },
     setTarget: (state, { payload }) => {
@@ -211,8 +214,9 @@ export const messageSlice = createSlice({
 
 function getUpdatedLastMessages(state: IState, newMessage: IMessage) {
   const { sender, receiver } = newMessage;
+  let _lastMessages = cloneDeep(state.lastMessages);
 
-  const focus = state.lastMessages.findIndex(message => {
+  const focus = _lastMessages.findIndex(message => {
     if (message == null) return null;
 
     return (
@@ -222,12 +226,12 @@ function getUpdatedLastMessages(state: IState, newMessage: IMessage) {
   });
 
   if (focus == null) {
-    state.lastMessages = [...state.lastMessages, newMessage];
+    _lastMessages = [..._lastMessages, newMessage];
   } else {
-    state.lastMessages[focus] = newMessage;
+    _lastMessages[focus] = newMessage;
   }
 
-  return state.lastMessages;
+  return _lastMessages;
 }
 
 export {

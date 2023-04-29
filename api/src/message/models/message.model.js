@@ -82,13 +82,14 @@ exports.listByUser = (perPage, page, userId) => {
 
 exports.listBySenderReceiver = (perPage, page, senderId, receiverId) => {
   return new Promise((resolve, reject) => {
+    //console.table({ perPage, page, skip: perPage * page });
     Message.find()
       .or([
         { sender: senderId, receiver: receiverId },
         { sender: receiverId, receiver: senderId },
       ])
-      //.limit(perPage)
-      .skip(perPage * page)
+      .limit(perPage)
+      .skip(perPage * (page - 1))
       .exec(function (err, users) {
         if (err) {
           reject(err);
