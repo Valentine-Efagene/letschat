@@ -13,7 +13,7 @@ import {
 } from '../../../../redux/message/message.slice';
 import MessageCard from '../../cards/Message';
 import styles from './Messages.module.css';
-import { FaArrowUp } from 'react-icons/fa';
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 
 // https://dev.to/novu/building-a-chat-app-with-socketio-and-react-2edj
@@ -25,13 +25,24 @@ export default function Messages() {
   const dispatch = useAppDispatch();
   const { messages, target } = useAppSelector(state => state.message);
   const [page, setPage] = useState<number>(1);
+  const [total, setTotal] = useState(STEP);
+
+  const incrementPage = () => {
+    const maxPage = Math.ceil(total / STEP);
+    setPage(prevState => (prevState >= maxPage ? maxPage : prevState + 1));
+  };
+
+  const decrementPage = () => {
+    setPage(prevState => (prevState <= 1 ? 1 : prevState - 1));
+  };
 
   useEffect(() => {
     const init = async () => {
       try {
-        const total = await dispatch(
+        const _total = await dispatch(
           fetchCountByContactIdThunk(target!),
         ).unwrap();
+        setTotal(_total);
         setPage(prevState =>
           prevState == null ? Math.floor(total / STEP) : prevState,
         );
@@ -58,10 +69,19 @@ export default function Messages() {
     };
 
     init();
-  }, [target, page]);
+  }, [target, page, total]);
 
-  const loadMore = () => {
-    setPage(prevState => prevState - 1);
+  const loadPrevious = () => {
+    incrementPage();
+
+    containerRef?.current?.scroll({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const loadNext = () => {
+    decrementPage();
 
     containerRef?.current?.scroll({
       top: 0,
@@ -75,8 +95,8 @@ export default function Messages() {
     <div
       className={styles.container}
       ref={containerRef as RefObject<HTMLDivElement>}>
-      {page != null && page !== 0 && (
-        <button className={styles.loadMore} onClick={loadMore}>
+      {page != null && page < Math.ceil(total / STEP) && (
+        <button className={styles.loadMore} onClick={loadPrevious}>
           <FaArrowUp />
         </button>
       )}
@@ -88,6 +108,11 @@ export default function Messages() {
           message={message}
         />
       ))}
+      {page != null && page > 1 && (
+        <button className={styles.loadMore} onClick={loadNext}>
+          <FaArrowDown />
+        </button>
+      )}
     </div>
   );
 }

@@ -80,6 +80,14 @@ exports.listByUser = (perPage, page, userId) => {
 };
 */
 
+/**
+ *
+ * @param {*} perPage
+ * @param {number} page: Must be >= 1
+ * @param {*} senderId
+ * @param {*} receiverId
+ * @returns
+ */
 exports.listBySenderReceiver = (perPage, page, senderId, receiverId) => {
   return new Promise((resolve, reject) => {
     //console.table({ perPage, page, skip: perPage * page });
