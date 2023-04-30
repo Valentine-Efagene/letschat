@@ -11,6 +11,7 @@
   text-decoration: none;
   transition: 300ms;
   position: relative;
+  background-color: red;
 }
 
 .container {
@@ -55,4 +56,5 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  margin: auto;
 }

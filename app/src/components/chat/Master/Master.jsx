@@ -99,7 +99,7 @@ export default function Master() {
             (lastMessage.text == null || lastMessage.text?.length < 1) &&
             lastMessage.files?.length > 0
           ) {
-            snippet = <FaFileAlt size="1x" />;
+            snippet = <FaFileAlt size="1x" className={styles.fileIcon} />;
           }
 
           return (

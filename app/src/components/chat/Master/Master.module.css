@@ -5,6 +5,10 @@
   box-shadow: 1px 1px 4px var(--primary-1);
 }
 
+.fileIcon {
+  width: 1.25rem;
+}
+
 .cl {
 }
 

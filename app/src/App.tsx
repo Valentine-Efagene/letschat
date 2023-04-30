@@ -58,7 +58,7 @@ function App() {
     });
 
     socket.on('connect_error', err => {
-      console.log(err.message);
+      console.log({ 'connect error': err.message });
     });
 
     const init = () => {

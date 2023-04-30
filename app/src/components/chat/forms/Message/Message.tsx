@@ -15,8 +15,11 @@ import {
   KeyboardEventHandler,
   useState,
   RefObject,
+  useRef,
+  useEffect,
 } from 'react';
 import { IMessage } from '../../../../types/message';
+import useClickOutside from '../../../../hooks/useClickOutside';
 
 interface IMessageProps {
   handleSubmit: FormEventHandler;
@@ -38,7 +41,8 @@ export default function Message({
   initStream,
 }: IMessageProps) {
   const [showMore, setShowMore] = useState(false);
-  const toggleShowMore = () => setShowMore(prevState => !prevState);
+  const toggleShowMore = () =>
+    setShowMore(prevState => (hideOptions ? prevState : !prevState));
 
   /**
    * TODO: Implement algorithm/heuristic
@@ -48,6 +52,13 @@ export default function Message({
   const computeRows = () => {
     return 5;
   };
+
+  const optionsRef = useRef<HTMLDivElement>();
+  const hideOptions = useClickOutside(optionsRef as RefObject<HTMLDivElement>);
+
+  useEffect(() => {
+    setShowMore(prevState => (hideOptions == true ? false : prevState));
+  }, [hideOptions, setShowMore]);
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
@@ -76,6 +87,7 @@ export default function Message({
 
       {showMore && (
         <div
+          ref={optionsRef as RefObject<HTMLDivElement>}
           className={styles.more}
           style={{ display: showMore ? 'grid' : 'none' }}>
           <AttachmentPicker multiple={true} onChange={handleFilesPicked} />
